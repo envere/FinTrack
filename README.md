@@ -17,3 +17,9 @@ Please call me at your earliest convenience at 12-345-678. Time is of the essenc
 Yours truly,
 
 Prince Alyusi Islassis
+
+
+## Features
+- Real-Time Data Visualisation
+- Divident Tracker
+- Integration Of Multiple Brokerage Platforms
