@@ -1,3 +1,4 @@
+# Structure
 ```
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
@@ -35,25 +36,32 @@ Component methods:
 - render()
 
 # Elements
-- <View 
+```
+<View 
     style={{...}}></View>
-- <Text 
+
+<Text 
     style={{...}}></Text>
-- <TextInput
+
+<TextInput
     style={{...}}
     placeholder=""
     onChangeText={() => {...}}/>
-- <Button
+
+<Button
     onPress={() => {...}}
     title=""/>
-- <TouchableHighlight
+
+<TouchableHighlight
     style={{...}},
     onPress={() => {...}}
     onLongPressButton={() => {...}}
     underlayColor=""
     background={ Platform.OS === ... }></TouchableHighlight>
-- <ScrollView></ScrollView> // whole page is rendered, good for finite and small lists
-- <FlatList                 // renders only the elements that are on the screen
+
+<ScrollView></ScrollView>     // whole page is rendered, good for finite and small lists
+
+<FlatList                     // renders only the elements that are on the screen
     data={[
       {key: ''},
       {key: ''},
@@ -61,7 +69,8 @@ Component methods:
       ...
     ]}
     renderItem={({item}) => <Text style={...}></Text>}/>
-- <SectionList
+
+<SectionList
     sections={[
       {title: '', data: ['', '', ...]},
       {title: '', data: ['', '', ...]},
@@ -71,6 +80,7 @@ Component methods:
     renderItem={({item}) => <Text style={...}></Text>
     renderSectionHeader={({section}) => <Text style={...}></Text>}
     keyExtractor={(item, index) => index}/>
+```
 
 # Attributes
 - Block Elements
