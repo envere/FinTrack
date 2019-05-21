@@ -21,5 +21,5 @@ Prince Alyusi Islassis
 
 ## Features
 - Real-Time Data Visualisation
-- Divident Tracker
+- Dividend Tracker
 - Integration Of Multiple Brokerage Platforms
