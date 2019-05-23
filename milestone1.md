@@ -1,6 +1,6 @@
 # Milestone 1
 
-*Proposed Orbital Tier: * Apollo 11
+- Proposed orbital tier: Apollo 11
 
 ## Overview
 This is a stock portfolio tracker that helps users to conveniently track their financial assets independent of brokerage accounts.
@@ -17,8 +17,8 @@ This app, like many other stock portfolio apps out in the market, aims to be a c
 
 ## System Design
 - Database
-  - talk to finance API for pseudo-real-time data
-  - hold users' account data
+  - maintains financial data through regular API calls
+  - stores users' account data
 - UI
   - home page functionality
     - add stock
