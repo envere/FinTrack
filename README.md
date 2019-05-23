@@ -1,7 +1,7 @@
-# NigerianPrince
+# FinTrack by Team NigerianPrince
 
-## Donate your money to our Patreon to help me claim back the throne !!!
-
+>## Donate your money to our Patreon to help me claim back the throne !!!
+>
 >Dear Sir:
 >
 >I have been requested by the Nigerian National Petroleum Company to contact you for assistance in resolving a matter. The >Nigerian National Petroleum Company has recently concluded a large number of contracts for oil exploration in the sub-Sahara >region. The contracts have immediately produced moneys equaling US$40,000,000. The Nigerian National Petroleum Company is >desirous of oil exploration in other parts of the world, however, because of certain regulations of the Nigerian Government, >it is unable to move these funds to another region.
