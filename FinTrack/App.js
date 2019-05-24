@@ -5,6 +5,13 @@ import {
   Text,
   View,
 } from 'react-native';
+import {
+  Container,
+  Header,
+  Left,
+  Body,
+  Title,
+} from 'native-base';
 
 import NavigationBar from './src/components/NavigationBar'
 
@@ -18,7 +25,16 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     return (
-      <View>
+      <View style={styles.container}>
+        <Container>
+          <Header>
+            <Left />
+            <Left />
+            <Body>
+              <Title>Home</Title>
+            </Body>
+          </Header>
+        </Container>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
@@ -31,8 +47,6 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
@@ -44,8 +58,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
-  navigations: {
-    alignItems: 'baseline',
   },
 });

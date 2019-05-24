@@ -14,7 +14,6 @@ export default class NavigationBar extends Component {
   render() {
     return (
       <Container>
-        <Header />
         <Content />
         <Footer>
           <FooterTab>
