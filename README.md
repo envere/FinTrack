@@ -1,13 +1,12 @@
 # FinTrack by Team NigerianPrince
 
-## Milestone 1
-
-- Proposed Orbital Tier: Apollo 11
-
 ## Overview
+Proposed level of achievement: Apollo 11
+
 This is a stock portfolio tracker that helps users to conveniently track their financial assets and dividend yield, personalised to include various miscellaneous fees independent of stock value.
 Users will be able to create accounts and fill in their respective data.
-The app will display graphs to visualise users' portfolios and track dividends.
+
+The app will display graphs to visualise user portfolios and track dividends.
 
 ## Motivation
 Keeping track of your stock portfolio can be tiresome and inconvenient especially when your portfolio gets too big which may result in information overload!This app, like many other stock portfolio apps out in the market, aims to be a convenient stop for users to collate their data in a single app. 
@@ -15,9 +14,9 @@ Keeping track of your stock portfolio can be tiresome and inconvenient especiall
 What differentiates us from other apps is that we track dividends on top of stock value, provide data visualisation, and account for brokerage and other miscellaneous fees. This is tailored to provide a more personalised and reliable portfolio tracker for users.
 
 ## Features
-- Dividend Tracking
-- Data Visualisation
-- Inclusion of Brokerage and other Miscellaneous Fees
+- Dividend tracking
+- Data visualisation
+- Inclusion of brokerage and other miscellaneous fees
 - Simple UI to minimise information overload
 
 ## System Design
@@ -32,9 +31,11 @@ What differentiates us from other apps is that we track dividends on top of stoc
   - list of transactions
     - transaction history which includes buying, selling of stocks, and dividend receipts
 
-## Technologies
-- Android App built with React-Native
-- DataBase (third party) supported by FireBase
+## Built with
+- [React Native](https://facebook.github.io/react-native/)
+- [Native Base](https://nativebase.io)
+- [Vector Icons](https://github.com/oblador/react-native-vector-icons)
+- [Firebase](https://firebase.google.com)
 
 ## Potential Extension Features
 - Compilation of news relevant to users' portfolio
