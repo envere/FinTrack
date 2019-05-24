@@ -1,17 +1,18 @@
-### FinTrack by Team NigerianPrince
+# FinTrack by Team NigerianPrince
 
 ## Milestone 1
 
-- Proposed orbital tier: Apollo 11
+- Proposed Orbital Tier: Apollo 11
 
 ## Overview
-This is a stock portfolio tracker that helps users to conveniently track their financial assets independent of brokerage accounts.
+This is a stock portfolio tracker that helps users to conveniently track their financial assets and dividend yield, personalised to include various miscellaneous fees independent of stock value.
 Users will be able to create accounts and fill in their respective data.
-The app will display graphs to visualise users' portfolio and track users' dividends.
+The app will display graphs to visualise users' portfolios and track dividends.
 
 ## Motivation
-Keeping track of your stock portfolio can be tiresome and inconvenient especially when your portfolio gets too big which may result in information overload!
-This app, like many other stock portfolio apps out in the market, aims to be a convenient stop for users to collate their data in a single app. What differentiates us from other apps is that we track dividends on top of stock value, provide data visualisation, and account for brokerage and other miscellaneous fees. This is tailored to provide a more personalised and reliable portfolio tracker for users.
+Keeping track of your stock portfolio can be tiresome and inconvenient especially when your portfolio gets too big which may result in information overload!This app, like many other stock portfolio apps out in the market, aims to be a convenient stop for users to collate their data in a single app. 
+
+What differentiates us from other apps is that we track dividends on top of stock value, provide data visualisation, and account for brokerage and other miscellaneous fees. This is tailored to provide a more personalised and reliable portfolio tracker for users.
 
 ## Features
 - Dividend Tracking
@@ -38,7 +39,11 @@ This app, like many other stock portfolio apps out in the market, aims to be a c
 ## Potential Extension Features
 - Compilation of news relevant to users' portfolio
 - IOS port
+- (might be too much of a stretch) stock recommendation algorithm
 
+***
+
+### NigerianPrince Fluff
 > Donate your money to our Patreon to help me claim back the throne !!!
 >
 >Dear Sir:
