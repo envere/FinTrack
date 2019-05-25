@@ -1,11 +1,11 @@
 import React from 'react'
 import { Stylesheet, Text, View } from 'react-native'
 
-export default class AccountScreen extends React.Component {
+export default class TransactionsScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Account</Text>
+                <Text style={styles.text}>Transactions</Text>
             </View>
         )
     }
