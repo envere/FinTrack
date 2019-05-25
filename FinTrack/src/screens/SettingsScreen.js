@@ -15,7 +15,7 @@ export default class SettingsScreen extends React.Component {
     }
 }
 
-const styles = StyleSheet.create {
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor = '#fff',
@@ -25,4 +25,4 @@ const styles = StyleSheet.create {
     text: {
         fontSize: 30,
     },
-}
+})
