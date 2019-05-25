@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   Platform,
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from 'react-native'
 import {
   Container,
   Header,
   Left,
   Body,
   Title,
-} from 'native-base';
+} from 'native-base'
 
 import NavigationBar from './src/components/NavigationBar'
 
@@ -20,7 +20,7 @@ const instructions = Platform.select({
   android:
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
-});
+})
 
 export default class App extends Component {
   render() {
@@ -40,7 +40,7 @@ export default class App extends Component {
         <Text style={styles.instructions}>{instructions}</Text>
         <NavigationBar />
       </View>
-    );
+    )
   }
 }
 
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-});
+})
