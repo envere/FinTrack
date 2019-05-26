@@ -11,9 +11,13 @@ react-native link
 ## React Navigation
 ```
 npm install --save react-navigation
+npm install --save react-native-gesture-handler
+react-native link react-native-gesture-handler
 ```
 
 ## Bug Fixes
 ### Resetting node modules
-`rm -r node_modules`
-`npm install`
+```
+rm -r node_modules
+npm install
+```
