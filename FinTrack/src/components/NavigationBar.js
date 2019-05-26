@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Container,
   Header,
@@ -7,8 +7,8 @@ import {
   FooterTab,
   Button,
   Icon,
-  Text,
-} from 'native-base';
+  Text
+} from "native-base";
 
 export default class NavigationBar extends Component {
   render() {
@@ -17,8 +17,7 @@ export default class NavigationBar extends Component {
         <Content />
         <Footer>
           <FooterTab>
-            <Button vertical
-              active>
+            <Button vertical active>
               <Icon name="home" />
               <Text>Home</Text>
             </Button>
