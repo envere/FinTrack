@@ -13,7 +13,7 @@ export default class SplashScreen extends Component {
 
 const styles = StyleSheet.create({
   view: {
-    backgroundColor: "darkslateblue",
+    backgroundColor: "#18325b",
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
