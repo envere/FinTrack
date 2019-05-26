@@ -13,3 +13,7 @@ react-native link
 npm install --save react-navigation
 ```
 
+## Bug Fixes
+### Resetting node modules
+`rm -r node_modules`
+`npm install`
