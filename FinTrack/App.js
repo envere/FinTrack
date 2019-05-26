@@ -17,15 +17,15 @@ export default class App extends Component {
     super(props);
 
     this.state = { isLoading: true };
-   }
+  }
 
-  performTimeConsumingTask = async () => {
+  async performTimeConsumingTask() {
     return new Promise(resolve =>
       setTimeout(() => {
         resolve("result");
       }, 2000)
     );
-  };
+  }
 
   async componentDidMount() {
     // Preload data from an external API
