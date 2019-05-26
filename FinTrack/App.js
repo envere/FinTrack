@@ -4,6 +4,7 @@ import { Container, Header, Left, Body, Title } from "native-base";
 
 import NavigationBar from "./src/components/NavigationBar";
 import SplashScreen from "./src/pages/SplashScreen";
+import LoginScreen from "./src/pages/LoginScreen";
 
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -16,14 +17,14 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isLoading: true };
+    this.state = { isLoading: true, isLoggedIn: true };
   }
 
   async performTimeConsumingTask() {
     return new Promise(resolve =>
       setTimeout(() => {
         resolve("result");
-      }, 2000)
+      }, 1000)
     );
   }
 
@@ -41,7 +42,11 @@ export default class App extends Component {
     if (this.state.isLoading) {
       return <SplashScreen />;
     }
+    if (this.state.isLoggedIn) { // put a ! to access homescreen.
+      return <LoginScreen />;
+    }
     return (
+      // home page
       <View style={styles.container}>
         <Container>
           <Header>
