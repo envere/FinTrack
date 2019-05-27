@@ -5,10 +5,13 @@ import {
   View,
 } from 'react-native'
 
+import MenuButton from '../components/MenuButton'
+
 export default class SettingsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <MenuButton navigation={this.props.navigation} />
         <Text>SettingsScreen</Text>
       </View>
     )

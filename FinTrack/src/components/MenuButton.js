@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, Button } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-export default class MenuButton extends React.Component {
+export default class MenuButton extends Component {
   render() {
     return(
       <Icon 

@@ -7,11 +7,15 @@ import AccountScreen from '../screens/AccountScreen'
 import PortfolioScreen from '../screens/PortfolioScreen'
 import TransactionsScreen from '../screens/TransactionsScreen'
 import SettingsScreen from '../screens/SettingsScreen'
+import MenuDrawer from './MenuDrawer';
 
 const WIDTH = Dimensions.get('window').width
 
 const DrawerConfig = {
   drawerWidth: WIDTH * 0.83,
+  contentComponent: ({navigation}) => {
+    return(<MenuDrawer />)
+  }
 }
 
 const DrawerNavigator = createDrawerNavigator(
