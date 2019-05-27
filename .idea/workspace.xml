@@ -2,19 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8601199-6b13-40a6-ae0f-006283f25ecf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinTrack/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/android/app/src/main/java/com/fintrack/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/android/app/src/main/java/com/fintrack/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/ios/FinTrack.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/ios/FinTrack.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinTrack/src/components/MenuButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/components/MenuButton.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinTrack/src/navigation/DrawerNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/navigation/DrawerNavigator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/src/screens/AccountScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/screens/AccountScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinTrack/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/screens/HomeScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/src/screens/PortfolioScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/screens/PortfolioScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/src/screens/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/screens/SettingsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTrack/src/screens/TransactionsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/FinTrack/src/screens/TransactionsScreen.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -5,10 +5,13 @@ import {
   View,
 } from 'react-native'
 
+import MenuButton from '../components/MenuButton'
+
 export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <MenuButton />
         <Text>HomeScreen</Text>
       </View>
     )

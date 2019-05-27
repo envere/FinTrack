@@ -6,11 +6,18 @@ import HomeScreen from '../screens/HomeScreen'
 
 const WIDTH = Dimensions.get('window').width
 
-const DrawerNavigator = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen
+const DrawerConfig = {
+  drawerWidth: WIDTH * 0.83,
+}
+
+const DrawerNavigator = createDrawerNavigator(
+  {
+    Home: {
+      screen: HomeScreen
+    },
   },
-})
+  DrawerConfig
+)
 
 export default createAppContainer(DrawerNavigator)
 

@@ -1,2 +1,26 @@
 import React from 'react'
-import { Stylesheet } from 'react-native'
+import { StyleSheet, Button } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
+
+export default class MenuButton extends React.Component {
+  render() {
+    return(
+      <Icon 
+        name="md-menu"
+        color="#000000"
+        size={32} 
+        style={ style.menuButton } 
+        onPress={() => {}}
+      />
+    )
+  }
+}
+
+const style = StyleSheet.create({
+  menuButton: {
+    zIndex: 9,
+    position: 'absolute',
+    top: 20,
+    left: 20,
+  }
+})
