@@ -20,9 +20,3 @@ const DrawerNavigator = createDrawerNavigator(
 )
 
 export default createAppContainer(DrawerNavigator)
-
-/*
-export default class DrawerNavigator extends React.Component {
-
-}
-*/
