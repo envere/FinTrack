@@ -15,7 +15,7 @@ export default class MenuDrawer extends Component {
 
   navLink(nav, text) {
     return(
-      <TouchableOpacity style={{height: 50}} onPress={() => {}}>
+      <TouchableOpacity style={{height: 50}} onPress={() => {this.props.navigation.navigate(nav)}}>
         <Text style={styles.link}>{text}</Text>
       </TouchableOpacity>
     )
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
   },
   username: {
     color: 'white',
-    paddingTop: 40,
+    paddingTop: 100,
+    paddingLeft: 14,
     fontSize: 30,
   },
 })
