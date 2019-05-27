@@ -13,13 +13,14 @@ import {
   Title,
 } from 'native-base'
 
+import HomeScreen from './src/screens/HomeScreen'
 import DrawerNavigator from './src/navigation/DrawerNavigator'
 
 export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <DrawerNavigator />
+        <HomeScreen />
       </View>
     )
   }
