@@ -11,7 +11,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <MenuButton />
+        <MenuButton navigation={this.props.navigation} />
         <Text>HomeScreen</Text>
       </View>
     )
