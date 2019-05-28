@@ -7,8 +7,8 @@ export default class MenuButton extends Component {
     return(
       <Icon 
         name="md-menu"
-        color="#000000"
-        size={32} 
+        color="white"
+        size={35} 
         style={ style.menuButton } 
         onPress={() => {this.props.navigation.toggleDrawer()}}
       />
@@ -18,9 +18,9 @@ export default class MenuButton extends Component {
 
 const style = StyleSheet.create({
   menuButton: {
-    zIndex: 9,
-    position: 'absolute',
-    top: 20,
-    left: 20,
+    // zIndex: 9,
+    // position: 'absolute',
+    // top: 20,
+    // left: 20,
   }
 })
