@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   profileText: {
     flex: 3,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   username: {
     fontSize: 20,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   imgView: {
-    flex: 3,
+    flex: 1,
     paddingLeft: 20,
     paddingRight:20,
   },
