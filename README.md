@@ -36,6 +36,7 @@ What differentiates us from other apps is that we track dividends on top of stoc
 - [Native Base](https://nativebase.io)
 - [Vector Icons](https://github.com/oblador/react-native-vector-icons)
 - [Firebase](https://firebase.google.com)
+- [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Potential Extension Features
 - Compilation of news relevant to users' portfolio
