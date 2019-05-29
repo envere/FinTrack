@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Container,
-  Header,
   Content,
   Footer,
   FooterTab,
@@ -24,15 +23,15 @@ export default class NavigationBar extends Component {
             <FooterTab>
               <Button vertical active>
                 <Icon name="home" />
-                <Text>Home</Text>
+                <Text uppercase={false}>Home</Text>
               </Button>
               <Button vertical>
                 <Icon name="stats" />
-                <Text>Portfolio</Text>
+                <Text uppercase={false}>Portfolio</Text>
               </Button>
               <Button vertical>
                 <Icon name="checkmark-circle-outline" />
-                <Text>Transactions</Text>
+                <Text uppercase={false}>Transactions</Text>
               </Button>
             </FooterTab>
           </Footer>
