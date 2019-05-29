@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import { Platform, StyleSheet, Text, View } from "react-native"
 import { Container, Header, Left, Body, Title } from "native-base"
 
-import NavigationBar from "./src/components/NavigationBar"
 import SplashScreen from "./src/pages/SplashScreen"
 import LoginScreen from "./src/pages/LoginScreen"
 import DrawerNavigator from "./src/navigation/DrawerNavigator"
