@@ -1,68 +1,50 @@
-import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import { Container, Header, Left, Body, Title } from "native-base";
+import React, { Component } from "react"
+import { Platform, StyleSheet, Text, View } from "react-native"
+import { Container, Header, Left, Body, Title } from "native-base"
 
-import NavigationBar from "./src/components/NavigationBar";
-import SplashScreen from "./src/pages/SplashScreen";
-import LoginScreen from "./src/pages/LoginScreen";
-
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
+import NavigationBar from "./src/components/NavigationBar"
+import SplashScreen from "./src/pages/SplashScreen"
+import LoginScreen from "./src/pages/LoginScreen"
+import DrawerNavigator from "./src/navigation/DrawerNavigator"
 
 export default class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.state = { isLoading: true, isLoggedIn: true };
+    this.state = { isLoading: true, isLoggedIn: true }
   }
 
   async performTimeConsumingTask() {
     return new Promise(resolve =>
       setTimeout(() => {
-        resolve("result");
+        resolve("result")
       }, 1000)
-    );
+    )
   }
 
   async componentDidMount() {
     // Preload data from an external API
     // Preload data using AsyncStorage(?)
-    const data = await this.performTimeConsumingTask();
+    const data = await this.performTimeConsumingTask()
 
     if (data !== null) {
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false })
     }
   }
 
   render() {
     if (this.state.isLoading) {
-      return <SplashScreen />;
+      return <SplashScreen />
     }
-    if (this.state.isLoggedIn) { // put a ! to access homescreen.
-      return <LoginScreen />;
+    if (!this.state.isLoggedIn) { // put a ! to access homescreen.
+      return <LoginScreen />
     }
     return (
       // home page
       <View style={styles.container}>
-        <Container>
-          <Header>
-            <Left />
-            <Left />
-            <Body>
-              <Title>Home</Title>
-            </Body>
-          </Header>
-        </Container>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <NavigationBar />
+        <DrawerNavigator />
       </View>
-    );
+    )
   }
 }
 
@@ -76,9 +58,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10
   },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
 });
