@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 
 import PageHeader from '../components/PageHeader'
-import NavigationBar from '../components/NavigationBar'
+import NavigationBar from '../navigation/NavigationBar'
 
 export default class SettingsScreen extends Component {
   render() {
