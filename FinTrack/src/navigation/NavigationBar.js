@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 import {
   Container,
   Content,
@@ -10,8 +11,18 @@ import {
   StyleProvider
 } from "native-base";
 
-import getTheme from "./../../native-base-theme/components";
-import FinTrackTheme from "./../../native-base-theme/variables/FinTrackTheme";
+import HomeScreen from "../pages/HomeScreen";
+import PortfolioScreen from "../pages/PortfolioScreen";
+import TransactionsScreen from "../pages/TransactionsScreen";
+
+import getTheme from "../../native-base-theme/components";
+import FinTrackTheme from "../../native-base-theme/variables/FinTrackTheme";
+
+{/* const navigator = createStackNavigator({
+  Home: HomeScreen,
+  Portfolio: PortfolioScreen,
+  Transactions: TransactionsScreen
+}); */}
 
 export default class NavigationBar extends Component {
   render() {
@@ -21,7 +32,11 @@ export default class NavigationBar extends Component {
           <Content />
           <Footer>
             <FooterTab>
-              <Button vertical active>
+              <Button
+                vertical
+                active
+                //onPress={() => this.props.navigation.navigate("Home")}
+              >
                 <Icon name="home" />
                 <Text uppercase={false}>Home</Text>
               </Button>
@@ -40,3 +55,4 @@ export default class NavigationBar extends Component {
     );
   }
 }
+
