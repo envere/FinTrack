@@ -6,8 +6,8 @@ export default class MenuButton extends Component {
   render() {
     return(
       <Icon 
-        name="md-menu"
-        color="white"
+        name='md-menu'
+        color='white'
         size={35} 
         style={ style.menuButton } 
         onPress={() => {this.props.navigation.toggleDrawer()}}

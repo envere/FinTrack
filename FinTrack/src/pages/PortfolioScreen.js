@@ -4,22 +4,15 @@ import {
   Text,
   View,
 } from 'react-native'
-import { Header } from 'react-native-elements'
 
-import MenuButton from '../components/MenuButton'
+import PageHeader from '../components/PageHeader'
 import NavigationBar from '../components/NavigationBar'
 
 export default class PortfolioScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header 
-          leftComponent={<MenuButton navigation={this.props.navigation} />}
-          centerComponent={{text: 'Portfolio', style: {color: 'white', fontSize: 28}}}
-          backgroundColor='#18325b'
-          leftContainerStyle={{paddingLeft: 10, paddingBottom: 20}}
-          centerContainerStyle={{paddingBottom: 20}}
-        />
+        <PageHeader text="Portfolio" navigation={this.props.navigation} />
         <NavigationBar />
       </View>
     )
