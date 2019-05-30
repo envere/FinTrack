@@ -15,6 +15,13 @@ npm install --save react-native-gesture-handler
 react-native link react-native-gesture-handler
 ```
 
+## React Native Elements
+```
+npm install --save react-native-elements
+npm install --save react-native-vector-icons
+react-native link react-native-vector-icons
+```
+
 ## Bug Fixes
 ### Resetting node modules
 ```
