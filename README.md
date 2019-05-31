@@ -19,11 +19,34 @@ Data visualisation in financial apps are often rather cryptic and confusing, whi
 Brokerage and miscellaneous fees are also an essential feature for a stock portfolio app which we will include for you to easily track your portfolio even if you have multiple brokerage accounts that you are tracking.
 News platform integrated into this app will allow you to quickly catch up on the latest updates regarding the companies that you are invested in, saving you time from scouring the web manually from news outlets and blogs for the same updates.
 
+## Aim
+We aim to develop a mobile application that improves user experience for people interested in tracking their stock portfolio through a mobile application. 
+We aim to achieve simplicity and convenience through the UI/UX design and the services we offer, which is to provide a tracker for your's stock portfolio, which may be composed of data that is spread over numerous brokerage services and multiple investments. 
+Ultimately, this app hopes to be a casual yet powerful tool for you to utilise to supplement your trading experience.
+
+## User Stories
+
+## Scope of project
+The mobile application provides a platform for users to create an account and store their user specific data.
+The application will allow users to navigate to several pages, which are mainly, home page, transaction summary page, portfolio summary page, account summary page, news page, settings page.
+These pages serve their respective purposes as covered earlier.
+
+
 ## Features
 - Dividend tracking
 - Data visualisation
 - Inclusion of brokerage and other miscellaneous fees
 - Simple UI to minimise information overload
+
+### June Phase
+- User Accounts
+- Divident tracking
+- Inclusion of brokerage and miscellaneous fees
+- UI
+
+### July Phase
+- Data Visualisation
+- News platform
 
 ## System Design
 - Database
