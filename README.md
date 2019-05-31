@@ -9,9 +9,15 @@ Users will be able to create accounts and fill in their respective data.
 The app will display graphs to visualise user portfolios and track dividends.
 
 ## Motivation
-Keeping track of your stock portfolio can be tiresome and inconvenient especially when your portfolio gets too big which may result in information overload!This app, like many other stock portfolio apps out in the market, aims to be a convenient stop for users to collate their data in a single app. 
+Keeping track of your stock portfolio can be a daunting and tiresome inconvenience. This inconvenience only worsens as your portfolio increases in size across multiple brokerage services due to information overload!
+This app aims to be a convenient centralized stop for you to collate your portfolio data in a single location on your mobile device.
 
-What differentiates us from other apps is that we track dividends on top of stock value, provide data visualisation, and account for brokerage and other miscellaneous fees. This is tailored to provide a more personalised and reliable portfolio tracker for users.
+What this app hopes to offer to you in addition to other stock portfolio apps in the current market is to track dividends in addition to stock value, provide intuitive data visualisation, account for brokerage and miscellaneous fees, and a news platform.
+
+Dividend tracking is a rare feature amongst today's stock portfolio apps in the market despite being useful data to track, thus we hope to add this feature to value add to you.
+Data visualisation in financial apps are often rather cryptic and confusing, which we hope to improve and simplify the visualisation for you regardless of your experience level in this field.
+Brokerage and miscellaneous fees are also an essential feature for a stock portfolio app which we will include for you to easily track your portfolio even if you have multiple brokerage accounts that you are tracking.
+News platform integrated into this app will allow you to quickly catch up on the latest updates regarding the companies that you are invested in, saving you time from scouring the web manually from news outlets and blogs for the same updates.
 
 ## Features
 - Dividend tracking
