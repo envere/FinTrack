@@ -38,15 +38,15 @@ These pages serve their respective purposes as covered earlier.
 - Inclusion of brokerage and other miscellaneous fees
 - Simple UI to minimise information overload
 
-### June Phase
-- User Accounts
-- Divident tracking
-- Inclusion of brokerage and miscellaneous fees
-- UI
-
-### July Phase
-- Data Visualisation
-- News platform
+## RoadMap
+- June
+  - UI
+  - User accounts
+  - Divident tracking
+  - Brokerage and miscellaneous fees
+- July
+  - Data visualisation
+  - News platform
 
 ## System Design
 - Database
