@@ -15,8 +15,11 @@ This app aims to be a convenient centralized stop for you to collate your portfo
 What this app hopes to offer to you in addition to other stock portfolio apps in the current market is to track dividends in addition to stock value, provide intuitive data visualisation, account for brokerage and miscellaneous fees, and a news platform.
 
 Dividend tracking is a rare feature amongst today's stock portfolio apps in the market despite being useful data to track, thus we hope to add this feature to value add to you.
+
 Data visualisation in financial apps are often rather cryptic and confusing, which we hope to improve and simplify the visualisation for you regardless of your experience level in this field.
+
 Brokerage and miscellaneous fees are also an essential feature for a stock portfolio app which we will include for you to easily track your portfolio even if you have multiple brokerage accounts that you are tracking.
+
 News platform integrated into this app will allow you to quickly catch up on the latest updates regarding the companies that you are invested in, saving you time from scouring the web manually from news outlets and blogs for the same updates.
 
 ## Aim
