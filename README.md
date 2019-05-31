@@ -28,6 +28,11 @@ We aim to achieve simplicity and convenience through the UI/UX design and the se
 Ultimately, this app hopes to be a casual yet powerful tool for you to utilise to supplement your trading experience.
 
 ## User Stories
+template: As a (role), I want (feature) so that (reason).
+
+- As a user, I want relevant stock data to be presented in a concise way, so I can check on my portfolio quickly and conveniently.
+- As a user, I want my dividend yield to be tracked together with my stock portfolio for convenience.
+- As a user, I want to check my progress without distractions from clutter such as that of traditional stocktracking apps, so that I can focus on what is important.
 
 ## Scope of project
 The mobile application provides a platform for users to create an account and store their user specific data.
