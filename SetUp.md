@@ -22,6 +22,9 @@ npm install --save react-native-vector-icons
 react-native link react-native-vector-icons
 ```
 
+## Generate JSON (for mock data)
+[JSON generator](https://www.json-generator.com/)
+
 ## Bug Fixes
 ### Resetting node modules
 ```
