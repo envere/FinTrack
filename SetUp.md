@@ -23,8 +23,8 @@ react-native link react-native-vector-icons
 ```
 
 ## Generate JSON (for mock data)
-[JSON generator](https://www.json-generator.com/)
-[JSON generator (next version)](https://next.json-generator.com/)
+- [JSON generator](https://www.json-generator.com/)
+- [JSON generator (next version)](https://next.json-generator.com/)
 
 ## Bug Fixes
 ### Resetting node modules
