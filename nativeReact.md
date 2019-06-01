@@ -1,4 +1,4 @@
-(reactnativeexpress tutorial)[http://www.reactnativeexpress.com/es6]
+[reactnativeexpress tutorial](http://www.reactnativeexpress.com/es6)
 
 # Structure
 ```
