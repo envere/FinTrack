@@ -9,23 +9,18 @@ Users will be able to create accounts and fill in their respective data.
 The app will display graphs to visualise user portfolios and track dividends.
 
 ## Motivation
-Keeping track of your stock portfolio can be a daunting and tiresome inconvenience. This inconvenience only worsens as your portfolio increases in size across multiple brokerage services due to information overload!
-This app aims to be a convenient centralized stop for you to collate your portfolio data in a single location on your mobile device.
+Keeping track of your stock portfolio can be a daunting and tiresome inconvenience. This inconvenience only worsens as your portfolio increases in size across multiple brokerage services! Hence, this app aims to be a centralized stop for you to collate your portfolio data in a single location.
 
-What this app hopes to offer to you in addition to other stock portfolio apps in the current market is to track dividends in addition to stock value, provide intuitive data visualisation, account for brokerage and miscellaneous fees, and a news platform.
+Dividend tracking is a rare feature amongst today's stock portfolio apps in the market despite being useful data to track, thus we hope to add this feature to value-add.
 
-Dividend tracking is a rare feature amongst today's stock portfolio apps in the market despite being useful data to track, thus we hope to add this feature to value add to you.
+Brokerage and miscellaneous fees are also an essential feature for a stock portfolio app which we will include for you to easily track your portfolio.
 
-Data visualisation in financial apps are often rather cryptic and confusing, which we hope to improve and simplify the visualisation for you regardless of your experience level in this field.
-
-Brokerage and miscellaneous fees are also an essential feature for a stock portfolio app which we will include for you to easily track your portfolio even if you have multiple brokerage accounts that you are tracking.
+Information in financial apps are often rather cryptic and confusing, hence we hope to implement data visualisation for you for simplicity and accessibility.
 
 News platform integrated into this app will allow you to quickly catch up on the latest updates regarding the companies that you are invested in, saving you time from scouring the web manually from news outlets and blogs for the same updates.
 
 ## Aim
-We aim to develop a mobile application that improves user experience for people interested in tracking their stock portfolio through a mobile application. 
-We aim to achieve simplicity and convenience through the UI/UX design and the services we offer, which is to provide a tracker for your's stock portfolio, which may be composed of data that is spread over numerous brokerage services and multiple investments. 
-Ultimately, this app hopes to be a casual yet powerful tool for you to utilise to supplement your trading experience.
+We aim to develop a mobile application that improves user experience for people interested in tracking their stock portfolio through a mobile application but has no time to do so manually. Through UI/UX simplicity and overall convenience, we aim to provide a tracker for users’ stock portfolio, which may be composed of data that is spread over multiple investments, with possibly different brokerage fees. Ultimately, this app hopes to be a casual yet powerful tool for you to utilise to supplement your trading experience.
 
 ## User Stories
 template: As a (role), I want (feature) so that (reason).
