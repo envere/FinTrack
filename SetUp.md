@@ -47,5 +47,5 @@ npm install
 ```
 npm init
 npm install --save express mongodb body-parser  // gets express framework, mongodb database, body-parser for JSON
-npm install --save-dev nodemon // auto restarts server if files in backend changes
+npm install -g nodemon // auto restarts server if files in backend changes
 ```
