@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { createSwitchNavigator, createAppContainer} from "react-navigation";
 
 import LoginForm from "../components/LoginForm";
-import HomeScreen from "./HomeScreen";
 import DrawerNavigator from "../navigation/DrawerNavigator"
 
 class LoginScreen extends Component {
