@@ -4,6 +4,7 @@ import { createSwitchNavigator, createAppContainer} from "react-navigation";
 
 import LoginForm from "../components/LoginForm";
 import HomeScreen from "./HomeScreen";
+import DrawerNavigator from "../navigation/DrawerNavigator"
 
 class LoginScreen extends Component {
   render() {
@@ -24,7 +25,7 @@ class LoginScreen extends Component {
 
 const switchNav = createSwitchNavigator({
   Login: { screen: LoginScreen },
-  Home: { screen: HomeScreen }
+  Home: { screen: DrawerNavigator}
 }, {
   initialRouteName: "Login"
 })
