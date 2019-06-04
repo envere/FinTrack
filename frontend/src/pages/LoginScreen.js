@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { createSwitchNavigator, createAppContainer} from "react-navigation";
 
 import LoginForm from "../components/LoginForm";
+import HomeScreen from "./HomeScreen";
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-          <Text style={styles.mainText}>FinTrack Login</Text>
+        <Text style={styles.mainText}>FinTrack Login</Text>
         <LoginForm type="Login" />
         <View style={styles.signupTextCont}>
           <Text style={styles.signupText}>Don't have an account yet?</Text>
@@ -20,6 +22,15 @@ export default class LoginScreen extends Component {
   }
 }
 
+const switchNav = createSwitchNavigator({
+  Login: { screen: LoginScreen },
+  Home: { screen: HomeScreen }
+}, {
+  initialRouteName: "Login"
+})
+
+export default createAppContainer(switchNav);
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#18325b",
@@ -28,10 +39,10 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   mainText: {
-      fontSize:40,
-      fontWeight:'bold',
-      color: 'white',
-      marginVertical: 80
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "white",
+    marginVertical: 80
   },
   signupTextCont: {
     flexGrow: 1,
