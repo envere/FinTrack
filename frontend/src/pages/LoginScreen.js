@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { createSwitchNavigator, createAppContainer} from "react-navigation";
+import { createSwitchNavigator, createAppContainer, createStackNavigator } from "react-navigation";
 
 import LoginForm from "../components/LoginForm";
-import DrawerNavigator from "../navigation/DrawerNavigator"
+import DrawerNavigator from "../navigation/DrawerNavigator";
+import SignupScreen from "./SignupScreen";
 
 class LoginScreen extends Component {
   render() {
@@ -13,7 +14,11 @@ class LoginScreen extends Component {
         <LoginForm type="Login" />
         <View style={styles.signupTextCont}>
           <Text style={styles.signupText}>Don't have an account yet?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("Signup")
+            }}
+          >
             <Text style={styles.signupButton}> Sign up!</Text>
           </TouchableOpacity>
         </View>
@@ -22,12 +27,16 @@ class LoginScreen extends Component {
   }
 }
 
-const switchNav = createSwitchNavigator({
-  Login: { screen: LoginScreen },
-  Home: { screen: DrawerNavigator}
-}, {
-  initialRouteName: "Login"
-})
+const switchNav = createSwitchNavigator(
+  {
+    Login: { screen: LoginScreen },
+    Home: { screen: DrawerNavigator },
+    Signup: { screen: SignupScreen }
+  },
+  {
+    initialRouteName: "Login",
+  }
+);
 
 export default createAppContainer(switchNav);
 
