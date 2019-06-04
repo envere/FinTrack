@@ -40,12 +40,12 @@ These pages serve their respective purposes as covered earlier.
 - Simple UI to minimise information overload
 
 ## RoadMap
-- June
+- June - Core features
   - UI
   - User accounts
   - Divident tracking
   - Brokerage and miscellaneous fees
-- July
+- July - Extension features
   - Data visualisation
   - News platform
 
