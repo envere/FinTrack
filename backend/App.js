@@ -16,6 +16,7 @@ app.listen(PORT, () => {
   client.connect(err => {
     console.log('mongoclient')
     const collection = client.db('test').collection('devices')
+    console.log(collection)
     client.close()
   })
 })
