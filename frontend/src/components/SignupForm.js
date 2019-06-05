@@ -8,10 +8,18 @@ import {
 } from "react-native";
 import { withNavigation } from "react-navigation";
 
-class LoginForm extends Component {
+class SignupForm extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <TextInput
+          style={styles.inputBox}
+          underlineColorAndroid="rgba(0,0,0,0)"
+          placeholder="Name"
+          placeholderTextColor="#ffffff"
+          selectionColor="#fff"
+          onSubmitEditing={() => this.password.focus()}
+        />
         <TextInput
           style={styles.inputBox}
           underlineColorAndroid="rgba(0,0,0,0)"
@@ -32,7 +40,7 @@ class LoginForm extends Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate("Home");
+            this.props.navigation.navigate("Login");
           }}
         >
           <Text style={styles.buttonText}>{this.props.type}</Text>
@@ -42,7 +50,7 @@ class LoginForm extends Component {
   }
 }
 
-export default withNavigation(LoginForm);
+export default withNavigation(SignupForm);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,5 @@
 import React, { Component } from "react"
-import { Platform, StyleSheet, Text, View } from "react-native"
-import { Container, Header, Left, Body, Title } from "native-base"
+import { StyleSheet, View } from "react-native"
 
 import SplashScreen from "./src/pages/SplashScreen"
 import LoginScreen from "./src/pages/LoginScreen"
@@ -35,7 +34,7 @@ export default class App extends Component {
     if (this.state.isLoading) {
       return <SplashScreen />
     }
-    if (!this.state.isLoggedIn) { // put a ! to access homescreen.
+    if (this.state.isLoggedIn) { // put a ! to access homescreen.
       return <LoginScreen />
     }
     return (
