@@ -14,6 +14,9 @@ app.listen(PORT, () => {
   console.log('listening')
   const client = new MongoClient(url, { useNewUrlParser: true })
   client.connect(err => {
+    if (err) {
+      console.log(err)
+    }
     console.log('mongoclient')
     const collection = client.db('test').collection('devices')
     console.log(collection)
