@@ -63,9 +63,10 @@ These pages serve their respective purposes as covered earlier.
 
 ## Built with
 - [React Native](https://facebook.github.io/react-native/)
-- [Native Base](https://nativebase.io)
-- [Vector Icons](https://github.com/oblador/react-native-vector-icons)
-- [Firebase](https://firebase.google.com)
+  - [NativeBase](https://nativebase.io)
+  - [Vector Icons](https://github.com/oblador/react-native-vector-icons)
+  - [React Navigation](https://reactnavigation.org)
+- [MongoDB](https://www.mongodb.com)
 - [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Potential Extension Features
