@@ -23,9 +23,10 @@ News platform integrated into this app will allow you to quickly catch up on the
 We aim to develop a mobile application that improves user experience for people interested in tracking their stock portfolio through a mobile application but has no time to do so manually. Through UI/UX simplicity and overall convenience, we aim to provide a tracker for users’ stock portfolio, which may be composed of data that is spread over multiple investments, with possibly different brokerage fees. Ultimately, this app hopes to be a casual yet powerful tool for you to utilise to supplement your trading experience.
 
 ## User Stories
-- As a user, I want relevant stock data to be presented in a concise way, so I can check on my portfolio quickly and conveniently.
-- As a user, I want my dividend yield to be tracked together with my stock portfolio for convenience.
-- As a user, I want to check my progress without distractions from clutter such as that of traditional stocktracking apps, so that I can focus on what is important.
+- As a new investor, I want to check my progress without distractions from clutter such as that of traditional stocktracking apps, so that I can focus on what is important.
+- As a long term investor, I want my dividend yield to be tracked together with my stock portfolio as it is a significant part of the total returns.
+- As an investor for many months/years, I want data visualisation so that I can better analyse my progress.
+- As a frequent trader, I want to track my transaction fees (brokerage etc.) as it directly affects portfolio value.
 
 ## Scope of project
 The mobile application provides a platform for users to create an account and store their user specific data.
