@@ -11,7 +11,7 @@ const stringifyReq = req => {
   return `req: \n\nparams: ${params}\n\nbody: ${body}\n\nurl: ${url}\n\nquery: ${query}\n\nheaders: ${headers}\n`
 }
 
-router.post('/adduser', (req, res) => {
+router.post('/user/:p1/:p2', (req, res) => {
   const req_string = stringifyReq(req)
   const user = new User({name: "name", email: "email", password: "password"})
   
