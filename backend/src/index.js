@@ -10,6 +10,11 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
+app.use(userRoute)
+
 app.use((req, res, next) => {
   console.log(`${new Date().toString()} => ${req.originalUrl}`)
   next()
