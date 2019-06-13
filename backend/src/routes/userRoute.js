@@ -11,13 +11,30 @@ const stringifyReq = req => {
   return `req: \n\nparams: ${params}\n\nbody: ${body}\n\nurl: ${url}\n\nquery: ${query}\n\nheaders: ${headers}\n`
 }
 
-router.post('/user/:p1/:p2', (req, res) => {
-  const req_string = stringifyReq(req)
-  const user = new User({name: "name", email: "email", password: "password"})
+// POST
+// localhost:3000/user/{user's name}/{user's email}
+router.post('/adduser/:name/:email', (req, res) => {
+  const user = new User({
+    name: req.params.name,
+    email: req.params.email,
+    password: 'test_password',
+  })
+  user
+    .save()
+    .then(doc => {
+      console.log(doc)
+      res.send(doc)
+    })
+    .catch(err => {
+      console.log(err)
+      res.send(err)
+    })
+})
+
+// GET
+// localhost:3000/user?email={user email}
+router.get('/getuser', (req, res) => {
   
-  console.log(req_string)
-  console.log(user)
-  res.send(req_string)
 })
 
 module.exports = router

@@ -3,9 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const userRoute = require('./routes/userRoute')
-const username = 'fintrack'
-const password = 'nfactorialsorting'
-const url = `mongodb+srv://${username}:${password}@fintrack-snwv2.mongodb.net/test?retryWrites=true&w=majority`
+
 const PORT = process.env.PORT || 3000
 
 const app = express()
