@@ -11,7 +11,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use(userRoute)
+app.use('/user', userRoute)
 
 app.use((req, res, next) => {
   console.log(`${new Date().toString()} => ${req.originalUrl}`)
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.log(err.stack)
-  res.send(500).send('error 500')
+  res.status(500).send('error 500')
 })
 
 app.listen(PORT, () => {
