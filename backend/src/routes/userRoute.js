@@ -1,23 +1,83 @@
 const User = require('../models/userModel')
 const express = require('express')
+const bcrypt = require('bcrypt')
 const router = express.Router()
 
 router.get('/', (req, res) => {
   User
     .find()
     .then(doc => {
-      console.log(doc)
-      res.status(200).json(doc)
+      res.status(200).json({
+        request: `${req.url}`,
+        message: 'list of all users',
+        users: doc,
+      })
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
     })
 })
 
-router.post('/', (req, res) => {
-  console.log(req.body)
-  res.send(JSON.stringify(req, false, 2))
+router.get('/:username', (req, res) => {
+  User
+    .findOne({username: req.params.username})
+    .then(doc => {
+      res.status(200).json({
+        request: `${req.url}`,
+        message: `getting user by username: ${req.params.username}`,
+        user: doc,
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
+    })
+})
+
+router.post('/register', (req, res) => {
+
+  const saltRounds = 10
+
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+
+    if (err) {
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
+    }
+
+    const user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+    })
+
+    user
+      .save()
+      .then(doc => {
+        res.status(200).json({
+          request: `${req.url}`,
+          message: 'added user',
+          user: doc,
+        })
+      })
+      .catch(err => {
+        res.status(500).json({
+          request: `${req.url}`,
+          message: 'error',
+          error: err,
+        })
+      })  
+  })
 })
 
 module.exports = router
