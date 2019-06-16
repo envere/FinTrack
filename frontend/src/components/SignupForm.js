@@ -37,6 +37,14 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
         />
+        <TextInput
+          style={styles.inputBox}
+          underlineColorAndroid="rgba(0,0,0,0)"
+          placeholder="Confirm password"
+          secureTextEntry={true}
+          placeholderTextColor="#ffffff"
+          ref={input => (this.password = input)}
+        />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
