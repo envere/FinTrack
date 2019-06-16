@@ -32,7 +32,8 @@ const jwtStrategy = new JWTStrategy(
   secretOrKey: 'secret_jwt',
   },
   (jwtPayload, callback) => {
-    
+    return User
+      .findOne({})
   }
 )
 
