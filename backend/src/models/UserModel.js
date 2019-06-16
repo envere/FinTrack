@@ -1,5 +1,6 @@
 // imports
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema
 
 // connection uri
@@ -38,6 +39,19 @@ const UserSchema = new Schema({
   }
 })
 
+UserSchema.statics.createUser = function(username, email, password) {
+  return new User({
+    username: username,
+    email: email,
+    password: hashPassword(password),
+  })
+}
+
 const User = mongoose.model('User', UserSchema)
 
 module.exports = User
+
+function hashPassword(password) {
+  const saltRounds = 10
+  return bcrypt.hashSync(password, saltRounds)
+}

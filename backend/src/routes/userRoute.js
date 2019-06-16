@@ -43,41 +43,64 @@ router.get('/:username', (req, res) => {
 
 router.post('/register', (req, res) => {
 
-  const saltRounds = 10
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
 
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+  const user = User.createUser(username, email, password)
 
-    if (err) {
+  user
+    .save()
+    .then(doc => {
+      res.status(200).json({
+        request: `${req.url}`,
+        message: 'added user',
+        user: doc,
+      })
+    })
+    .catch(err => {
       res.status(500).json({
         request: `${req.url}`,
         message: 'error',
         error: err,
       })
-    }
+    })  
 
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hash,
-    })
+  // const saltRounds = 10
 
-    user
-      .save()
-      .then(doc => {
-        res.status(200).json({
-          request: `${req.url}`,
-          message: 'added user',
-          user: doc,
-        })
-      })
-      .catch(err => {
-        res.status(500).json({
-          request: `${req.url}`,
-          message: 'error',
-          error: err,
-        })
-      })  
-  })
+  // bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+
+  //   if (err) {
+  //     res.status(500).json({
+  //       request: `${req.url}`,
+  //       message: 'error',
+  //       error: err,
+  //     })
+  //   }
+
+  //   const user = new User({
+  //     username: req.body.username,
+  //     email: req.body.email,
+  //     password: hash,
+  //   })
+
+    // user
+    //   .save()
+    //   .then(doc => {
+    //     res.status(200).json({
+    //       request: `${req.url}`,
+    //       message: 'added user',
+    //       user: doc,
+    //     })
+    //   })
+    //   .catch(err => {
+    //     res.status(500).json({
+    //       request: `${req.url}`,
+    //       message: 'error',
+    //       error: err,
+    //     })
+    //   })  
+  // })
 })
 
 module.exports = router
