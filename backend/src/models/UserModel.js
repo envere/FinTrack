@@ -43,7 +43,7 @@ UserSchema.statics.createUser = function(username, email, password) {
   return new User({
     username: username,
     email: email,
-    password: hashPassword(password),
+    password: hashPasswordSync(password),
   })
 }
 
@@ -51,7 +51,7 @@ const User = mongoose.model('User', UserSchema)
 
 module.exports = User
 
-function hashPassword(password) {
+function hashPasswordSync(password) {
   const saltRounds = 10
   return bcrypt.hashSync(password, saltRounds)
 }

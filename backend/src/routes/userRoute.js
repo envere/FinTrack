@@ -42,7 +42,7 @@ router.get('/:username', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-
+  
   const username = req.body.username
   const email = req.body.email
   const password = req.body.password
@@ -65,42 +65,6 @@ router.post('/register', (req, res) => {
         error: err,
       })
     })  
-
-  // const saltRounds = 10
-
-  // bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-
-  //   if (err) {
-  //     res.status(500).json({
-  //       request: `${req.url}`,
-  //       message: 'error',
-  //       error: err,
-  //     })
-  //   }
-
-  //   const user = new User({
-  //     username: req.body.username,
-  //     email: req.body.email,
-  //     password: hash,
-  //   })
-
-    // user
-    //   .save()
-    //   .then(doc => {
-    //     res.status(200).json({
-    //       request: `${req.url}`,
-    //       message: 'added user',
-    //       user: doc,
-    //     })
-    //   })
-    //   .catch(err => {
-    //     res.status(500).json({
-    //       request: `${req.url}`,
-    //       message: 'error',
-    //       error: err,
-    //     })
-    //   })  
-  // })
 })
 
 module.exports = router
