@@ -43,8 +43,14 @@ npm install
 
 ## Back End
 
-### Steps
-```
-npm init
-npm install --save express mongodb body-parser
-```
+### Libraries
+- express
+- body-parser
+- mongodb
+- mongoose
+- bcrypt
+- express-session
+- passport
+- passport-local
+- passport-jwt
+- jsonwebtoken
