@@ -39,27 +39,6 @@ const UserSchema = new Schema({
   }
 })
 
-UserSchema.statics.createUser = function(username, email, password) {
-  return new User({
-    username: username,
-    email: email,
-    password: hashPasswordSync(password),
-  })
-}
-
-UserSchema.statics.findByUsername = function(username) {
-  return this.findOne({username: username})
-}
-
-UserSchema.statics.findByEmail = function(email) {
-  return this.findOne({email: email})
-}
-
 const User = mongoose.model('User', UserSchema)
 
 module.exports = User
-
-function hashPasswordSync(password) {
-  const saltRounds = 10
-  return bcrypt.hashSync(password, saltRounds)
-}
