@@ -7,9 +7,14 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
-import axios from 'axios';
+import axios from "axios";
 
 const url = "localhost:3000/user/register";
+
+function validateEmail(email) {
+  const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regexp.test(email);
+}
 
 class SignupForm extends Component {
   constructor(props) {
@@ -18,8 +23,8 @@ class SignupForm extends Component {
       username: "",
       email: "",
       password: "",
-      password2: "",
-    }
+      password2: ""
+    };
   }
   render() {
     return (
@@ -30,7 +35,7 @@ class SignupForm extends Component {
           placeholder="Username"
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
-          onChangeText={text => this.setState({username: text})}
+          onChangeText={text => this.setState({ username: text })}
           onSubmitEditing={() => this.password.focus()}
         />
         <TextInput
@@ -40,7 +45,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
-          onChangeText={text => this.setState({email: text})}
+          onChangeText={text => this.setState({ email: text })}
           onSubmitEditing={() => this.password.focus()}
         />
         <TextInput
@@ -50,7 +55,7 @@ class SignupForm extends Component {
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
-          onChangeText={text => this.setState({password: text})}
+          onChangeText={text => this.setState({ password: text })}
         />
         <TextInput
           style={styles.inputBox}
@@ -59,16 +64,18 @@ class SignupForm extends Component {
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
-          onChangeText={text => this.setState({password2: text})}
+          onChangeText={text => this.setState({ password2: text })}
         />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
             const pwCheck = this.state.password === this.state.password2;
-            if (!pwCheck) {
-              alert("Please ensure that your 2nd password is the same.")
+            if (!validateEmail(this.state.email)) {
+              alert("Please enter a valid email");
+            } else if (!pwCheck) {
+              alert("Please ensure that your 2nd password is the same.");
             } else {
-              alert(JSON.stringify(this.state))
+              alert(JSON.stringify(this.state));
             }
             //this.props.navigation.navigate("Login");
           }}
