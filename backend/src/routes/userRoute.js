@@ -51,13 +51,6 @@ router.post('/register', (req, res) => {
   const saltRounds = 10
 
   bcrypt.hash(plaintext_password, saltRounds, (err, hash) => {
-    if (err) {
-      res.json({
-        request: req.url,
-        message: 'error',
-        error: err,
-      })
-    }
     const user = new User({
       username: username,
       email: email,
@@ -105,7 +98,14 @@ router.post('/login', (req, res) => {
             error: 'invalid password',
           })
         }
-        
+        return user
+      })
+    })
+    .then(user => {
+      jwt.sign({user: user}, 'secretkey', (err, token) => {
+        res.status(200).json({
+          token   
+        })
       })
     })
     .catch(err => {
@@ -116,5 +116,19 @@ router.post('/login', (req, res) => {
       })
     })
 })
+
+// Token format
+// authorization: "Bearer <token>"
+
+function verifyToken(req, res, next) {
+  // auth header value
+  const bearerHeader = req.headers['authorization']
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(' ')
+    const bearerToken = bearer[1]
+    req.token = bearerToken
+    next()
+  }
+}
 
 module.exports = router
