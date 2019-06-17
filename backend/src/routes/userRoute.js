@@ -107,6 +107,7 @@ router.post('/login', (req, res) => {
         }
         
       })
+    })
     .catch(err => {
       res.status(500).json({
         request: req.url,
@@ -114,16 +115,6 @@ router.post('/login', (req, res) => {
         error: err,
       })
     })
-
-  // User
-  //   .findByUsername('x')
-  //   .then(doc => {
-  //     if (!doc) {
-  //       throw new Error(`user with username: ${supplied_username} does not exist`)
-  //     }
-  //     return doc
-  //   })
-  //   .then(doc => doc.verifyPassword(supplied_password))
 })
 
 module.exports = router
