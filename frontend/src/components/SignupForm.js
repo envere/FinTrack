@@ -7,9 +7,8 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
-import axios from "axios";
 
-const url = "localhost:3000/user/register";
+const url = "https://orbital-fintrack.herokuapp.com/user/register";
 
 function validateEmail(email) {
   const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -75,7 +74,18 @@ class SignupForm extends Component {
             } else if (!pwCheck) {
               alert("Please ensure that your 2nd password is the same.");
             } else {
-              alert(JSON.stringify(this.state));
+              fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Origin": "*"
+                },
+                body: JSON.stringify({
+                  "username": this.state.username,
+                  "email": this.state.email,
+                  "password": this.state.password
+                })
+              }).then(res => alert(JSON.stringify(res)));
             }
             //this.props.navigation.navigate("Login");
           }}
