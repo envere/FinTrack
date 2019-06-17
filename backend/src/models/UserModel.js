@@ -47,6 +47,14 @@ UserSchema.statics.createUser = function(username, email, password) {
   })
 }
 
+UserSchema.statics.findByUsername = function(username) {
+  return this.findOne({username: username})
+}
+
+UserSchema.statics.findByEmail = function(email) {
+  return this.findOne({email: email})
+}
+
 const User = mongoose.model('User', UserSchema)
 
 module.exports = User
