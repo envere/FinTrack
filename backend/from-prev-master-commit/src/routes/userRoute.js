@@ -1,67 +1,70 @@
-const UserModel = require('../models/userModel')
+const User = require('../models/userModel')
 const express = require('express')
+const bcrypt = require('bcrypt')
 const router = express.Router()
 
-// create new user
-// POST
-router.post('/user', (req, res) => {
-  if (!req.body) {
-    res.status(400).send('error 400, Request boy missing')
-  }
-
-  if (!req.body.email) {
-
-  }
-
-  const model = new UserModel(req.body)
-  model
-    .save()
+router.get('/', (req, res) => {
+  User
+    .find()
     .then(doc => {
-      if (!doc || doc.length === 0) {
-        return res.status(500).send(doc)
-      }
-
-      res.status(201).send(doc)
+      res.status(200).json({
+        request: `${req.url}`,
+        message: 'list of all users',
+        users: doc,
+      })
     })
     .catch(err => {
-      res.status(500).json(err)
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
     })
 })
 
-// GET
-router.get('/user', (req, res) => {
-  if (!res.query.email) {
-    return res.status(400).send('missing url parameter: email')
-  }
-
-  UserModel
-    .findOne({email: req.query.email})
-    .then(doc => {res.json(doc)})
-    .catch(err => {res.status(500).json(err)})
+router.get('/:username', (req, res) => {
+  User
+    .findOne({username: req.params.username})
+    .then(doc => {
+      res.status(200).json({
+        request: `${req.url}`,
+        message: `getting user by username: ${req.params.username}`,
+        user: doc,
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
+    })
 })
 
-// UPDATE
-router.put('/user', (req, res) => {
-  if (!req.query.email) {
-    return res.status(400).send('missing url parameter: email')
-  }
+router.post('/register', (req, res) => {
 
-  UserModel
-    .findOneAndUpdate({email: req.query.email}, req.body, {new: true})
-    .then(doc => {res.json(doc)})
-    .catch(err => {res.status(500).json(err)})
-})
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
 
-// DELETE
-router.delete('/user', (req, res) => {
-  if (!req.query.email) {
-    return res.status(400).send('missing url parameter: email')
-  }
+  const user = User.createUser(username, email, password)
 
-  UserModel
-    .findOneAndRemove({email: req.query.email})
-    .then(doc => {res.json(doc)})
-    .catch(err => {res.status(500).json(err)})
+  user
+    .save()
+    .then(doc => {
+      res.status(200).json({
+        request: `${req.url}`,
+        message: 'added user',
+        user: doc,
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        request: `${req.url}`,
+        message: 'error',
+        error: err,
+      })
+    })  
 })
 
 module.exports = router
