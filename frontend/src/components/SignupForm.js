@@ -7,17 +7,30 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
+import axios from 'axios';
+
+const url = "localhost:3000/user/register";
 
 class SignupForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      email: "",
+      password: "",
+      password2: "",
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
         <TextInput
           style={styles.inputBox}
           underlineColorAndroid="rgba(0,0,0,0)"
-          placeholder="Name"
+          placeholder="Username"
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
+          onChangeText={text => this.setState({username: text})}
           onSubmitEditing={() => this.password.focus()}
         />
         <TextInput
@@ -27,6 +40,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
+          onChangeText={text => this.setState({email: text})}
           onSubmitEditing={() => this.password.focus()}
         />
         <TextInput
@@ -36,6 +50,7 @@ class SignupForm extends Component {
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
+          onChangeText={text => this.setState({password: text})}
         />
         <TextInput
           style={styles.inputBox}
@@ -44,11 +59,18 @@ class SignupForm extends Component {
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
+          onChangeText={text => this.setState({password2: text})}
         />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate("Login");
+            const pwCheck = this.state.password === this.state.password2;
+            if (!pwCheck) {
+              alert("Please ensure that your 2nd password is the same.")
+            } else {
+              alert(JSON.stringify(this.state))
+            }
+            //this.props.navigation.navigate("Login");
           }}
         >
           <Text style={styles.buttonText}>{this.props.type}</Text>
