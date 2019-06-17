@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const express = require('express')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const router = express.Router()
 
 router.get('/', (req, res) => {
@@ -24,7 +25,7 @@ router.get('/', (req, res) => {
 
 router.get('/:username', (req, res) => {
   User
-    .findOne({username: req.params.username})
+    .findByUsername(req.params.username)
     .then(doc => {
       res.status(200).json({
         request: `${req.url}`,
@@ -65,6 +66,12 @@ router.post('/register', (req, res) => {
         error: err,
       })
     })  
+})
+
+router.post('/login', (req, res) => {
+  const supplied_username = req.body.username
+  const supplied_password = req.body.password
+
 })
 
 module.exports = router
