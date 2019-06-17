@@ -81,13 +81,19 @@ class SignupForm extends Component {
                   "Access-Control-Origin": "*"
                 },
                 body: JSON.stringify({
-                  "username": this.state.username,
-                  "email": this.state.email,
-                  "password": this.state.password
+                  username: this.state.username,
+                  email: this.state.email,
+                  password: this.state.password
                 })
-              }).then(res => alert(JSON.stringify(res)));
+              }).then(res => {
+                if (JSON.parse(res.status) === 200) {
+                  alert("Sign up successful!");
+                  this.props.navigation.navigate("Login");
+                } else {
+                  alert("Error " + JSON.stringify(res.status));
+                }
+              });
             }
-            //this.props.navigation.navigate("Login");
           }}
         >
           <Text style={styles.buttonText}>{this.props.type}</Text>
