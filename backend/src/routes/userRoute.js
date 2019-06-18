@@ -55,10 +55,6 @@ router.post("/register", (req, res) => {
   const email = req.body.email;
   const plaintext_password = req.body.password;
 
-  const username = req.body.username
-  const email = req.body.email
-  const plaintext_password = req.body.password
-
   const saltRounds = 12
 
   bcrypt.hash(plaintext_password, saltRounds, (err, hash) => {
