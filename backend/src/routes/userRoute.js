@@ -2,11 +2,17 @@ const User = require('../models/UserModel')
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const passport = require('passport')
 const router = express.Router()
 
-router.get('/getUsers', passport.authenticate('jwt', { session: false }) ,(req, res) => {
-  User
+const secret = require('../configs/jwtConfig').secret
+
+router.get('/', verifyJWT, (req, res) => {
+  jwt.verify(req.token, secret, (err, auth) => {
+    if (err) {
+      res.sendStatus(403)
+    }
+
+    User
     .find()
     .then(doc => {
       res.status(200).json({
@@ -22,9 +28,10 @@ router.get('/getUsers', passport.authenticate('jwt', { session: false }) ,(req, 
         error: err,
       })
     })
+  })
 })
 
-router.get('/getUser/:username', (req, res) => {
+router.get('/:username', (req, res) => {
   User
     .findOne({username: req.params.username})
     .then(doc => {
@@ -77,8 +84,9 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  const supplied_username = 'test_username'
-  const supplied_password = 'test_password'
+  const supplied_username = req.body.username
+  const supplied_password = req.body.password
+
   User
     .findOne({username: supplied_username})
     .then(user => {
@@ -89,32 +97,42 @@ router.post('/login', (req, res) => {
           error: 'user account does not exist'
         })
       }
-      bcrypt.compare(supplied_password, user.password)
-      .then(isValid => {
-        if (isValid) {
-          const payload = {
-            id: user.username,
+      bcrypt
+        .compare(supplied_password, user.password)
+        .then(isValid => {
+          if (isValid) {
+            jwt.sign({user}, secret, { expiresIn: '30s' }, (err, token) => {
+              if (err) {
+                res.status(500).json({
+                  request: req.url,
+                  message: 'error',
+                  error: err,
+                })
+              } else {
+                res.json({token})
+              }
+            })
+          } else {
+            res.status(400).json({
+              request: req.url,
+              message: 'error',
+              error: 'invalid password',
+            })
           }
-          jwt.sign(payload, 'secret', { expiresIn: 36000 }, (err, token) => {
-            if (err) {
-              res.status(500).json({
-                request: req.url,
-                message: 'error',
-                error: err,
-              })
-            } else {
-              res.json({token})
-            }
-          })
-        } else {
-          res.status(400).json({
-            request: req.url,
-            message: 'error',
-            error: 'invalid password',
-          })
-        }
-      })
+        })
     })
 })
+
+// checks if jwt token is valid
+function verifyJWT(req, res, next) {
+  const bearerHeader = req.headers['authorization']
+  if (bearerHeader) {
+    bearerToken = bearerHeader.split(' ')[1]
+    req.token = bearerToken
+    next()
+  } else {
+    res.sendStatus(403)
+  }
+}
 
 module.exports = router
