@@ -6,7 +6,7 @@ const router = express.Router()
 
 const secret = require('../configs/jwtConfig').secret
 
-router.get('/', verifyJWT, (req, res) => {
+router.get('/getUsers', verifyJWT, (req, res) => {
   jwt.verify(req.token, secret, (err, auth) => {
     if (err) {
       res.sendStatus(403)
@@ -101,7 +101,7 @@ router.post('/login', (req, res) => {
         .compare(supplied_password, user.password)
         .then(isValid => {
           if (isValid) {
-            jwt.sign({user}, secret, { expiresIn: '30s' }, (err, token) => {
+            jwt.sign({user}, secret, (err, token) => {
               if (err) {
                 res.status(500).json({
                   request: req.url,
