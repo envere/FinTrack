@@ -4,8 +4,15 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  User
+const secret = require('../configs/jwtConfig').secret
+
+router.get('/getUsers', verifyJWT, (req, res) => {
+  jwt.verify(req.token, secret, (err, auth) => {
+    if (err) {
+      res.sendStatus(403)
+    }
+
+    User
     .find()
     .then(doc => {
       res.status(200).json({
@@ -21,6 +28,7 @@ router.get('/', (req, res) => {
         error: err,
       })
     })
+  })
 })
 
 router.get('/:username', (req, res) => {
@@ -76,9 +84,8 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  const supplied_username = 'test_username'
-  const supplied_password = 'test_password'
-
+  const supplied_username = req.body.username
+  const supplied_password = req.body.password
 
   User
     .findOne({username: supplied_username})
@@ -90,44 +97,41 @@ router.post('/login', (req, res) => {
           error: 'user account does not exist'
         })
       }
-      bcrypt.compare(supplied_password, user.password, (err, result) => {
-        if (!result) {
-          res.status(400).json({
-            request: req.url,
-            message: 'error',
-            error: 'invalid password',
-          })
-        }
-        return user
-      })
-    })
-    .then(user => {
-      jwt.sign({user: user}, 'secretkey', (err, token) => {
-        res.status(200).json({
-          token   
+      bcrypt
+        .compare(supplied_password, user.password)
+        .then(isValid => {
+          if (isValid) {
+            jwt.sign({user}, secret, (err, token) => {
+              if (err) {
+                res.status(500).json({
+                  request: req.url,
+                  message: 'error',
+                  error: err,
+                })
+              } else {
+                res.json({token})
+              }
+            })
+          } else {
+            res.status(400).json({
+              request: req.url,
+              message: 'error',
+              error: 'invalid password',
+            })
+          }
         })
-      })
-    })
-    .catch(err => {
-      res.status(500).json({
-        request: req.url,
-        message: 'error',
-        error: err,
-      })
     })
 })
 
-// Token format
-// authorization: "Bearer <token>"
-
-function verifyToken(req, res, next) {
-  // auth header value
+// checks if jwt token is valid
+function verifyJWT(req, res, next) {
   const bearerHeader = req.headers['authorization']
   if (bearerHeader) {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
+    bearerToken = bearerHeader.split(' ')[1]
     req.token = bearerToken
     next()
+  } else {
+    res.sendStatus(403)
   }
 }
 
