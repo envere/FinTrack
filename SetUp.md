@@ -54,3 +54,4 @@ npm install
 - passport-local
 - passport-jwt
 - jsonwebtoken
+- nodemon (devDependency)
