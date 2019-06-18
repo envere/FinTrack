@@ -2,9 +2,10 @@ const User = require('../models/UserModel')
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const passport = require('passport')
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/getUsers', passport.authenticate('jwt', { session: false }) ,(req, res) => {
   User
     .find()
     .then(doc => {
@@ -23,7 +24,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:username', (req, res) => {
+router.get('/getUser/:username', (req, res) => {
   User
     .findOne({username: req.params.username})
     .then(doc => {
@@ -78,8 +79,6 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   const supplied_username = 'test_username'
   const supplied_password = 'test_password'
-
-
   User
     .findOne({username: supplied_username})
     .then(user => {
@@ -90,45 +89,32 @@ router.post('/login', (req, res) => {
           error: 'user account does not exist'
         })
       }
-      bcrypt.compare(supplied_password, user.password, (err, result) => {
-        if (!result) {
+      bcrypt.compare(supplied_password, user.password)
+      .then(isValid => {
+        if (isValid) {
+          const payload = {
+            id: user.username,
+          }
+          jwt.sign(payload, 'secret', { expiresIn: 36000 }, (err, token) => {
+            if (err) {
+              res.status(500).json({
+                request: req.url,
+                message: 'error',
+                error: err,
+              })
+            } else {
+              res.json({token})
+            }
+          })
+        } else {
           res.status(400).json({
             request: req.url,
             message: 'error',
             error: 'invalid password',
           })
         }
-        return user
-      })
-    })
-    .then(user => {
-      jwt.sign({user: user}, 'secretkey', (err, token) => {
-        res.status(200).json({
-          token   
-        })
-      })
-    })
-    .catch(err => {
-      res.status(500).json({
-        request: req.url,
-        message: 'error',
-        error: err,
       })
     })
 })
-
-// Token format
-// authorization: "Bearer <token>"
-
-function verifyToken(req, res, next) {
-  // auth header value
-  const bearerHeader = req.headers['authorization']
-  if (bearerHeader) {
-    const bearer = bearerHeader.split(' ')
-    const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
-  }
-}
 
 module.exports = router
