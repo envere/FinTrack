@@ -17,10 +17,9 @@ mongoose
     useCreateIndex: true,
     dbName: 'fintrack_database',
   })
-  .then(
-    () => console.log('connected successfully to database [UserModel.js]'),
-    err => console.log(`connection error to database [UserModel.js]\nerror: ${err}`)
-  )
+  .then(() => console.log('connected successfully to database [UserModel.js]'))
+  .catch(err => console.log(`connection error to database [UserModel.js]\nerror: ${err}`))
+  
 
 const UserSchema = new Schema({
   username: { 
