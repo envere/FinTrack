@@ -31,14 +31,9 @@ router.get('/getUsers', verifyJWT, (req, res) => {
   })
 })
 
-<<<<<<< HEAD
-router.get("/:username", (req, res) => {
-  User.findOne({ username: req.params.username })
-=======
 router.get('/getUser/:username', (req, res) => {
   User
     .findOne({username: req.params.username})
->>>>>>> marc
     .then(doc => {
       res.status(200).json({
         request: `${req.url}`,
@@ -60,15 +55,11 @@ router.post("/register", (req, res) => {
   const email = req.body.email;
   const plaintext_password = req.body.password;
 
-<<<<<<< HEAD
-  const saltRounds = 10;
-=======
   const username = req.body.username
   const email = req.body.email
   const plaintext_password = req.body.password
 
   const saltRounds = 12
->>>>>>> marc
 
   bcrypt.hash(plaintext_password, saltRounds, (err, hash) => {
     const user = new User({
