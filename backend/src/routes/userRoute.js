@@ -88,13 +88,13 @@ router.post("/login", (req, res) => {
 
   User.findOne({ username: supplied_username }).then(user => {
     if (!user) {
-      res.status(404).json({
+      return res.status(404).json({
         request: req.url,
         message: "error",
         error: "user account does not exist"
       });
     }
-    bcrypt.compare(supplied_password, user.password).then(isValid => {
+    return bcrypt.compare(supplied_password, user.password).then(isValid => {
       if (isValid) {
         jwt.sign({ user }, secret, (err, token) => {
           if (err) {
