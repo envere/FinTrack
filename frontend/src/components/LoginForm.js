@@ -15,7 +15,7 @@ class LoginForm extends Component {
         <TextInput
           style={styles.inputBox}
           underlineColorAndroid="rgba(0,0,0,0)"
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
