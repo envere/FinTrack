@@ -9,6 +9,16 @@ export default class SignupScreen extends Component {
       <View style={styles.container}>
         <Text style={styles.mainText}>Registration</Text>
         <SignupForm type="Signup" />
+        <View style={styles.signupTextCont}>
+          <Text style={styles.signupText}>Already have an account?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("Login");
+            }}
+          >
+            <Text style={styles.signupButton}> Sign in!</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -27,4 +37,20 @@ const styles = StyleSheet.create({
     color: "white",
     marginVertical: 80
   },
+  signupTextCont: {
+    flexGrow: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
+    paddingVertical: 16,
+    flexDirection: "row"
+  },
+  signupText: {
+    color: "rgba(255,255,255,0.6)",
+    fontSize: 16
+  },
+  signupButton: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "500"
+  }
 });

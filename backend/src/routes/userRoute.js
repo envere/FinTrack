@@ -9,10 +9,10 @@ const secret = require("../configs/jwtConfig").secret;
 router.get("/getUsers", verifyJWT, (req, res) => {
   jwt.verify(req.token, secret, (err, auth) => {
     if (err) {
-      res.sendStatus(403);
+      return res.sendStatus(403); // inserted return for clarity
     }
 
-    User.find()
+    return User.find()
       .then(doc => {
         res.status(200).json({
           request: `${req.url}`,
@@ -49,9 +49,9 @@ router.get("/getUser/:username", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const displayUsername= req.body.username;
-  const username =  displayUsername.toLowerCase();
-  const email = (req.body.email).toLowerCase();
+  const displayUsername = req.body.username;
+  const username = displayUsername.toLowerCase();
+  const email = req.body.email.toLowerCase();
   const plaintext_password = req.body.password;
 
   const saltRounds = 12;
@@ -83,7 +83,7 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const supplied_username = (req.body.username).toLowerCase();
+  const supplied_username = req.body.username.toLowerCase();
   const supplied_password = req.body.password;
 
   User.findOne({ username: supplied_username }).then(user => {
