@@ -18,6 +18,9 @@ export default class MenuDrawer extends Component {
       <TouchableOpacity
         style={{ height: 50 }}
         onPress={() => {
+          if (text === "Logout") {
+            alert("You have logged out");
+          }
           this.props.navigation.navigate(nav);
         }}
       >
@@ -49,6 +52,7 @@ export default class MenuDrawer extends Component {
             {this.navLink("Transactions", "Transactions")}
             {this.navLink("Account", "Account")}
             {this.navLink("Settings", "Settings")}
+            {this.navLink("Login", "Logout")}
           </View>
         </ScrollView>
         <View style={styles.footer}>
