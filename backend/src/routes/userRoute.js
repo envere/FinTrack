@@ -49,14 +49,16 @@ router.get("/getUser/:username", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const username = req.body.username;
-  const email = req.body.email;
+  const displayUsername= req.body.username;
+  const username =  displayUsername.toLowerCase();
+  const email = (req.body.email).toLowerCase();
   const plaintext_password = req.body.password;
 
   const saltRounds = 12;
 
   bcrypt.hash(plaintext_password, saltRounds, (err, hash) => {
     const user = new User({
+      displayUsername: displayUsername,
       username: username,
       email: email,
       password: hash
@@ -81,7 +83,7 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const supplied_username = req.body.username;
+  const supplied_username = (req.body.username).toLowerCase();
   const supplied_password = req.body.password;
 
   User.findOne({ username: supplied_username }).then(user => {
