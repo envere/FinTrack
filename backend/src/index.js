@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const jwt = require('./util/jwt')
 
 const PORT = process.env.PORT || 3000
 
@@ -10,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', require('./routes/register'))
 app.use('/', require('./routes/login'))
-app.use('/user', require('./routes/userRoute'))
+app.use('/user', jwt.queryJWT, require('./routes/user'))
 
 app.use((req, res, next) => {
   console.log(`${new Date().toString()} => ${req.originalUrl}`)
