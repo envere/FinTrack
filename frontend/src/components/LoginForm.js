@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { withNavigation } from "react-navigation";
 
-const url = "https://orbital-fintrack.herokuapp.com/user/login";
+const url = "https://orbital-fintrack.herokuapp.com/login";
 
 class LoginForm extends Component {
   constructor(props) {
