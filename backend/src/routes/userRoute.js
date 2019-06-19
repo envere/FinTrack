@@ -4,14 +4,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 
-const secret = require('../configs/jwtConfig').secret
+const token = require('../configs/token')
+const secret = token.secret
 
-router.get('/getUsers', verifyJWT, (req, res) => {
-  jwt.verify(req.token, secret, (err, auth) => {
-    if (err) {
-      res.sendStatus(403)
-    }
-
+router.get('/getUsers', token.queryJWT, (req, res) => {
+  token.verifyJWT(req.token, secret)
+  .then(auth => {
     User
     .find()
     .then(doc => {
@@ -29,6 +27,29 @@ router.get('/getUsers', verifyJWT, (req, res) => {
       })
     })
   })
+  .catch(err => res.sendStatus(403))
+  // jwt.verify(req.token, secret, (err, auth) => {
+  //   if (err) {
+  //     res.sendStatus(403)
+  //   }
+
+  //   User
+  //   .find()
+  //   .then(doc => {
+  //     res.status(200).json({
+  //       request: `${req.url}`,
+  //       message: 'list of all users',
+  //       users: doc,
+  //     })
+  //   })
+  //   .catch(err => {
+  //     res.status(500).json({
+  //       request: `${req.url}`,
+  //       message: 'error',
+  //       error: err,
+  //     })
+  //   })
+  // })
 })
 
 router.get('/getUser/:username', (req, res) => {
@@ -101,17 +122,14 @@ router.post('/login', (req, res) => {
         .compare(supplied_password, user.password)
         .then(isValid => {
           if (isValid) {
-            jwt.sign({user}, secret, (err, token) => {
-              if (err) {
-                res.status(500).json({
-                  request: req.url,
-                  message: 'error',
-                  error: err,
-                })
-              } else {
-                res.json({token})
-              }
-            })
+            token
+              .signJWT({user}, secret)
+              .then(token => res.json({token}))
+              .catch(err => res.status(500).json({
+                request: req.url,
+                message: 'error',
+                error: err,
+              }))
           } else {
             res.status(400).json({
               request: req.url,
@@ -122,17 +140,5 @@ router.post('/login', (req, res) => {
         })
     })
 })
-
-// checks if jwt token is valid
-function verifyJWT(req, res, next) {
-  const bearerHeader = req.headers['authorization']
-  if (bearerHeader) {
-    bearerToken = bearerHeader.split(' ')[1]
-    req.token = bearerToken
-    next()
-  } else {
-    res.sendStatus(403)
-  }
-}
 
 module.exports = router
