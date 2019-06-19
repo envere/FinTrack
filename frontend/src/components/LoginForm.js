@@ -15,7 +15,8 @@ class LoginForm extends Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      text: "Login"
     };
   }
 
@@ -47,6 +48,7 @@ class LoginForm extends Component {
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
             } else {
+              this.setState({text: "Logging in..."})
               fetch(url, {
                 method: "POST",
                 headers: {
@@ -68,7 +70,7 @@ class LoginForm extends Component {
             }
           }}
         >
-          <Text style={styles.buttonText}>{this.props.type}</Text>
+          <Text style={styles.buttonText}>{this.state.text}</Text>
         </TouchableOpacity>
       </View>
     );

@@ -11,7 +11,7 @@ class LoginScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.mainText}>FinTrack Login</Text>
-        <LoginForm type="Login" />
+        <LoginForm />
         <View style={styles.signupTextCont}>
           <Text style={styles.signupText}>Don't have an account yet?</Text>
           <TouchableOpacity
