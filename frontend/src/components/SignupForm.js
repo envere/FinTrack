@@ -90,7 +90,7 @@ class SignupForm extends Component {
                   alert("Sign up successful!");
                   this.props.navigation.navigate("Login");
                 } else {
-                  alert("Error " + JSON.stringify(res.status));
+                  alert("Error: Username/email is in use");
                 }
               });
             }

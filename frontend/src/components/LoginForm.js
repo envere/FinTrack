@@ -8,17 +8,28 @@ import {
 } from "react-native";
 import { withNavigation } from "react-navigation";
 
+const url = "https://orbital-fintrack.herokuapp.com/user/login";
+
 class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: ""
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <TextInput
           style={styles.inputBox}
           underlineColorAndroid="rgba(0,0,0,0)"
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
+          onChangeText={text => this.setState({ username: text })}
           onSubmitEditing={() => this.password.focus()}
         />
         <TextInput
@@ -28,11 +39,33 @@ class LoginForm extends Component {
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
+          onChangeText={text => this.setState({ password: text })}
         />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate("Home");
+            if (this.state.username === "" || this.state.password === "") {
+              alert("Please enter your credentials");
+            } else {
+              fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Origin": "*"
+                },
+                body: JSON.stringify({
+                  username: this.state.username,
+                  password: this.state.password
+                })
+              }).then(res => {
+                if (JSON.parse(res.status === 200)) {
+                  alert("Login successful!");
+                  this.props.navigation.navigate("Home");
+                  return res.json().then(res => JSON.stringify(res));
+                }
+                return res.json().then(res => alert("Error: " + res.error));
+              });
+            }
           }}
         >
           <Text style={styles.buttonText}>{this.props.type}</Text>
