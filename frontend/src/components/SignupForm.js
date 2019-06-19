@@ -35,7 +35,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           onChangeText={text => this.setState({ username: text })}
-          onSubmitEditing={() => this.password.focus()}
+          onSubmitEditing={() => this.email.focus()}
         />
         <TextInput
           style={styles.inputBox}
@@ -44,6 +44,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
+          ref={input => (this.email= input)}
           onChangeText={text => this.setState({ email: text })}
           onSubmitEditing={() => this.password.focus()}
         />
@@ -55,6 +56,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           ref={input => (this.password = input)}
           onChangeText={text => this.setState({ password: text })}
+          onSubmitEditing={() => this.password2.focus()}
         />
         <TextInput
           style={styles.inputBox}
@@ -62,7 +64,7 @@ class SignupForm extends Component {
           placeholder="Confirm password"
           secureTextEntry={true}
           placeholderTextColor="#ffffff"
-          ref={input => (this.password = input)}
+          ref={input => (this.password2 = input)}
           onChangeText={text => this.setState({ password2: text })}
         />
         <TouchableOpacity

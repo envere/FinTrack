@@ -9,10 +9,10 @@ const secret = require("../configs/jwtConfig").secret;
 router.get("/getUsers", verifyJWT, (req, res) => {
   jwt.verify(req.token, secret, (err, auth) => {
     if (err) {
-      res.sendStatus(403);
+      return res.sendStatus(403); // inserted return for clarity
     }
 
-    User.find()
+    return User.find()
       .then(doc => {
         res.status(200).json({
           request: `${req.url}`,
@@ -49,14 +49,16 @@ router.get("/getUser/:username", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const username = req.body.username;
-  const email = req.body.email;
+  const displayUsername = req.body.username;
+  const username = displayUsername.toLowerCase();
+  const email = req.body.email.toLowerCase();
   const plaintext_password = req.body.password;
 
   const saltRounds = 12;
 
   bcrypt.hash(plaintext_password, saltRounds, (err, hash) => {
     const user = new User({
+      displayUsername: displayUsername,
       username: username,
       email: email,
       password: hash
@@ -81,18 +83,18 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const supplied_username = req.body.username;
+  const supplied_username = req.body.username.toLowerCase();
   const supplied_password = req.body.password;
 
   User.findOne({ username: supplied_username }).then(user => {
     if (!user) {
-      res.status(404).json({
+      return res.status(404).json({
         request: req.url,
         message: "error",
         error: "user account does not exist"
       });
     }
-    bcrypt.compare(supplied_password, user.password).then(isValid => {
+    return bcrypt.compare(supplied_password, user.password).then(isValid => {
       if (isValid) {
         jwt.sign({ user }, secret, (err, token) => {
           if (err) {

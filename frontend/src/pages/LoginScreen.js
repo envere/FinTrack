@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { createSwitchNavigator, createAppContainer, createStackNavigator } from "react-navigation";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
 
 import LoginForm from "../components/LoginForm";
 import DrawerNavigator from "../navigation/DrawerNavigator";
@@ -16,7 +16,7 @@ class LoginScreen extends Component {
           <Text style={styles.signupText}>Don't have an account yet?</Text>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate("Signup")
+              this.props.navigation.navigate("Signup");
             }}
           >
             <Text style={styles.signupButton}> Sign up!</Text>
@@ -34,7 +34,7 @@ const switchNav = createSwitchNavigator(
     Signup: { screen: SignupScreen }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "Login"
   }
 );
 
