@@ -27,7 +27,7 @@ function getClosePrice(symbol) {
         const closePrice = timeSeries[firstKey]['4. close']
         resolve(closePrice)
       })
-      .catch(err => reject(key))
+      .catch(err => reject(err))
   })
 }
 
@@ -45,13 +45,9 @@ function initializeHistory(symbol) {
   })
 }
 
-initializeHistory('MSFT').then(x => console.log(x.arr)).catch(err => console.log(err))
-
 module.exports = {
   getEquity: getEquity,
   getTimeSeries: getTimeSeries,
   getClosePrice: getClosePrice,
   initializeHistory: initializeHistory,
 }
-
-console.log(alphavantage.requestCSV('TIME_SERIES_DAILY', 'MSFT'))
