@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Text, Modal, TouchableHighlight } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Button,
+  Text,
+  Modal,
+  TouchableHighlight,
+  TextInput
+} from "react-native";
 
 import PageHeader from "../components/PageHeader";
 import NavigationBar from "../navigation/NavigationBar";
@@ -8,7 +16,8 @@ export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      searchSymbol: ""
     };
   }
 
@@ -16,9 +25,13 @@ export default class HomeScreen extends Component {
     this.setState({ modalVisible: visible });
   }
   render() {
+    const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
+      this.state.searchSymbol
+    }&apikey=1WJTX23D9MKYZMFE`;
     return (
       <View style={styles.container}>
         <PageHeader text="Home" navigation={this.props.navigation} />
+        {/* start test modal */}
         <Modal
           animationType="slide"
           transparent={false}
@@ -29,7 +42,31 @@ export default class HomeScreen extends Component {
         >
           <View style={{ marginTop: 22 }}>
             <View>
-              <Text>Hello World!</Text>
+              <TextInput
+                placeholder="stock name"
+                onChangeText={text => this.setState({ searchSymbol: text })}
+              />
+              <TextInput placeholder="number of units" />
+              <TextInput placeholder="price" />
+
+              <Button
+                title="Add!"
+                onPress={() => {
+                  fetch(url)
+                    .then(res => res.json())
+                    .then(res => {
+                      const arr = res.bestMatches;
+                      let string = "Best matches:\n";
+                      arr.map(stock => {
+                        const name = `${stock["2. name"]} (Symbol: ${
+                          stock["1. symbol"]
+                        })\n`;
+                        string = string + name;
+                      });
+                      alert(string);
+                    });
+                }}
+              />
 
               <TouchableHighlight
                 onPress={() => {
@@ -47,6 +84,7 @@ export default class HomeScreen extends Component {
             this.setModalVisible(true);
           }}
         />
+        {/* end test modal */}
         <NavigationBar />
       </View>
     );
