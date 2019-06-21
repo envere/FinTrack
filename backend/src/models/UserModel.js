@@ -1,14 +1,10 @@
 // imports
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose")
+const Schema = mongoose.Schema
 
 // connection uri
-const username = "fintrack";
-const password = "nfactorialsorting";
-const server = "fintrack-snwv2.mongodb.net";
-const database = "fintrack_database";
-const uri = `mongodb+srv://${username}:${password}@${server}/${database}?retryWrites=true&w=majority`;
+const db = require('../configs/mongodbConfig')
+const uri = db.uri
 
 // connect to database
 mongoose
@@ -18,9 +14,7 @@ mongoose
     dbName: "fintrack_database"
   })
   .then(() => console.log("connected successfully to database [UserModel.js]"))
-  .catch(err =>
-    console.log(`connection error to database [UserModel.js]\nerror: ${err}`)
-  );
+  .catch(err =>console.log(`connection error to database [UserModel.js]\nerror: ${err}`))
 
 const UserSchema = new Schema({
   username: {
@@ -38,10 +32,10 @@ const UserSchema = new Schema({
     type: String,
     required: true
   }
-});
+})
 
-UserSchema.index({ 'username': 'text' })
+UserSchema.index({ username: "text" })
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema)
 
-module.exports = User;
+module.exports = User
