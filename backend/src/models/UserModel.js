@@ -23,15 +23,11 @@ mongoose
   );
 
 const UserSchema = new Schema({
-  displayUsername: {
-    type: String,
-    required: true,
-    unique: true
-  },
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true,
   },
   email: {
     type: String,
@@ -43,6 +39,8 @@ const UserSchema = new Schema({
     required: true
   }
 });
+
+UserSchema.index({ 'username': 'text' })
 
 const User = mongoose.model("User", UserSchema);
 
