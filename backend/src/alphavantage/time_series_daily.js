@@ -2,7 +2,7 @@ const axios = require('axios')
 const alphavantage = require('../configs/alphavantageConfig')
 const Deque = require('../util/deque')
 
-function getEquity(symbol) {
+function equity(symbol) {
   return new Promise((resolve, reject) => {
     axios
       .get(alphavantage.requestJSON('TIME_SERIES_DAILY', symbol))
@@ -11,7 +11,7 @@ function getEquity(symbol) {
   })
 }
 
-function getTimeSeries(symbol) {
+function timeSeries(symbol) {
   return new Promise((resolve, reject) => {
     getEquity(symbol)
       .then(data => resolve(data['Time Series (Daily)']))
@@ -19,25 +19,25 @@ function getTimeSeries(symbol) {
   })
 }
 
-function getClosePrice(symbol) {
+function closePrice(symbol) {
   return new Promise((resolve, reject) => {
-    getTimeSeries(symbol)
-      .then(timeSeries => {
-        const firstKey = Object.keys(timeSeries)[0]
-        const closePrice = timeSeries[firstKey]['4. close']
-        resolve(closePrice)
+    timeSeries(symbol)
+      .then(series => {
+        const firstKey = Object.keys(series)[0]
+        const price = series[firstKey]['4. close']
+        resolve(price)
       })
       .catch(err => reject(err))
   })
 }
 
-function initializeHistory(symbol) {
+function initClosePriceHistory(symbol) {
   return new Promise((resolve, reject) => {
-    getTimeSeries(symbol)
-      .then(timeSeries => {
+    timeSeries(symbol)
+      .then(series => {
         const deque = new Deque()
-        for (const key in timeSeries) {
-          deque.addLast(timeSeries[key]['4. close'])
+        for (const key in series) {
+          deque.addLast(series[key]['4. close'])
         }
         resolve(deque)
       })
@@ -46,8 +46,8 @@ function initializeHistory(symbol) {
 }
 
 module.exports = {
-  getEquity: getEquity,
-  getTimeSeries: getTimeSeries,
-  getClosePrice: getClosePrice,
-  initializeHistory: initializeHistory,
+  equity: equity,
+  timeSeries: timeSeries,
+  closePrice: closePrice,
+  initClosePriceHistory: initClosePriceHistory,
 }
