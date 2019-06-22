@@ -1,6 +1,5 @@
 const axios = require('axios')
 const alphavantage = require('../configs/alphavantageConfig')
-const Deque = require('../util/deque')
 
 function equity(symbol) {
   return new Promise((resolve, reject) => {
@@ -31,23 +30,8 @@ function closePrice(symbol) {
   })
 }
 
-function initClosePriceHistory(symbol) {
-  return new Promise((resolve, reject) => {
-    timeSeries(symbol)
-      .then(series => {
-        const deque = new Deque()
-        for (const key in series) {
-          deque.addLast(series[key]['4. close'])
-        }
-        resolve(deque)
-      })
-      .catch(err => reject(err))
-  })
-}
-
 module.exports = {
   equity: equity,
   timeSeries: timeSeries,
   closePrice: closePrice,
-  initClosePriceHistory: initClosePriceHistory,
 }

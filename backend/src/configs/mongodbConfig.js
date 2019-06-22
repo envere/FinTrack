@@ -3,5 +3,7 @@ module.exports = {
   password: "nfactorialsorting",
   server: "fintrack-snwv2.mongodb.net",
   database: "fintrack_database",
-  uri: `mongodb+srv://${this.username}:${this.password}@${this.server}/${this.database}?retryWrites=true&w=majority`,
+  uri: function(username, password, server, database) {
+    return `mongodb+srv://${username}:${password}@${server}/${database}?retryWrites=true&w=majority`
+  },
 }

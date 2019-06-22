@@ -1,6 +1,5 @@
 const axios = require('axios')
 const alphavantage = require('../configs/alphavantageConfig')
-const Deque = require('../util/deque')
 
 function equity(symbol) {
   return new Promise((resolve, reject) => {
@@ -26,20 +25,6 @@ function dividend(symbol) {
         const firstKey = Object.keys(series)[0]
         const div = series[firstKey]['7. dividend amount']
         resolve(div)
-      })
-      .catch(err => reject(err))
-  })
-}
-
-function initDividendHistory(symbol) {
-  return new Promise((resolve, reject) => {
-    timeSeries(symbol)
-      .then(series => {
-        const deque = new Deque()
-        for (const key in series) {
-          deque.addLast(series[key]['7. dividend amount'])
-        }
-        resolve(deque)
       })
       .catch(err => reject(err))
   })
