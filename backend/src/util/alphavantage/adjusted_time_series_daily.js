@@ -34,5 +34,4 @@ module.exports = {
   equity: equity,
   timeSeries: timeSeries,
   dividend: dividend,
-  initDividendHistory: initDividendHistory,
 }
