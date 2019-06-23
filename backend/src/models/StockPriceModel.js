@@ -16,21 +16,26 @@ mongoose
   .then(() => console.log("connected successfully to database [StockPrice]"))
   .catch(err => console.log(`connection error to database [StockPrice]\nerror: ${err}`))
 
+
 const StockPriceSchema = new Schema({
   symbol: {
     type: String,
     required: true,
-    unique: true,
     uppercase: true,
   },
-  price: {
-    type: Number,
+  startDate: {
+    type: Date,
     required: true,
-  }
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  daily: [],
+  weekly: [],
+  monthly: [],
 })
 
-StockPriceSchema.index({ symbol: "text", price: "text" })
+const StockPrice = mongoose.model('StockPrice', StockPriceSchema)
 
-const StockPrice = mongoose.model("StockPrice", StockPriceSchema)
-
-module.export = StockPrice
+module.exports = StockPrice
