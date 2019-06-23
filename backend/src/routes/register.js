@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/register", (req, res) => {
   const displayUsername = req.body.username;
-  const username = displayUsername.toLowerCase();
+  const username = displayUsername;
   const email = req.body.email;
   const plaintext_password = req.body.password;
 
