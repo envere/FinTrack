@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", require("./routes/register"));
 app.use("/", require("./routes/login"));
 app.use("/user", jwt.queryJWT, require("./routes/user"));
+app.use("/stock", jwt.queryJWT, require("./routes/stock"));
 
 app.use((req, res, next) => {
   console.log(`${new Date().toString()} => ${req.originalUrl}`);

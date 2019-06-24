@@ -23,18 +23,33 @@ const StockPriceSchema = new Schema({
     required: true,
     uppercase: true,
   },
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    required: true,
-  },
+  start: Date,
+  end: Date,
   daily: [],
   weekly: [],
   monthly: [],
 })
+
+StockPriceSchema.statics.getBucket = function (symbol, date) {
+  return this.find({ symbol: symbol }).sort({ start: -1 })
+}
+
+StockPriceSchema.methods.checkSize = function () {
+  return this.daily.length < 100
+}
+
+StockPriceSchema.methods.addDailyPrice = function (date, price) {
+  this.daily.push({ date, price })
+}
+
+StockPriceSchema.methods.addWeeklyPrice = function (date, price) {
+  this.weekly.push({ date, price })
+}
+
+StockPriceSchema.methods.addMonthlyPrice = function (date, price) {
+  this.monthly.push({ date, price })
+}
+
 
 const StockPrice = mongoose.model('StockPrice', StockPriceSchema)
 
