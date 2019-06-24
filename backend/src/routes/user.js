@@ -10,14 +10,12 @@ router.get("/getUsers", (req, res) => {
       User.find()
         .then(doc => {
           res.status(200).json({
-            request: `${req.url}`,
             message: "List of all users",
             users: doc
           });
         })
         .catch(err => {
           res.status(500).json({
-            request: `${req.url}`,
             message: "error",
             error: err
           });
@@ -33,14 +31,12 @@ router.get("/getUser/:username", (req, res) => {
       User.findOne({ username: req.params.username })
         .then(doc => {
           res.status(200).json({
-            request: `${req.url}`,
             message: `Getting user by username: ${req.params.username}`,
             user: doc
           });
         })
         .catch(err => {
           res.status(500).json({
-            request: `${req.url}`,
             message: "error",
             error: err
           });

@@ -10,7 +10,6 @@ router.post("/login", (req, res) => {
   User.findOne({ username: supplied_username }).then(user => {
     if (!user) {
       return res.status(404).json({
-        request: req.url,
         message: "error",
         error: "User account does not exist"
       });
@@ -24,14 +23,12 @@ router.post("/login", (req, res) => {
             .then(token => res.json({ token }))
             .catch(err =>
               res.status(500).json({
-                request: req.url,
                 message: "Error",
                 error: err
               })
             );
         } else {
           res.status(400).json({
-            request: req.url,
             message: "error",
             error: "Invalid password"
           });

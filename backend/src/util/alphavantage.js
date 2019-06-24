@@ -27,6 +27,18 @@ function daily_timeseries(symbol) {
   })
 }
 
+function daily_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    daily_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
 function daily_prices(symbol) {
   return new Promise((resolve, reject) => {
     daily_timeseries(symbol)
@@ -58,6 +70,40 @@ function dailyAdjusted_timeseries(symbol) {
       .then(data => data['Time Series (Daily)'])
       .then(timeseries => resolve(timeseries))
       .catch(err => reject(err))
+  })
+}
+
+function dailyAdjusted_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    dailyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function dailyAdjusted_latestadjustedprice(symbol) {
+  return new Promise((resolve, reject) => {
+    dailyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestadjustedprice = timeseries[keys[0]]['5. adjusted close']
+        resolve(latestadjustedprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function dailyAdjusted_latestdividend(symbol) {
+  return new Promise((resolve, reject) => {
+    dailyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestdividend = timeseries[keys[0]]['7. dividend amount']
+      })
   })
 }
 
@@ -126,6 +172,18 @@ function weekly_timeseries(symbol) {
   })
 }
 
+function weekly_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    weekly_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
 function weekly_prices(symbol) {
   return new Promise((resolve, reject) => {
     weekly_timeseries(symbol)
@@ -155,6 +213,42 @@ function weeklyAdjusted_timeseries(symbol) {
   return new Promise((resolve, reject) => {
     weeklyAdjusted_equity(symbol)
       .then(data => resolve(data['Weekly Adjusted Time Series']))
+      .catch(err => reject(err))
+  })
+}
+
+function weeklyAdjusted_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    weeklyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function weeklyAdjusted_latestadjustedprice(symbol) {
+  return new Promise((resolve, reject) => {
+    weeklyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['5. adjusted close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function weeklyAdjusted_latestdividend(symbol) {
+  return new Promise((resolve, reject) => {
+    weeklyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['7. dividend amount']
+        resolve(latestprice)
+      })
       .catch(err => reject(err))
   })
 }
@@ -224,6 +318,18 @@ function monthly_timeseries(symbol) {
   })
 }
 
+function monthly_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    monthly_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(timeseries)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
 function monthly_prices(symbol) {
   return new Promise((resolve, reject) => {
     monthly_timeseries(symbol)
@@ -253,6 +359,42 @@ function monthlyAdjusted_timeseries(symbol) {
   return new Promise((resolve, reject) => {
     monthlyAdjusted_equity(symbol)
       .then(data => resolve(data['Monthly Adjusted Time Series']))
+      .catch(err => reject(err))
+  })
+}
+
+function monthlyAdjusted_latestprice(symbol) {
+  return new Promise((resolve, reject) => {
+    monthlyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['4. close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function monthlyAdjusted_latestadjustedprice(symbol) {
+  return new Promise((resolve, reject) => {
+    monthlyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['5. adjusted close']
+        resolve(latestprice)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function monthlyAdjusted_latestdividend(symbol) {
+  return new Promise((resolve, reject) => {
+    monthlyAdjusted_timeseries(symbol)
+      .then(timeseries => {
+        const keys = Object.keys(symbol)
+        const latestprice = timeseries[keys[0]]['7. dividend amount']
+        resolve(latestprice)
+      })
       .catch(err => reject(err))
   })
 }
@@ -308,11 +450,15 @@ function monthlyAdjusted_dividends(symbol) {
 const daily = {
   equity: daily_equity,
   timeseries: daily_timeseries,
+  latestprice: daily_latestprice,
   prices: daily_prices,
 }
 const dailyAdjusted = {
   equity: dailyAdjusted_equity,
   timeseries: dailyAdjusted_timeseries,
+  latestprice: dailyAdjusted_latestprice,
+  latestadjustedprice: dailyAdjusted_latestadjustedprice,
+  latestdividend: dailyAdjusted_latestdividend,
   prices: dailyAdjusted_prices,
   adjustedprices: dailyAdjusted_adjustedprices,
   dividends: dailyAdjusted_dividends,
@@ -320,11 +466,15 @@ const dailyAdjusted = {
 const weekly = {
   equity: weekly_equity,
   timeseries: weekly_timeseries,
+  latestprice: weekly_latestprice,
   prices: weekly_prices,
 }
 const weeklyAdjusted = {
   equity: weeklyAdjusted_equity,
   timeseries: weeklyAdjusted_timeseries,
+  latestprice: weeklyAdjusted_latestprice,
+  latestadjustedprice: weeklyAdjusted_latestadjustedprice,
+  latestdividend: weeklyAdjusted_latestdividend,
   prices: weeklyAdjusted_prices,
   adjustedprices: weeklyAdjusted_adjustedprices,
   dividends: weeklyAdjusted_dividends,
@@ -332,11 +482,15 @@ const weeklyAdjusted = {
 const monthly = {
   equity: monthly_equity,
   timeseries: monthly_timeseries,
+  latestprice: monthly_latestprice,
   prices: monthly_prices,
 }
 const monthlyAdjusted = {
   equity: monthlyAdjusted_equity,
   timeseries: monthlyAdjusted_timeseries,
+  latestprice: monthlyAdjusted_latestprice,
+  latestadjustedprice: monthlyAdjusted_latestadjustedprice,
+  latestdividend: monthlyAdjusted_latestdividend,
   prices: monthlyAdjusted_prices,
   adjustedprices: monthlyAdjusted_adjustedprices,
   dividends: monthlyAdjusted_dividends,

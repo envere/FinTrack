@@ -13,8 +13,8 @@ mongoose
     useCreateIndex: true,
     dbName: "fintrack_database"
   })
-  .then(() => console.log("connected successfully to database [StockPrice]"))
-  .catch(err => console.log(`connection error to database [StockPrice]\nerror: ${err}`))
+  .then(() => console.log("connected successfully to database [StockName]"))
+  .catch(err => console.log(`connection error to database [StockName]\nerror: ${err}`))
 
 const StockNameSchema = new Schema({
   symbol: {
@@ -33,4 +33,4 @@ StockNameSchema.index({ symbol: "text", price: "text" })
 
 const StockName = mongoose.model("StockName", StockNameSchema)
 
-module.export = StockPrice
+module.exports = StockName
