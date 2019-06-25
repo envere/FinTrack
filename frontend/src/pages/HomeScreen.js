@@ -27,60 +27,9 @@ export default class HomeScreen extends Component {
     this.setState({ modalVisible: visible });
   }
   render() {
-    const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
-      this.state.searchSymbol
-    }&apikey=1WJTX23D9MKYZMFE`;
     return (
       <View style={styles.container}>
         <PageHeader text="Home" navigation={this.props.navigation} />
-        {/* 
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={{ marginTop: 22 }}>
-            <View>
-              <TextInput
-                placeholder="stock name"
-                onChangeText={text => this.setState({ searchSymbol: text })}
-              />
-              <TextInput placeholder="number of units" />
-              <TextInput placeholder="price" />
-
-              <Button
-                title="Add!"
-                onPress={() => {
-                  fetch(url)
-                    .then(res => res.json())
-                    .then(res => {
-                      const arr = res.bestMatches;
-                      let string = "Best matches:\n";
-                      arr.map(stock => {
-                        const name = `${stock["2. name"]} (Symbol: ${
-                          stock["1. symbol"]
-                        })\n`;
-                        string = string + name;
-                      });
-                      alert(string);
-                    });
-                }}
-              />
-
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}
-              >
-                <Text>Cancel</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
-        {/* end test modal */}
         <Modal
           style={styles.modal}
           animationType="slide"

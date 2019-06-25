@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Modal,
-  Dimensions,
-  Button
-} from "react-native";
+import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 /**
@@ -25,7 +18,8 @@ export default class AddStockForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bank: "dbs", // for testing
+      bank: "dbs", // default value for testing
+      symbolPlaceholder: "Stock name",
       symbol: "",
       units: 0,
       date: "",
@@ -48,17 +42,35 @@ export default class AddStockForm extends Component {
     if (fees < 25) {
       this.setState({ fees: 25 });
     } else {
-      this.setState({ fees: fees});
+      this.setState({ fees: fees });
     }
-    //return this.state.fees + rawTotal;
   }
+
   render() {
+    const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
+      this.state.symbol
+    }&apikey=1WJTX23D9MKYZMFE`;
     return (
-      <View>
+      <View style={styles.form}>
         <TextInput
-          placeholder="Stock Name"
+          placeholder={
+              this.state.symbolPlaceholder
+          }
           onChangeText={text => this.setState({ symbol: text })}
-          onSubmitEditing={() => this.units.focus()}
+          onSubmitEditing={() => {
+            fetch(url)
+              .then(res => res.json())
+              .then(res => {
+                const results = res.bestMatches;
+                if (results.length === 1) {
+                  this.setState({ symbol: results[0]["1. symbol"]})
+                  this.setState({ symbolPlaceholder: results[0]["1. symbol"]})
+                } else {
+                  alert("more than 1 results obtained");
+                }
+              });
+            this.units.focus();
+          }}
         />
         <TextInput
           placeholder="Units"
@@ -91,7 +103,7 @@ export default class AddStockForm extends Component {
           //onChangeText={text => this.setState({ fees: text })}
           ref={input => (this.fees = input)}
         />
-        <Button title="add" onPress={() => alert(this.state.fees)} />
+        <Button title="add" onPress={() => alert(this.state.symbol)} />
       </View>
     );
   }
@@ -100,11 +112,7 @@ export default class AddStockForm extends Component {
 const screen = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  modal: {
-    justifyContent: "center",
-    borderRadius: 0,
-    shadowRadius: 10,
-    height: 280,
-    width: screen.width - 80
+  form: {
+    justifyContent: "center"
   }
 });
