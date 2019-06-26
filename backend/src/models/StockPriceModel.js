@@ -23,20 +23,14 @@ const StockPriceSchema = new Schema({
     required: true,
     uppercase: true,
   },
-  start: Date,
-  end: Date,
+  year: {
+    type: Number,
+    required: true,
+  },
   daily: [],
   weekly: [],
-  monthly: [],
+  mosnthly: [],
 })
-
-StockPriceSchema.statics.getBucket = function (symbol, date) {
-  return this.find({ symbol: symbol }).sort({ start: -1 })
-}
-
-StockPriceSchema.methods.checkSize = function () {
-  return this.daily.length < 100
-}
 
 StockPriceSchema.methods.addDailyPrice = function (date, price) {
   this.daily.push({ date, price })
