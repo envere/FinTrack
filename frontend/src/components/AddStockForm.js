@@ -53,9 +53,8 @@ export default class AddStockForm extends Component {
     return (
       <View style={styles.form}>
         <TextInput
-          placeholder={
-              this.state.symbolPlaceholder
-          }
+          style={styles.textbox}
+          placeholder={this.state.symbolPlaceholder}
           onChangeText={text => this.setState({ symbol: text })}
           onSubmitEditing={() => {
             fetch(url)
@@ -63,8 +62,8 @@ export default class AddStockForm extends Component {
               .then(res => {
                 const results = res.bestMatches;
                 if (results.length === 1) {
-                  this.setState({ symbol: results[0]["1. symbol"]})
-                  this.setState({ symbolPlaceholder: results[0]["1. symbol"]})
+                  this.setState({ symbol: results[0]["1. symbol"] });
+                  this.setState({ symbolPlaceholder: results[0]["1. symbol"] });
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -73,6 +72,7 @@ export default class AddStockForm extends Component {
           }}
         />
         <TextInput
+          style={styles.textbox}
           placeholder="Units"
           onChangeText={text => {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
@@ -81,12 +81,14 @@ export default class AddStockForm extends Component {
           onSubmitEditing={() => this.date.focus()}
         />
         <TextInput
+          style={styles.textbox}
           placeholder="Date purchased"
           onChangeText={text => this.setState({ date: text })}
           ref={input => (this.date = input)}
           onSubmitEditing={() => this.price.focus()}
         />
         <TextInput
+          style={styles.textbox}
           placeholder="Price"
           onChangeText={text => {
             this.setState({ price: parseFloat(text) }, () => this.updateFees());
@@ -95,6 +97,7 @@ export default class AddStockForm extends Component {
           onSubmitEditing={() => this.fees.focus()}
         />
         <TextInput
+          style={styles.textbox}
           placeholder={
             this.state.fees === 0 || isNaN(this.state.fees)
               ? "Trading fees"
@@ -112,7 +115,15 @@ export default class AddStockForm extends Component {
 const screen = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  form: {
-    justifyContent: "center"
+  container: {
+    justifyContent: "center",
+    width: "50%",
+    height: 280,
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor:"black"
+  },
+  textbox: {
+    paddingHorizontal: 16
   }
 });
