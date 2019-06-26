@@ -27,23 +27,9 @@ const StockPriceSchema = new Schema({
     type: Number,
     required: true,
   },
-  daily: [],
-  weekly: [],
-  monthly: [],
+  days: [],
+  months: [],
 })
-
-StockPriceSchema.methods.addDailyPrice = function (date, price) {
-  this.daily.push({ date, price })
-}
-
-StockPriceSchema.methods.addWeeklyPrice = function (date, price) {
-  this.weekly.push({ date, price })
-}
-
-StockPriceSchema.methods.addMonthlyPrice = function (date, price) {
-  this.monthly.push({ date, price })
-}
-
 
 const StockPrice = mongoose.model('StockPrice', StockPriceSchema)
 
