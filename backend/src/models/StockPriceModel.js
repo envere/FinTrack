@@ -29,7 +29,7 @@ const StockPriceSchema = new Schema({
   },
   daily: [],
   weekly: [],
-  mosnthly: [],
+  monthly: [],
 })
 
 StockPriceSchema.methods.addDailyPrice = function (date, price) {
