@@ -4,7 +4,9 @@ const key = alphavantageConfig.key
 
 // url
 const daily_url = alphavantageConfig.daily_url
+const daily_compact_url = alphavantageConfig.daily_compact_url
 const daily_adjusted_url = alphavantageConfig.daily_adjusted_url
+const daily_adjusted_compact_url = alphavantageConfig.daily_adjusted_compact_url
 const weekly_url = alphavantageConfig.weekly_url
 const weekly_adjusted_url = alphavantageConfig.weekly_adjusted_url
 const monthly_url = alphavantageConfig.monthly_url
@@ -29,7 +31,10 @@ function daily_timeseries(symbol) {
 
 function daily_latestprice(symbol) {
   return new Promise((resolve, reject) => {
-    daily_timeseries(symbol)
+    axios
+      .get(daily_compact_url(symbol, key))
+      .then(response => response.data)
+      .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
         const latestprice = timeseries[keys[0]]['4. close']
@@ -75,7 +80,10 @@ function dailyAdjusted_timeseries(symbol) {
 
 function dailyAdjusted_latestprice(symbol) {
   return new Promise((resolve, reject) => {
-    dailyAdjusted_timeseries(symbol)
+    axios
+      .get(daily_adjusted_compact_url(symbol, key))
+      .then(response => response.data)
+      .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
         const latestprice = timeseries[keys[0]]['4. close']
@@ -87,7 +95,10 @@ function dailyAdjusted_latestprice(symbol) {
 
 function dailyAdjusted_latestadjustedprice(symbol) {
   return new Promise((resolve, reject) => {
-    dailyAdjusted_timeseries(symbol)
+    axios
+      .get(daily_adjusted_compact_url(symbol, key))
+      .then(response => response.data)
+      .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
         const latestadjustedprice = timeseries[keys[0]]['5. adjusted close']
@@ -99,17 +110,25 @@ function dailyAdjusted_latestadjustedprice(symbol) {
 
 function dailyAdjusted_latestdividend(symbol) {
   return new Promise((resolve, reject) => {
-    dailyAdjusted_timeseries(symbol)
+    axios
+      .get(daily_adjusted_compact_url(symbol, key))
+      .then(response => response.data)
+      .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
         const latestdividend = timeseries[keys[0]]['7. dividend amount']
+        resolve(latestdividend)
       })
+      .catch(err => reject(err))
   })
 }
 
 function dailyAdjusted_prices(symbol) {
   return new Promise((resolve, reject) => {
-    dailyAdjusted_timeseries(symbol)
+    axios
+      .get(daily_adjusted_url(symbol, key))
+      .then(response => response.data)
+      .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
         const dateprice_pairs = keys.map(key => {
