@@ -52,10 +52,27 @@ function daily_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
+      .catch(err => reject(err))
+  })
+}
+
+function daily_prices_range(symbol, start, end) {
+  return new Promise((resolve, reject) => {
+    daily_prices(symbol)
+      .then(prices => {
+        const filteredprices = prices.filter(price => {
+          const format = date => date.toISOString().split('T')[0]
+          const date = price.date
+          return format(start) <= format(date) && format(date) <= format(end)
+        })
+        resolve(filteredprices)
+      })
+      .then(prices => prices.filter(price => start <= price.date && price.date <= end))
+      .then(filteredprices => resolve(filteredprices))
       .catch(err => reject(err))
   })
 }
@@ -134,7 +151,7 @@ function dailyAdjusted_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
@@ -150,7 +167,7 @@ function dailyAdjusted_adjustedprices(symbol) {
         const dateadjustedprice_pairs = keys.map(key => {
           const date = new Date(key)
           const adjustedprice = timeseries[key]['5. adjusted close']
-          return {date, adjustedprice}
+          return { date, adjustedprice }
         })
         resolve(dateadjustedprice_pairs)
       })
@@ -166,7 +183,7 @@ function dailyAdjusted_dividends(symbol) {
         const datedividend_pairs = keys.map(key => {
           const date = new Date(key)
           const dividend = timeseries[key]['7. dividend amount']
-          return {date, dividend}
+          return { date, dividend }
         })
         resolve(datedividend_pairs)
       })
@@ -211,7 +228,7 @@ function weekly_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
@@ -280,7 +297,7 @@ function weeklyAdjusted_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
@@ -296,7 +313,7 @@ function weeklyAdjusted_adjustedprices(symbol) {
         const dateadjustedprice_pairs = keys.map(key => {
           const date = new Date(key)
           const adjustedprice = timeseries[key]['5. adjusted close']
-          return {date, adjustedprice}
+          return { date, adjustedprice }
         })
         resolve(dateadjustedprice_pairs)
       })
@@ -312,7 +329,7 @@ function weeklyAdjusted_dividends(symbol) {
         const datedividend_pairs = keys.map(key => {
           const date = new Date(key)
           const dividend = timeseries[key]['7. dividend amount']
-          return {date, dividend}
+          return { date, dividend }
         })
         resolve(datedividend_pairs)
       })
@@ -357,7 +374,7 @@ function monthly_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
@@ -426,7 +443,7 @@ function monthlyAdjusted_prices(symbol) {
         const dateprice_pairs = keys.map(key => {
           const date = new Date(key)
           const price = timeseries[key]['4. close']
-          return {date, price}
+          return { date, price }
         })
         resolve(dateprice_pairs)
       })
@@ -442,7 +459,7 @@ function monthlyAdjusted_adjustedprices(symbol) {
         const dateadjustedprice_pairs = keys.map(key => {
           const date = new Date(key)
           const adjustedprice = timeseries[key]['5. adjusted close']
-          return {date, adjustedprice}
+          return { date, adjustedprice }
         })
         resolve(dateadjustedprice_pairs)
       })
@@ -458,7 +475,7 @@ function monthlyAdjusted_dividends(symbol) {
         const datedividend_pairs = keys.map(key => {
           const date = new Date(key)
           const dividend = timeseries[key]['7. dividend amount']
-          return {date, dividend}
+          return { date, dividend }
         })
         resolve(datedividend_pairs)
       })
@@ -471,6 +488,7 @@ const daily = {
   timeseries: daily_timeseries,
   latestprice: daily_latestprice,
   prices: daily_prices,
+  prices_range: daily_prices_range,
 }
 const dailyAdjusted = {
   equity: dailyAdjusted_equity,
