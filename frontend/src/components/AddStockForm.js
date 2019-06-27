@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 
+import store from "../data/PortfolioStore";
 /**
  * array indices:
  * [0] for trade value of <=50k,
@@ -42,9 +43,10 @@ export default class AddStockForm extends Component {
     let fees = brokerFees * rawTotal;
     if (fees < 25) {
       this.setState({ fees: 25 });
-    } else {
-      this.setState({ fees: fees });
+      return rawTotal + 25;
     }
+    this.setState({ fees: fees });
+    return rawTotal + fees;
   }
 
   render() {
@@ -109,7 +111,7 @@ export default class AddStockForm extends Component {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
           }}
           ref={input => (this.units = input)}
-          onSubmitEditing={() => this.date.focus()}
+          onSubmitEditing={() => this.price.focus()}
         />
         {/*<TextInput
           style={styles.textbox}
@@ -137,7 +139,19 @@ export default class AddStockForm extends Component {
           //onChangeText={text => this.setState({ fees: text })}
           ref={input => (this.fees = input)}
         />
-        <Button title="add" onPress={() => alert(this.state.date)} />
+        <Button
+          title="add"
+          onPress={() => {
+            //alert(JSON.stringify(this.state))
+            store.dispatch({
+              type: "ADD",
+              symbol: this.state.symbol,
+              startPrice: this.updateFees(),
+              currPrice: 10
+            });
+            alert(JSON.stringify(store.getState()))
+          }}
+        />
       </View>
     );
   }
@@ -146,13 +160,13 @@ export default class AddStockForm extends Component {
 const screen = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    width: "50%",
-    height: 280,
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "black"
+  formDEPRECATED: {
+    //justifyContent: "center",
+    width: "80%",
+    height: 280
+    //flex: 1,
+    //flexDirection: "row",
+    //backgroundColor: "black"
   },
   textbox: {
     paddingHorizontal: 16
