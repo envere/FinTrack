@@ -29,10 +29,6 @@ export default class AddStockForm extends Component {
     };
   }
 
-  setDate(newDate) {
-    this.setState({ date: newDate });
-  }
-
   updateFees() {
     let brokerFees = brokerageFeesList[this.state.bank];
     const rawTotal = this.state.units * this.state.price;
@@ -55,6 +51,7 @@ export default class AddStockForm extends Component {
     const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
       this.state.symbol
     }&apikey=1WJTX23D9MKYZMFE`;
+    const setDate = newDate => this.setState({ date: newDate });
     return (
       <View style={styles.form}>
         <Header>
@@ -75,7 +72,7 @@ export default class AddStockForm extends Component {
           androidMode={"default"}
           placeHolderText="Date purchased"
           placeHolderTextStyle={{ color: "#d3d3d3" }}
-          onDateChange={this.setDate}
+          onDateChange={setDate}
           ref={input => (this.date = input)}
           disabled={false}
         />
@@ -140,7 +137,7 @@ export default class AddStockForm extends Component {
           //onChangeText={text => this.setState({ fees: text })}
           ref={input => (this.fees = input)}
         />
-        <Button title="add" onPress={() => alert(this.state.symbol)} />
+        <Button title="add" onPress={() => alert(this.state.date)} />
       </View>
     );
   }
