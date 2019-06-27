@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 
 /**
  * array indices:
@@ -28,6 +29,10 @@ export default class AddStockForm extends Component {
     };
   }
 
+  setDate(newDate) {
+    this.setState({ date: newDate });
+  }
+
   updateFees() {
     let brokerFees = brokerageFeesList[this.state.bank];
     const rawTotal = this.state.units * this.state.price;
@@ -52,6 +57,28 @@ export default class AddStockForm extends Component {
     }&apikey=1WJTX23D9MKYZMFE`;
     return (
       <View style={styles.form}>
+        <Header>
+          <Left />
+          <Body>
+            <Title>Add Stock</Title>
+          </Body>
+          <Right />
+        </Header>
+        <DatePicker
+          defaultDate={new Date(2018, 4, 4)}
+          minimumDate={new Date(2010, 1, 1)}
+          maximumDate={new Date(2018, 12, 31)}
+          locale={"en"}
+          timeZoneOffsetInMinutes={undefined}
+          modalTransparent={false}
+          animationType={"fade"}
+          androidMode={"default"}
+          placeHolderText="Date purchased"
+          placeHolderTextStyle={{ color: "#d3d3d3" }}
+          onDateChange={this.setDate}
+          ref={input => (this.date = input)}
+          disabled={false}
+        />
         <TextInput
           style={styles.textbox}
           placeholder={this.state.symbolPlaceholder}
@@ -62,8 +89,15 @@ export default class AddStockForm extends Component {
               .then(res => {
                 const results = res.bestMatches;
                 if (results.length === 1) {
-                  this.setState({ symbol: results[0]["1. symbol"] });
-                  this.setState({ symbolPlaceholder: results[0]["1. symbol"] });
+                  this.setState({
+                    symbol: results[0]["1. symbol"].replace(".SGP", ".SI")
+                  });
+                  this.setState({
+                    symbolPlaceholder: results[0]["1. symbol"].replace(
+                      ".SGP",
+                      ".SI"
+                    )
+                  });
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -80,13 +114,13 @@ export default class AddStockForm extends Component {
           ref={input => (this.units = input)}
           onSubmitEditing={() => this.date.focus()}
         />
-        <TextInput
+        {/*<TextInput
           style={styles.textbox}
           placeholder="Date purchased"
           onChangeText={text => this.setState({ date: text })}
           ref={input => (this.date = input)}
           onSubmitEditing={() => this.price.focus()}
-        />
+        />*/}
         <TextInput
           style={styles.textbox}
           placeholder="Price"
@@ -120,8 +154,8 @@ const styles = StyleSheet.create({
     width: "50%",
     height: 280,
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor:"black"
+    flexDirection: "column",
+    backgroundColor: "black"
   },
   textbox: {
     paddingHorizontal: 16
