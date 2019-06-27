@@ -97,6 +97,7 @@ export default class AddStockForm extends Component {
                       ".SI"
                     )
                   });
+                  // get price api and update state accordingly
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -113,13 +114,6 @@ export default class AddStockForm extends Component {
           ref={input => (this.units = input)}
           onSubmitEditing={() => this.price.focus()}
         />
-        {/*<TextInput
-          style={styles.textbox}
-          placeholder="Date purchased"
-          onChangeText={text => this.setState({ date: text })}
-          ref={input => (this.date = input)}
-          onSubmitEditing={() => this.price.focus()}
-        />*/}
         <TextInput
           style={styles.textbox}
           placeholder="Price"
@@ -136,18 +130,16 @@ export default class AddStockForm extends Component {
               ? "Trading fees"
               : this.state.fees.toString()
           }
-          //onChangeText={text => this.setState({ fees: text })}
           ref={input => (this.fees = input)}
         />
         <Button
           title="add"
           onPress={() => {
-            //alert(JSON.stringify(this.state))
             store.dispatch({
               type: "ADD",
               symbol: this.state.symbol,
               startPrice: this.updateFees(),
-              currPrice: 10
+              currPrice: 10 // get current price from api and calculate
             });
             alert(JSON.stringify(store.getState()))
           }}
