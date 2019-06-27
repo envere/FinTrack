@@ -11,8 +11,9 @@ import {
 } from "react-native";
 
 import PageHeader from "../components/PageHeader";
-import NavigationBar from "../navigation/NavigationBar";
+import BottomTab from "../navigation/BottomTab";
 import AddStockForm from "../components/AddStockForm";
+import NavigationBar from "../navigation/NavigationBar"
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -45,7 +46,7 @@ export default class HomeScreen extends Component {
             this.setModalVisible(true);
           }}
         />
-        <NavigationBar />
+        <BottomTab />
       </View>
     );
   }

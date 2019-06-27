@@ -6,14 +6,14 @@ import {
 } from 'react-native'
 
 import PageHeader from '../components/PageHeader'
-import NavigationBar from '../navigation/NavigationBar'
+import BottomTab from '../navigation/BottomTab'
 
 export default class AccountScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
         <PageHeader text="Account" navigation={this.props.navigation} />
-        <NavigationBar />
+        <BottomTab />
       </View>
     )
   }

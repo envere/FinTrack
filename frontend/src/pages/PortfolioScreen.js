@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 
 import PageHeader from "../components/PageHeader";
-import NavigationBar from "../navigation/NavigationBar";
+import BottomTab from "../navigation/BottomTab";
 import store from "../data/PortfolioStore";
 
 export default class PortfolioScreen extends Component {
@@ -11,7 +11,7 @@ export default class PortfolioScreen extends Component {
       <View style={styles.container}>
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
         <Button title="test" onPress={() => alert(JSON.stringify(store.getState()))} />
-        <NavigationBar />
+        <BottomTab />
       </View>
     );
   }
