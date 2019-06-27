@@ -36,6 +36,7 @@ function getStockName(symbol, res) {
     .catch(err => res.sendStatus(400))
 }
 
+
 function initPriceHistory(symbol) {
   StockPrice
     .deleteMany({ symbol })
@@ -53,7 +54,6 @@ function initPriceHistory(symbol) {
           }
 
           const buckets = new Map()
-          StockPrice.deleteMany({ symbol })
           years.forEach(year => buckets.set(year, new StockPrice({ symbol, year })))
 
           prices.forEach(price => {
@@ -108,11 +108,9 @@ router.post('/pricerange', (req, res) => {
     })
 })
 
-StockPrice.findOne({ symbol: 'MSFT', year: 2019})
-  .then(stockprice => {
-    // console.log(stockprice)
-    console.log(stockprice.days)
-    // console.log(stockprice.months)
-  })
+StockPrice
+  .latest('MSFT')
+  .then(x => console.log(x))
+  .catch(err => console.log(err))
 
 module.exports = router
