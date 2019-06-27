@@ -13,7 +13,6 @@ import {
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
 import AddStockForm from "../components/AddStockForm";
-import NavigationBar from "../navigation/NavigationBar"
 
 export default class HomeScreen extends Component {
   constructor(props) {
