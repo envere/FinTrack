@@ -31,7 +31,7 @@ const StockPriceSchema = new Schema({
   months: [],
 })
 
-StockPriceSchema.statics.getLatest = function (symbol) {
+StockPriceSchema.statics.latest = function (symbol) {
   return this
     .find({ symbol })
     .sort({year: -1})

@@ -63,15 +63,7 @@ function daily_prices(symbol) {
 function daily_prices_range(symbol, start, end) {
   return new Promise((resolve, reject) => {
     daily_prices(symbol)
-      .then(prices => {
-        const filteredprices = prices.filter(price => {
-          const format = date => date.toISOString().split('T')[0]
-          const date = price.date
-          return format(start) <= format(date) && format(date) <= format(end)
-        })
-        resolve(filteredprices)
-      })
-      .then(prices => prices.filter(price => start <= price.date && price.date <= end))
+      .then(prices => prices.filter(price => start < price.date && price.date <= end))
       .then(filteredprices => resolve(filteredprices))
       .catch(err => reject(err))
   })
@@ -382,6 +374,15 @@ function monthly_prices(symbol) {
   })
 }
 
+function monthly_prices_range(symbol, start, end) {
+  return new Promise((resolve, reject) => {
+    monthly_prices(symbol)
+      .then(prices => prices.filter(price => start < price.date && price.date <= end))
+      .then(filteredprices => resolve(filteredprices))
+      .catch(err => reject(err))
+  })
+}
+
 function monthlyAdjusted_equity(symbol) {
   return new Promise((resolve, reject) => {
     axios
@@ -521,6 +522,7 @@ const monthly = {
   timeseries: monthly_timeseries,
   latestprice: monthly_latestprice,
   prices: monthly_prices,
+  prices_range: monthly_prices_range,
 }
 const monthlyAdjusted = {
   equity: monthlyAdjusted_equity,
