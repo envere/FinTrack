@@ -31,6 +31,14 @@ const StockPriceSchema = new Schema({
   months: [],
 })
 
+StockPriceSchema.statics.getLatest = function (symbol) {
+  return this
+    .find({ symbol })
+    .sort({year: -1})
+    .then(sorted => sorted[0])
+    .catch(err => console.log(err))
+}
+
 const StockPrice = mongoose.model('StockPrice', StockPriceSchema)
 
 module.exports = StockPrice
