@@ -41,6 +41,7 @@ function updateStockPrices() {
             .daily
             .prices_range(symbol, latestday, new Date())
             .then(prices => {
+              prices.pop()
               let index = prices.length - 1
               while (index >= 0) {
                 const price = prices[index]
@@ -68,6 +69,7 @@ function updateStockPrices() {
                 .monthly
                 .prices_range(symbol, latestmonth, new Date())
                 .then(prices => {
+                  prices.pop()
                   let index = prices.length - 1
                   while (index >= 0) {
                     const price = prices[index]
