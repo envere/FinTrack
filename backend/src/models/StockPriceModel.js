@@ -34,8 +34,18 @@ const StockPriceSchema = new Schema({
 StockPriceSchema.statics.latest = function (symbol) {
   return this
     .find({ symbol })
-    .sort({year: -1})
+    .sort({ year: -1 })
     .then(sorted => sorted[0])
+    .catch(err => console.log(err))
+}
+
+StockPriceSchema.statics.range = function (symbol, start, end) {
+  const startyear = start.getFullYear()
+  const endyear = end.getFullYear()
+  console.log(startyear, endyear)
+  return this
+    .find({ symbol })
+    .then(data => data.filter(bucket => startyear <= bucket.year && bucket.year <= endyear))
     .catch(err => console.log(err))
 }
 
