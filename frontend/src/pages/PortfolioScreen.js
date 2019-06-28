@@ -1,23 +1,31 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, FlatList } from "react-native";
 
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
 import store from "../data/PortfolioStore";
-import { FlatList } from "react-native-gesture-handler";
 
 export default class PortfolioScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stockData: store.getState()
+    };
+  }
   render() {
     return (
       <View style={styles.container}>
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
         <FlatList
-          data={store.getState()}
+          data={this.state.stockData}
           renderItem={({ item }) => <Text>{item.name}</Text>}
+          refreshing
+          onRefresh={() => store.getState()}
+          keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
         />
         <Button
-          title="test"
-          onPress={() => alert(JSON.stringify(store.getState()))}
+          title="Refresh"
+          onPress={() => this.setState({ stockData: store.getState() })}
         />
         <BottomTab />
       </View>
