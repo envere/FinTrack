@@ -36,6 +36,60 @@ function getStockName(symbol, res) {
     .catch(err => res.sendStatus(400))
 }
 
+function getStockRange(symbol, start, end) {
+  StockPrice
+    .range(symbol, start, end)
+    .then(buckets => {
+      const data = {
+        days: [],
+        months: [],
+      }
+      buckets.forEach(bucket => {
+        const format = date => new Date(date.toISOString().split('T')[0])
+        const days = bucket.days
+        const months = bucket.months
+        days.forEach(day => {
+          if (start <= format(day.date) && format(day.date) <= end) {
+            data.days.push(day)
+          }
+        })
+        months.forEach(month => {
+          if (start <= format(month.date) && format(month.date) <= end) {
+            data.months.push(month)
+          }
+        })
+      })
+      return data
+    })
+    .then(data => {
+      if (data.days === [] && data.months === []) {
+        alphavantage
+          .daily
+          .prices_range(symbol, start, end)
+          .then(prices => {
+            prices.forEach(price => data.days.push(price))
+            return alphavantage
+              .monthly
+              .prices_range(symbol, start, end)
+          })
+          .then(prices => {
+            prices.forEach(price => data.months.push(price))
+            res.status(200).json({
+              message: `${symbol} price range from ${start} to ${end}`,
+              stock: data,
+            })
+          })
+          .then(done => initPriceHistory(symbol))
+          .catch(err => res.sendStatus(400))
+      } else {
+        res.status(200).json({
+          message: `${symbol} price range from ${start} to ${end}`,
+          stock: data,
+        })
+      }
+    })
+    .catch(err => console.log(err))
+}
 
 function initPriceHistory(symbol) {
   StockPrice
@@ -61,7 +115,7 @@ function initPriceHistory(symbol) {
             const month = price.date.getMonth()
             const value = price.price
             const bucket = buckets.get(year)
-            bucket.months.push({ date: month, price: value })
+            bucket.months.push({ date: price.date, price: value })
           })
           alphavantage
             .daily
@@ -73,7 +127,7 @@ function initPriceHistory(symbol) {
                 const date = price.date.getDate()
                 const value = price.price
                 const bucket = buckets.get(year)
-                bucket.days.push({ date: [month, date], price: value })
+                bucket.days.push({ date: price.date, price: value })
               })
               return buckets
             })
@@ -99,18 +153,11 @@ router.post('/pricerange', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
-      const startDate = req.body.start
-      const endDate = req.body.end
-      const years = [startDate.getFullYear()]
-      const months = [startDate.getMonth()]
-      const days = [startDate.getDate()]
-
+      const symbol = req.body.symbol
+      const start = req.body.start
+      const end = req.body.end
+      getStockRange(symbol, start, end)
     })
 })
-
-StockPrice
-  .latest('MSFT')
-  .then(x => console.log(x))
-  .catch(err => console.log(err))
 
 module.exports = router
