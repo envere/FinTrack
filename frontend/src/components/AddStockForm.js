@@ -23,6 +23,7 @@ export default class AddStockForm extends Component {
       bank: "dbs", // default value for testing
       symbolPlaceholder: "Stock name",
       symbol: "",
+      name: "",
       units: 0,
       date: "",
       price: 0,
@@ -97,6 +98,9 @@ export default class AddStockForm extends Component {
                       ".SI"
                     )
                   });
+                  this.setState({
+                    name: results[0]["2. name"]
+                  });
                   // get price api and update state accordingly
                 } else {
                   alert("more than 1 results obtained");
@@ -138,10 +142,11 @@ export default class AddStockForm extends Component {
             store.dispatch({
               type: "ADD",
               symbol: this.state.symbol,
+              name: this.state.name,
               startPrice: this.updateFees(),
               currPrice: 10 // get current price from api and calculate
             });
-            alert(JSON.stringify(store.getState()))
+            alert(JSON.stringify(store.getState()));
           }}
         />
       </View>

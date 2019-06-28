@@ -6,6 +6,7 @@ const portfolio = (state = initialState, action) => {
         ...state,
         {
           symbol: action.symbol,
+          name: action.name,
           startPrice: action.startPrice,
           currPrice: action.currPrice
         }
