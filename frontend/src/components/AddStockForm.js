@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 
+import store from "../data/PortfolioStore";
 /**
  * array indices:
  * [0] for trade value of <=50k,
@@ -22,6 +23,7 @@ export default class AddStockForm extends Component {
       bank: "dbs", // default value for testing
       symbolPlaceholder: "Stock name",
       symbol: "",
+      name: "",
       units: 0,
       date: "",
       price: 0,
@@ -42,9 +44,10 @@ export default class AddStockForm extends Component {
     let fees = brokerFees * rawTotal;
     if (fees < 25) {
       this.setState({ fees: 25 });
-    } else {
-      this.setState({ fees: fees });
+      return rawTotal + 25;
     }
+    this.setState({ fees: fees });
+    return rawTotal + fees;
   }
 
   render() {
@@ -95,6 +98,10 @@ export default class AddStockForm extends Component {
                       ".SI"
                     )
                   });
+                  this.setState({
+                    name: results[0]["2. name"]
+                  });
+                  // get price api and update state accordingly
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -109,15 +116,8 @@ export default class AddStockForm extends Component {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
           }}
           ref={input => (this.units = input)}
-          onSubmitEditing={() => this.date.focus()}
-        />
-        {/*<TextInput
-          style={styles.textbox}
-          placeholder="Date purchased"
-          onChangeText={text => this.setState({ date: text })}
-          ref={input => (this.date = input)}
           onSubmitEditing={() => this.price.focus()}
-        />*/}
+        />
         <TextInput
           style={styles.textbox}
           placeholder="Price"
@@ -134,10 +134,21 @@ export default class AddStockForm extends Component {
               ? "Trading fees"
               : this.state.fees.toString()
           }
-          //onChangeText={text => this.setState({ fees: text })}
           ref={input => (this.fees = input)}
         />
-        <Button title="add" onPress={() => alert(this.state.date)} />
+        <Button
+          title="add"
+          onPress={() => {
+            store.dispatch({
+              type: "ADD",
+              symbol: this.state.symbol,
+              name: this.state.name,
+              startPrice: this.updateFees(),
+              currPrice: 10 // get current price from api and calculate
+            });
+            alert(JSON.stringify(store.getState()));
+          }}
+        />
       </View>
     );
   }
@@ -146,13 +157,13 @@ export default class AddStockForm extends Component {
 const screen = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    width: "50%",
-    height: 280,
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "black"
+  formDEPRECATED: {
+    //justifyContent: "center",
+    width: "80%",
+    height: 280
+    //flex: 1,
+    //flexDirection: "row",
+    //backgroundColor: "black"
   },
   textbox: {
     paddingHorizontal: 16
