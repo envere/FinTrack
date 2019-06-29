@@ -45,7 +45,10 @@ export default class PortfolioScreen extends Component {
         <Button
           title="Refresh"
           onPress={() =>
+            // this refreshes by getting the updated redux state (if any)
             this.setState({ stockData: store.getState().stockList })
+
+            // we also need to fetch the latest price api through this button
           }
         />
         <BottomTab />
