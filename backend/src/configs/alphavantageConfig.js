@@ -1,5 +1,8 @@
 module.exports = {
   key: '2TU1SD6EZTVECMLR',
+  intraday_url: function (symbol, key) {
+    return `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=1min&apikey=${key}`
+  },
   daily_url: function (symbol, key) {
     return `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=full&apikey=${key}`
   },

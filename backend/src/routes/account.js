@@ -87,3 +87,5 @@ router.post("/removesymbol", (req, res) => {
     })
     .catch(err => res.sendStatus(403))
 })
+
+module.exports = router

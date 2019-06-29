@@ -3,44 +3,53 @@ const jwt = require("../util/jwt");
 const express = require("express");
 const router = express.Router();
 
-router.get("/getUsers", (req, res) => {
+router.get("/getusers", (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
-      User.find()
-        .then(doc => {
+      User
+        .find()
+        .then(users => {
           res.status(200).json({
             message: "List of all users",
-            users: doc
+            users,
           });
         })
         .catch(err => {
-          res.status(500).json({
-            message: "error",
-            error: err
-          });
+          res.sendStatus(400)
         });
     })
     .catch(err => res.sendStatus(403));
 });
 
-router.get("/getUser/:username", (req, res) => {
+router.get("/getuser", (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
-      User.findOne({ username: req.params.username })
-        .then(doc => {
-          res.status(200).json({
-            message: `Getting user by username: ${req.params.username}`,
-            user: doc
-          });
-        })
-        .catch(err => {
-          res.status(500).json({
-            message: "error",
-            error: err
-          });
-        });
+      const username = req.query.username
+      if (username) {
+        User
+          .findOne({ username })
+          .then(user => {
+            res.status(200).json({
+              message: `getting user by username: ${username}`,
+              user,
+            })
+          })
+          .catch(err => res.sendStatus(400))
+      }
+      else {
+        User
+          .find()
+          .then(users => {
+            res.status(200).json({
+              message: 'fetching all users since no username in query',
+              users,
+            })
+          })
+          .catch(err => res.sendStatus(400))
+
+      }
     })
     .catch(err => res.sendStatus(403));
 });
