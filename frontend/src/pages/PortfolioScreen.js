@@ -18,12 +18,38 @@ export default class PortfolioScreen extends Component {
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
         <FlatList
           data={this.state.stockData}
-          renderItem={({ item }) => <Text>{item.symbol}</Text>}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "80%",
+                alignItems: "center"
+              }}
+            >
+              <View>
+                <Text>{item.symbol}</Text>
+                <Text>{item.name}</Text>
+              </View>
+              <View>
+                <Text>{`${(
+                  ((item.currPrice - item.startPrice) / item.startPrice) *
+                  100
+                ).toFixed(2)}%`}</Text>
+              </View>
+            </View>
+          )}
           keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
         />
         <Button
           title="Refresh"
-          onPress={() => this.setState({ stockData: store.getState().stockList })}
+          onPress={() =>
+            // this refreshes by getting the updated redux state (if any)
+            this.setState({ stockData: store.getState().stockList })
+
+            // we also need to fetch the latest price api through this button
+          }
         />
         <BottomTab />
       </View>
