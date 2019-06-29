@@ -65,9 +65,9 @@ export default class AddStockForm extends Component {
           <Right />
         </Header>
         <DatePicker
-          defaultDate={new Date(2018, 4, 4)}
+          defaultDate={new Date()}
           minimumDate={new Date(2010, 1, 1)}
-          maximumDate={new Date(2018, 12, 31)}
+          maximumDate={new Date()}
           locale={"en"}
           timeZoneOffsetInMinutes={undefined}
           modalTransparent={false}
@@ -144,7 +144,8 @@ export default class AddStockForm extends Component {
               symbol: this.state.symbol,
               name: this.state.name,
               startPrice: this.updateFees(),
-              currPrice: 10 // get current price from api and calculate
+              date: this.state.date,
+              currPrice: 100000 // get current price from api and calculate
             });
             alert(JSON.stringify(store.getState()));
           }}
