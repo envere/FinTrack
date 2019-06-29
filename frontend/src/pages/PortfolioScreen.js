@@ -9,7 +9,7 @@ export default class PortfolioScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stockData: store.getState()
+      stockData: store.getState().stockList
     };
   }
   render() {
@@ -18,14 +18,12 @@ export default class PortfolioScreen extends Component {
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
         <FlatList
           data={this.state.stockData}
-          renderItem={({ item }) => <Text>{item.name}</Text>}
-          refreshing
-          onRefresh={() => store.getState()}
+          renderItem={({ item }) => <Text>{item.symbol}</Text>}
           keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
         />
         <Button
           title="Refresh"
-          onPress={() => this.setState({ stockData: store.getState() })}
+          onPress={() => this.setState({ stockData: store.getState().stockList })}
         />
         <BottomTab />
       </View>

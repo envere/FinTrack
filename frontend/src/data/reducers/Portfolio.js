@@ -1,14 +1,14 @@
-const initialState = [
-  [], //stocklist
-  [] //transaction history
-];
+const initialState = {
+  stockList: [],
+  transactions: []
+};
 const portfolio = (state = initialState, action) => {
   switch (action.type) {
     case "ADD":
-      return [
-        [
-          //stocklist
-          ...state, // existing stocks
+      return {
+        ...state,
+        stockList: [
+          ...state.stockList,
           {
             symbol: action.symbol,
             name: action.name,
@@ -16,16 +16,16 @@ const portfolio = (state = initialState, action) => {
             currPrice: action.currPrice
           }
         ],
-        [
-          //transaction history
-          ...state, // existing transactions
+        transactions: [
+          ...state.transactions,
           {
             symbol: action.symbol,
             price: action.startPrice,
             date: action.date
           }
         ]
-      ];
+      };
+
     default:
       return state;
   }
