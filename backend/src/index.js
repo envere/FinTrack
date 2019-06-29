@@ -9,8 +9,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/", require("./routes/register"));
-app.use("/", require("./routes/login"));
+app.use("/auth", require("./routes/auth"))
+app.use("/account", jwt.queryJWT, require("./routes/account"))
 app.use("/user", jwt.queryJWT, require("./routes/user"));
 app.use("/stock", jwt.queryJWT, require("./routes/stock"));
 
