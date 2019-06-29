@@ -20,24 +20,14 @@ router.post("/register", (req, res) => {
       user
         .save()
         .then(doc => {
-          res.status(200).json({
-            message: "added user",
+          res.status(201).json({
+            message: `added ${username}`,
             user: doc
           });
         })
-        .catch(err => {
-          res.status(500).json({
-            message: "error",
-            error: err
-          });
-        });
+        .catch(err => res.sendStatus(400));
     })
-    .catch(err =>
-      res.json({
-        message: "error",
-        error: err
-      })
-    );
+    .catch(err => res.sendStatus(400));
 });
 
 router.post("/login", (req, res) => {
@@ -45,31 +35,22 @@ router.post("/login", (req, res) => {
   const supplied_password = req.body.password;
   User.findOne({ username: supplied_username }).then(user => {
     if (!user) {
-      return res.status(404).json({
-        message: "error",
-        error: "User account does not exist"
-      });
+      res.sendStatus(404)
+    } else {
+      bcrypt
+        .checkPassword(supplied_password, user.password)
+        .then(isValid => {
+          if (isValid) {
+            jwt
+              .signJWT({ user })
+              .then(token => res.json({ token }))
+              .catch(err => res.sendStatus(400))
+          } else {
+            res.sendStatus(403)
+          }
+        })
+        .catch(err => res.sendStatus(400))
     }
-    return bcrypt
-      .checkPassword(supplied_password, user.password)
-      .then(isValid => {
-        if (isValid) {
-          jwt
-            .signJWT({ user })
-            .then(token => res.json({ token }))
-            .catch(err =>
-              res.status(500).json({
-                message: "Error",
-                error: err
-              })
-            );
-        } else {
-          res.status(400).json({
-            message: "error",
-            error: "Invalid password"
-          });
-        }
-      });
   });
 });
 
