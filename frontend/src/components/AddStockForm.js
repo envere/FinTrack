@@ -65,7 +65,7 @@ export default class AddStockForm extends Component {
           <Right />
         </Header>
         <DatePicker
-          defaultDate={new Date()}//{new Date(2018, 4, 4)}
+          defaultDate={new Date()}
           minimumDate={new Date(2010, 1, 1)}
           maximumDate={new Date()}
           locale={"en"}
