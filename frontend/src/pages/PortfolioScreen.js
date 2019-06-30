@@ -16,6 +16,17 @@ export default class PortfolioScreen extends Component {
     return (
       <View style={styles.container}>
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "80%",
+            marginHorizontal: "10%"
+          }}
+        >
+          <Text style={styles.header}>Stock</Text>
+          <Text style={styles.header}>Profit/Loss</Text>
+        </View>
         <FlatList
           data={this.state.stockData}
           renderItem={({ item }) => (
@@ -25,7 +36,7 @@ export default class PortfolioScreen extends Component {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "80%",
-                alignItems: "center"
+                marginHorizontal: "10%"
               }}
             >
               <View>
@@ -37,6 +48,7 @@ export default class PortfolioScreen extends Component {
                   ((item.currPrice - item.startPrice) / item.startPrice) *
                   100
                 ).toFixed(2)}%`}</Text>
+                <Text>{`$${item.currPrice - item.startPrice}`}</Text>
               </View>
             </View>
           )}
@@ -44,9 +56,10 @@ export default class PortfolioScreen extends Component {
         />
         <Button
           title="Refresh"
-          onPress={() =>
-            // this refreshes by getting the updated redux state (if any)
-            this.setState({ stockData: store.getState().stockList })
+          onPress={
+            () =>
+              // this refreshes by getting the updated redux state (if any)
+              this.setState({ stockData: store.getState().stockList })
 
             // we also need to fetch the latest price api through this button
           }
@@ -61,5 +74,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5FCFF"
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: 22
   }
 });
