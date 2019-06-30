@@ -16,6 +16,17 @@ export default class PortfolioScreen extends Component {
     return (
       <View style={styles.container}>
         <PageHeader text="Portfolio" navigation={this.props.navigation} />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "80%",
+            marginHorizontal: "10%"
+          }}
+        >
+          <Text style={styles.header}>Stock</Text>
+          <Text style={styles.header}>Profit/Loss</Text>
+        </View>
         <FlatList
           data={this.state.stockData}
           renderItem={({ item }) => (
@@ -25,7 +36,7 @@ export default class PortfolioScreen extends Component {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "80%",
-                marginHorizontal:"10%"
+                marginHorizontal: "10%"
               }}
             >
               <View>
@@ -63,5 +74,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5FCFF"
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: 22
   }
 });
