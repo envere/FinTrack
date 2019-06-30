@@ -11,6 +11,7 @@ mongoose
   .connect(uri, {
     useNewUrlParser: true,
     useCreateIndex: true,
+    useFindAndModify: false,
     dbName: "fintrack_database"
   })
   .then(() => console.log("connected successfully to database [User]"))
@@ -32,7 +33,13 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  symbol: [],
+  symbols: [
+    {
+      symbol: String,
+      units: Number,
+      initialprice: Number,
+    }
+  ],
 })
 
 UserSchema.index({ username: "text" })
