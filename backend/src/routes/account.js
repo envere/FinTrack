@@ -53,7 +53,7 @@ router.post('/addsymbol', (req, res) => {
       const symbol = req.body.symbol
       const units = req.body.units === "" ? 0 : req.body.units
       const initialprice = req.body.initialprice === "" ? 0 : req.body.initialprice
-      if (!(symbol)) {
+      if (!(id && symbol)) {
         res.sendStatus(400)
       } else {
         User
@@ -88,6 +88,62 @@ router.post('/addsymbol', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
+router.post('/updatesymbol', (req, res) => {
+  jwt
+    .verifyJWT(req.token)
+    .then(auth => {
+      const id = req.body.id
+      const symbol = req.body.symbol
+      const units = req.body.units === "" ? 0 : req.body.units
+      const initialprice = req.body.initialprice === "" ? 0 : req.body.initialprice
+      if (!(id && symbol)) {
+        res.sendStatus(400)
+      } else {
+        User
+          .findById(id)
+          .then(user => {
+            if (!user) {
+              res.sendStatus(404)
+            } else {
+              const symbols = user.symbols
+              const check = symbols.filter(elem => elem.symbol === symbol).length !== 0
+              if (check) {
+                User
+                  .findById(id)
+                  .then(user => {
+                    const symbols = user.symbols
+                    symbols.forEach(elem => {
+                      if (elem.symbol === symbol) {
+                        elem.units = units
+                        elem.initialprice = initialprice
+                      }
+                    })
+                    User
+                      .findByIdAndUpdate(id, { symbols: symbols })
+                      .then(user => {
+
+                        res.status(200).json({
+                          message: `updated symbol: ${symbol}, units: ${units}, initialprice: ${initialprice}`,
+                          user,
+                        })
+                      })
+                      .catch(err => res.sendStatus(400))
+
+                  })
+              } else {
+                res.status(200).json({
+                  message: `${symbol} not saved under ${user.username}'s account`,
+                  user,
+                })
+              }
+            }
+          })
+          .catch(err => res.sendStatus(400))
+      }
+    })
+    .catch(err => res.sendStatus(403))
+})
+
 router.post('/deletesymbol', (req, res) => {
   jwt
     .verifyJWT(req.token)
@@ -97,7 +153,6 @@ router.post('/deletesymbol', (req, res) => {
       User
         .findByIdAndUpdate(id, { $pull: { symbols: { symbol } } })
         .then(user => {
-          console.log(user)
           res.status(200).json({
             message: `removed ${symbol} from ${user.username}`,
             user,
