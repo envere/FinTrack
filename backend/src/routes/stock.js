@@ -54,11 +54,11 @@ function initPriceHistory(symbol) {
     .catch(err => console.log(err))
 }
 
-router.post('/intraday/latestprice', (req, res) => {
+router.get('/intraday/latestprice', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
-      const symbol = req.body.symbol
+      const symbol = req.query.symbol
       if (!symbol) {
         res.sendStatus(400)
       } else {
