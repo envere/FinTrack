@@ -54,6 +54,7 @@ export default class AddStockForm extends Component {
     const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
       this.state.symbol
     }&apikey=1WJTX23D9MKYZMFE`;
+
     const setDate = newDate => this.setState({ date: newDate });
     return (
       <View style={styles.form}>
@@ -102,6 +103,11 @@ export default class AddStockForm extends Component {
                     name: results[0]["2. name"]
                   });
                   // get price api and update state accordingly
+                  
+                  //here's the hardcoded part(remove after demo)VVVV
+                  this.setState({
+                    price: this.state.symbol ===  "STEG.SI" ? 4.200 : 0.805
+                  })
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -120,7 +126,9 @@ export default class AddStockForm extends Component {
         />
         <TextInput
           style={styles.textbox}
-          placeholder="Price"
+          placeholder={
+            this.state.price === 0 ? "Price" : this.state.price.toString()
+          }
           onChangeText={text => {
             this.setState({ price: parseFloat(text) }, () => this.updateFees());
           }}
@@ -139,13 +147,14 @@ export default class AddStockForm extends Component {
         <Button
           title="add"
           onPress={() => {
+            const price = this.state.symbol === "STEG.SI" ? 4.2 : 0.805;
             store.dispatch({
               type: "ADD",
               symbol: this.state.symbol,
               name: this.state.name,
               startPrice: this.updateFees(),
               date: this.state.date,
-              currPrice: 100000 // get current price from api and calculate
+              currPrice: this.state.units * price
             });
             alert(JSON.stringify(store.getState()));
           }}
