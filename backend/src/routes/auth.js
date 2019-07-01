@@ -20,15 +20,15 @@ router.post("/register", (req, res) => {
       });
       user
         .save()
-        .then(doc => {
+        .then(user => {
           res.status(201).json({
             message: `added ${username}`,
-            user: doc
+            user,
           });
         })
-        .catch(err => res.sendStatus(400))
+        .catch(err => res.sendStatus(500))
     })
-    .catch(err => res.sendStatus(400))
+    .catch(err => res.sendStatus(500))
 });
 
 router.post("/login", (req, res) => {
@@ -51,15 +51,15 @@ router.post("/login", (req, res) => {
                   token,
                   user,
                 }))
-                .catch(err => res.sendStatus(400))
+                .catch(err => res.sendStatus(500))
             } else {
               res.sendStatus(403)
             }
           })
-          .catch(err => res.sendStatus(400))
+          .catch(err => res.sendStatus(500))
       }
     })
-    .catch(err => res.sendStatus(400))
+    .catch(err => res.sendStatus(500))
 });
 
 module.exports = router;

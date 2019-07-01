@@ -11,12 +11,12 @@ router.get("/getusers", (req, res) => {
         .find()
         .then(users => {
           res.status(200).json({
-            message: "List of all users",
+            message: "list of all users",
             users,
           });
         })
         .catch(err => {
-          res.sendStatus(400)
+          res.sendStatus(500)
         });
     })
     .catch(err => res.sendStatus(403));
@@ -36,7 +36,7 @@ router.get("/getuser", (req, res) => {
               user,
             })
           })
-          .catch(err => res.sendStatus(400))
+          .catch(err => res.sendStatus(500))
       }
       else {
         User
@@ -47,8 +47,7 @@ router.get("/getuser", (req, res) => {
               users,
             })
           })
-          .catch(err => res.sendStatus(400))
-
+          .catch(err => res.sendStatus(500))
       }
     })
     .catch(err => res.sendStatus(403));
