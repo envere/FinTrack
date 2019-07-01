@@ -45,14 +45,14 @@ router.post('/deleteaccount', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
-router.post('/addsymbol', (req, res) => {
+router.post('/symbol/add', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
       const id = req.body.id
       const symbol = req.body.symbol
       const units = req.body.units === "" ? 0 : req.body.units
-      const initialprice = req.body.initialprice === "" ? 0 : req.body.initialprice
+      const initialvalue = req.body.initialvalue === "" ? 0 : req.body.initialvalue
       if (!(id && symbol)) {
         res.sendStatus(400)
       } else {
@@ -62,14 +62,14 @@ router.post('/addsymbol', (req, res) => {
             if (!user) {
               res.sendStatus(404)
             } else {
-              const value = { symbol, units, initialprice }
+              const newsymbol = { symbol, units, initialvalue }
               const check = user.symbols.filter(elem => elem.symbol === symbol).length === 0
               if (check) {
                 User
-                  .findByIdAndUpdate(id, { $push: { symbols: value } })
+                  .findByIdAndUpdate(id, { $push: { symbols: newsymbol } })
                   .then(user => {
                     res.status(200).json({
-                      message: `added {${symbol}, ${units}, ${initialprice}} to ${user.username}`,
+                      message: `added {${symbol}, ${units}, ${initialvalue}} to ${user.username}`,
                       user,
                     })
                   })
@@ -88,14 +88,14 @@ router.post('/addsymbol', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
-router.post('/updatesymbol', (req, res) => {
+router.post('/symbol/update', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
       const id = req.body.id
       const symbol = req.body.symbol
       const units = req.body.units === "" ? 0 : req.body.units
-      const initialprice = req.body.initialprice === "" ? 0 : req.body.initialprice
+      const initialvalue = req.body.initialvalue === "" ? 0 : req.body.initialvalue
       if (!(id && symbol)) {
         res.sendStatus(400)
       } else {
@@ -105,8 +105,7 @@ router.post('/updatesymbol', (req, res) => {
             if (!user) {
               res.sendStatus(404)
             } else {
-              const symbols = user.symbols
-              const check = symbols.filter(elem => elem.symbol === symbol).length !== 0
+              const check = user.symbols.filter(elem => elem.symbol === symbol).length !== 0
               if (check) {
                 User
                   .findById(id)
@@ -115,15 +114,14 @@ router.post('/updatesymbol', (req, res) => {
                     symbols.forEach(elem => {
                       if (elem.symbol === symbol) {
                         elem.units = units
-                        elem.initialprice = initialprice
+                        elem.initialvalue = initialvalue
                       }
                     })
                     User
                       .findByIdAndUpdate(id, { symbols: symbols })
                       .then(user => {
-
                         res.status(200).json({
-                          message: `updated symbol: ${symbol}, units: ${units}, initialprice: ${initialprice}`,
+                          message: `updated symbol: ${symbol}, units: ${units}, initialprice: ${initialvalue}`,
                           user,
                         })
                       })
@@ -144,7 +142,7 @@ router.post('/updatesymbol', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
-router.post('/deletesymbol', (req, res) => {
+router.post('/symbol/delete', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
