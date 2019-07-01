@@ -111,3 +111,5 @@ res = {
 *successful:* 200
 *token not valid:* 403
 *other errors:* 500
+
+### account/deleteaccount
