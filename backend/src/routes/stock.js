@@ -124,65 +124,65 @@ router.post('/pricerange', (req, res) => {
     .verifyJWT(req.token)
     .then(auth => {
       const symbol = req.body.symbol
-      const start = req.body.start
-      const end = req.body.end
+      const start = new Date(req.body.start)
+      const end = new Date(req.body.end)
       if (!(symbol && start && end)) {
         res.sendStatus(400)
       } else {
         StockPrice
           .range(symbol, start, end)
           .then(buckets => {
-            const data = {
+            const prices = {
               days: [],
               months: [],
             }
-            buckets.forEach(bucket => {
-              const format = date => new Date(date.toISOString().split('T')[0])
-              const days = bucket.days
-              const months = bucket.months
-              days.forEach(day => {
-                if (start <= format(day.date) && format(day.date) <= end) {
-                  data.days.push(day)
-                }
-              })
-              months.forEach(month => {
-                if (start <= format(month.date) && format(month.date) <= end) {
-                  data.months.push(month)
-                }
-              })
-            })
-            return data
-          })
-          .then(data => {
-            if (data.days === [] && data.months === []) {
+            if (buckets === []) {
               alphavantage
                 .daily
                 .prices_range(symbol, start, end)
-                .then(prices => {
-                  prices.forEach(price => data.days.push(price))
-                  return alphavantage
+                .then(dailypricerange => {
+                  prices.days = dailypricerange.filter(price => start <= price.date && price.date <= end)
+                  alphavantage
                     .monthly
                     .prices_range(symbol, start, end)
+                    .then(monthlypricerange => {
+                      prices.months = monthlypricerange.filter(price => start <= price.date && price.date <= end)
+                    })
+                    .then(done => {
+                      res.status(200).json({
+                        message: `${symbol} prices from ${start} to ${end}`,
+                        prices,
+                      })
+                      initPriceHistory(symbol)
+                    })
+                    .catch(err => res.sendStatus(400))
                 })
-                .then(prices => {
-                  prices.forEach(price => data.months.push(price))
-                  res.status(200).json({
-                    message: `${symbol} price range from ${start} to ${end}`,
-                    stock: data,
-                  })
-                })
-                .then(done => initPriceHistory(symbol))
                 .catch(err => res.sendStatus(400))
             } else {
+              buckets.forEach(bucket => {
+                const days = bucket.days
+                const months = bucket.months
+                days.forEach(day => {
+                  if (start <= day.date && day.date <= end) {
+                    prices.days.push(day)
+                  }
+                })
+                months.forEach(month => {
+                  if (start <= month.date && month.date <= end) {
+                    prices.months.push(month)
+                  }
+                })
+              })
               res.status(200).json({
-                message: `${symbol} price range from ${start} to ${end}`,
-                stock: data,
+                message: `${symbol} prices from ${start} to ${end}`,
+                prices,
               })
             }
           })
           .catch(err => res.sendStatus(400))
       }
     })
+    .catch(err => res.sendStatus(403))
 })
 
 module.exports = router
