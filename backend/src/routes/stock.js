@@ -126,6 +126,10 @@ router.post('/pricerange', (req, res) => {
       const symbol = req.body.symbol
       const start = new Date(req.body.start)
       const end = new Date(req.body.end)
+      const startyear = start.getFullYear()
+      const endyear = end.getFullYear()
+      const startmonth = start.getMonth()
+      const endmonth = end.getMonth()
       if (!(symbol && start && end)) {
         res.sendStatus(400)
       } else {
@@ -146,7 +150,15 @@ router.post('/pricerange', (req, res) => {
                     .monthly
                     .prices_range(symbol, start, end)
                     .then(monthlypricerange => {
-                      prices.months = monthlypricerange.filter(price => start <= price.date && price.date <= end)
+                      prices.months = monthlypricerange.filter(price => {
+                        const checklower = startyear === price.date.getFullYear()
+                          ? startmonth <= price.date.getMonth()
+                          : startyear < price.date.getFullYear()
+                        const checkupper = endyear === price.date.getFullYear()
+                          ? price.date.getMonth() <= endmonth
+                          : price.date.getFullYear() < endyear
+                        return checklower && checkupper
+                      })
                     })
                     .then(done => {
                       res.status(200).json({
@@ -168,7 +180,13 @@ router.post('/pricerange', (req, res) => {
                   }
                 })
                 months.forEach(month => {
-                  if (start <= month.date && month.date <= end) {
+                  const checklower = startyear === month.date.getFullYear()
+                    ? startmonth <= month.date.getMonth()
+                    : startyear < month.date.getFullYear()
+                  const checkupper = endyear === month.date.getFullYear()
+                    ? month.date.getMonth() <= endmonth
+                    : month.date.getFullYear() < endyear
+                  if (checklower && checkupper) {
                     prices.months.push(month)
                   }
                 })
