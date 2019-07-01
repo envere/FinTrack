@@ -42,7 +42,6 @@ StockPriceSchema.statics.latest = function (symbol) {
 StockPriceSchema.statics.range = function (symbol, start, end) {
   const startyear = start.getFullYear()
   const endyear = end.getFullYear()
-  console.log(startyear, endyear)
   return this
     .find({ symbol })
     .then(data => data.filter(bucket => startyear <= bucket.year && bucket.year <= endyear))
