@@ -33,10 +33,10 @@ router.post('/deleteaccount', (req, res) => {
                   res.sendStatus(403)
                 }
               })
-              .catch(err => res.sendStatus(400))
+              .catch(err => res.sendStatus(500))
           }
         })
-        .catch(err => res.sendStatus(400))
+        .catch(err => res.sendStatus(500))
     })
     .catch(err => res.sendStatus(403))
 })
@@ -66,7 +66,7 @@ router.post('/symbol/add', (req, res) => {
                     user,
                   })
                 })
-                .catch(err => res.sendStatus(400))
+                .catch(err => res.sendStatus(500))
             } else {
               res.status(200).json({
                 message: `${symbol} is already under ${user.username}'s account`,
@@ -75,7 +75,7 @@ router.post('/symbol/add', (req, res) => {
             }
           }
         })
-        .catch(err => res.sendStatus(400))
+        .catch(err => res.sendStatus(500))
     })
     .catch(err => res.sendStatus(403))
 })
@@ -139,13 +139,18 @@ router.post('/symbol/delete', (req, res) => {
       User
         .findByIdAndUpdate(id, { $pull: { symbols: { symbol } } })
         .then(user => {
-          res.status(200).json({
-            message: `removed ${symbol} from ${user.username}`,
-            user,
-          })
+          if (!user) {
+            res.sendStatus(404)
+          } else {
+            res.status(200).json({
+              message: `removed ${symbol} from ${user.username}`,
+              user,
+            })
+          }
         })
         .catch(err => res.sendStatus(400))
     })
+    .catch(err => res.sendStatus(403))
 })
 
 module.exports = router
