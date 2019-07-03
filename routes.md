@@ -45,9 +45,9 @@ For protected routes, invalid or non existent JWT will result in a 403 response 
 ```
 POST
 req.body = {
-  username: username,   // username
-  email: email,         // email
-  password: password,   // password
+  username: String,   // username
+  email: String,         // email
+  password: String,   // password
 }
 
 res = {
@@ -62,13 +62,13 @@ res = {
 ```
 POST
 req.body = {
-  username: username,   // username 
-  password: password,   // password
+  username: String,   // username 
+  password: String,   // password
 }
 
 res = {
   message: authentication passed,
-  token: token,         // jwt token
+  token: String,         // jwt token
   user: user,           // user document
 }
 ```
@@ -105,7 +105,7 @@ res = {
 // if username !== ""
 res = {
   message: fetching all users since no username in query,
-  users: users          // array of all user documents
+  users: [user]          // array of all user documents
 }
 ```
 *successful:* 200
@@ -117,11 +117,135 @@ res = {
 POST
 
 req.body = {
-  id: id,               // user account document object id
-  password: password,   // password
+  id: String,               // user account document object id
+  password: String,   // password
 }
 
 res = {
-
+  message: removed $username from database, // user account 
+  user: user,
 }
 ```
+*successful:* 200
+*token not valid / password failed:* 403
+*other errors:* 500
+
+### account/symbol/add
+```
+req.body = {
+  id: String,
+  symbol: String,
+  units: Number,
+  initialvalue: Number,
+}
+
+// if account did not have this symbol
+res = {
+  message: added $symbol, $units, $initialvalue to $username,
+  user: user,
+}
+// if account already has symbol
+res = {
+  message: $symbol is already under $username's account,
+  user: user,
+}
+```
+*successful:* 200
+*token not valid:* 403
+*user account not found*: 404
+*other errors:* 500
+
+### account/symbol/update
+```
+req.body = {
+  id: String,
+  symbol: String,
+  units: Number,
+  initialvalue: Number,
+}
+
+// if account did not have symbol
+res = {
+  message: $symbol not saved under $username's account,
+  user: user,
+}
+// if account does have symbol
+res = {
+  message: updated $symbol, $units, $initialvalue,
+  user: user,
+}
+```
+*successful:* 200
+*token not valid:* 403
+*user account not found*: 404
+*other errors:* 500
+
+### account/symbol/delete
+```
+req.body = {
+  id: String,
+  symbol: String,
+}
+
+res = {
+  message: removed $symbol from $username,
+  user: user,
+}
+```
+*successful:* 200
+*token not valid:* 403
+*user account not found*: 404
+*other errors:* 500
+
+### stock/intraday/latestprice
+```
+req.body = {
+  symbol: String
+}
+
+res = {
+  message: latest price $latestprice at time $date (intraday),
+  latestprice: Number,
+}
+```
+*successful:* 200
+*token not valid:* 403
+*other errors:* 500
+
+### stock/daily/latestprice
+```
+req.body = {
+  symbol: String,
+}
+
+res = {
+  message: getting $symbol latest price (daily),
+  stock: {
+    price: Number,
+    date: Date,
+  }
+}
+```
+*successful:* 200
+*token not valid:* 403
+*other errors:* 500
+
+### stock/pricerange
+```
+req.body = {
+  symbol: String,
+  start: String,      // ISO format (YYYY-MM-DD)
+  end: String,        // ISO format (YYYY-MM-DD)
+}
+
+res = {
+  message: $symbol prices from $start to $end,
+  prices: [{
+    date: Date,
+    price: Number,
+  }]
+}
+```
+*successful:* 200
+*token not valid:* 403
+*other errors:* 500
