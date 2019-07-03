@@ -113,3 +113,15 @@ res = {
 *other errors:* 500
 
 ### account/deleteaccount
+```
+POST
+
+req.body = {
+  id: id,               // user account document object id
+  password: password,   // password
+}
+
+res = {
+
+}
+```
