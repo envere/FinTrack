@@ -52,7 +52,10 @@ req.body = {
 
 res = {
   message: added $username,
-  user: user,           // user document
+  user: {
+    _id: String,
+    username: String,
+  }
 }
 ```
 *successful:* 201
@@ -69,7 +72,10 @@ req.body = {
 res = {
   message: authentication passed,
   token: String,         // jwt token
-  user: user,           // user document
+  user: {
+    _id: String,
+    username: String
+  }
 }
 ```
 *successful:* 200
@@ -82,7 +88,15 @@ GET
 
 res = {
   message: list of all users,
-  users: [user]         // array of all user documents
+  users: [{
+    _id: String,
+    username: username,
+    symbols: [{
+      symbol: String,
+      units: Number,
+      initialvalue: Number,
+    }]
+  }]
 }
 ```
 *successful:* 200
@@ -97,15 +111,31 @@ req.query = {
   username: username,
 }
 
-// if username === ""
-res = {
-  message: getting user by username: $username,     
-  user: user            // user document
-}
 // if username !== ""
 res = {
+  message: getting user by username: $username,     
+  user: {
+    _id: String,
+    username: String,
+    symbols: [{
+      symbol: String,
+      units: Number,
+      initialvalue: Number,
+    }]
+  }
+}
+// if username === ""
+res = {
   message: fetching all users since no username in query,
-  users: [user]          // array of all user documents
+  users: [{
+    _id: String,
+    username: String,
+    symbols: [{
+      symbol: String,
+      units: Number,
+      initialvalue: Number,
+    }]
+  }]
 }
 ```
 *successful:* 200
@@ -123,7 +153,10 @@ req.body = {
 
 res = {
   message: removed $username from database, // user account 
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 ```
 *successful:* 200
@@ -142,12 +175,18 @@ req.body = {
 // if account did not have this symbol
 res = {
   message: added $symbol, $units, $initialvalue to $username,
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 // if account already has symbol
 res = {
   message: $symbol is already under $username's account,
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 ```
 *successful:* 200
@@ -167,12 +206,18 @@ req.body = {
 // if account did not have symbol
 res = {
   message: $symbol not saved under $username's account,
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 // if account does have symbol
 res = {
   message: updated $symbol, $units, $initialvalue,
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 ```
 *successful:* 200
@@ -189,7 +234,10 @@ req.body = {
 
 res = {
   message: removed $symbol from $username,
-  user: user,
+  user: {
+    _id: String,
+    username: String,
+  },
 }
 ```
 *successful:* 200
@@ -205,7 +253,10 @@ req.body = {
 
 res = {
   message: latest price $latestprice at time $date (intraday),
-  latestprice: Number,
+  latestprice: {
+    date: Date,
+    price: Number,
+  },
 }
 ```
 *successful:* 200
