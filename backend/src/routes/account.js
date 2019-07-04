@@ -19,14 +19,16 @@ router.post('/deleteaccount', (req, res) => {
             bcrypt
               .checkPassword(supplied_password, user.password)
               .then(isValid => {
-                console.log(isValid)
                 if (isValid) {
                   User
                     .findByIdAndDelete(id)
                     .then(user => {
                       res.status(200).json({
                         message: `removed ${user.username} from database`,
-                        user,
+                        user: {
+                          _id: user._id,
+                          username: user.username,
+                        },
                       })
                     })
                 } else {
@@ -63,14 +65,20 @@ router.post('/symbol/add', (req, res) => {
                 .then(user => {
                   res.status(200).json({
                     message: `added {${symbol}, ${units}, ${initialvalue}} to ${user.username}`,
-                    user,
+                    user: {
+                      _id: user._id,
+                      username: user.username,
+                    },
                   })
                 })
                 .catch(err => res.sendStatus(500))
             } else {
               res.status(200).json({
                 message: `${symbol} is already under ${user.username}'s account`,
-                user,
+                user: {
+                  _id: user._id,
+                  username: user.username,
+                },
               })
             }
           }
@@ -111,7 +119,10 @@ router.post('/symbol/update', (req, res) => {
                     .then(user => {
                       res.status(200).json({
                         message: `updated symbol: ${symbol}, units: ${units}, initialprice: ${initialvalue}`,
-                        user,
+                        user: {
+                          _id: user._id,
+                          username: user.username,
+                        },
                       })
                     })
                     .catch(err => res.sendStatus(400))
@@ -120,7 +131,10 @@ router.post('/symbol/update', (req, res) => {
             } else {
               res.status(200).json({
                 message: `${symbol} not saved under ${user.username}'s account`,
-                user,
+                user: {
+                  _id: user._id,
+                  username: user.username,
+                },
               })
             }
           }
@@ -144,7 +158,10 @@ router.post('/symbol/delete', (req, res) => {
           } else {
             res.status(200).json({
               message: `removed ${symbol} from ${user.username}`,
-              user,
+              user: {
+                _id: user._id,
+                username: user.username,
+              },
             })
           }
         })

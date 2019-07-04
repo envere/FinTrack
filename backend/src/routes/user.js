@@ -9,6 +9,13 @@ router.get("/getusers", (req, res) => {
     .then(auth => {
       User
         .find()
+        .then(users => users.map(user => {
+          return {
+            _id: user._id,
+            username: user.username,
+            symbols: user.symbols,
+          }
+        }))
         .then(users => {
           res.status(200).json({
             message: "list of all users",
@@ -33,7 +40,11 @@ router.get("/getuser", (req, res) => {
           .then(user => {
             res.status(200).json({
               message: `getting user by username: ${username}`,
-              user,
+              user: {
+                _id: user._id,
+                username: user.username,
+                symbols: user.symbols,
+              },
             })
           })
           .catch(err => res.sendStatus(500))
@@ -41,6 +52,13 @@ router.get("/getuser", (req, res) => {
       else {
         User
           .find()
+          .then(users => users.map(user => {
+            return {
+              _id: user._id,
+              username: user.username,
+              symbols: user.symbols,
+            }
+          }))
           .then(users => {
             res.status(200).json({
               message: 'fetching all users since no username in query',

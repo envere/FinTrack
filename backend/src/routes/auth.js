@@ -23,7 +23,10 @@ router.post("/register", (req, res) => {
         .then(user => {
           res.status(201).json({
             message: `added ${username}`,
-            user,
+            user: {
+              _id: user._id,
+              username: user.username,
+            },
           });
         })
         .catch(err => res.sendStatus(500))
@@ -49,7 +52,10 @@ router.post("/login", (req, res) => {
                 .then(token => res.json({
                   message: 'authentication passed',
                   token,
-                  user,
+                  user: {
+                    _id: user._id,
+                    username: user.username,
+                  },
                 }))
                 .catch(err => res.sendStatus(500))
             } else {
