@@ -1,5 +1,7 @@
 const StockName = require('../models/StockNameModel')
 const StockPrice = require('../models/StockPriceModel')
+const DividendName = require('../models/DividendNameModel')
+const DividendPrice = require('../models/DividendPriceModel')
 const alphavantage = require('../util/alphavantage')
 const jwt = require('../util/jwt')
 const express = require('express')
@@ -54,6 +56,60 @@ function initPriceHistory(symbol) {
     .catch(err => console.log(err))
 }
 
+function initDividendHistory(symbol) {
+  DividendPrice
+    .deleteMany({ symbol })
+    .then(done => {
+      alphavantage
+        .monthlyAdjusted
+        .dividends(symbol)
+        .then(dividends => {
+          const maxYear = dividends[0].date.getFullYear()
+          const minYear = dividends[dividends.length - 1].date.getFullYear()
+
+          const years = []
+          for (let i = minYear; i <= maxYear; ++i) {
+            years.push(i)
+          }
+
+          const buckets = new Map()
+          years.forEach(year => buckets.set(year, new DividendPrice({ symbol, year })))
+
+          dividends.forEach(dividend => {
+            const year = dividend.date.getFullYear()
+            const month = dividend.date.getMonth()
+            const value = dividend.price
+            const bucket = buckets.get(year)
+            bucket.months.push({ date: dividend.date, price: value })
+          })
+          alphavantage
+            .dailyAdjusted
+            .dividends(symbol)
+            .then(dividends => {
+              dividends.forEach(dividend => {
+                const year = dividend.date.getFullYear()
+                const month = dividend.date.getMonth()
+                const date = dividend.date.getDate()
+                const value = dividend.price
+                const bucket = buckets.get(year)
+                bucket.days.push({ date: dividend.date, price: value })
+              })
+              return buckets
+            })
+            .then(buckets => buckets.forEach(dividendprice => dividendprice.save()))
+            .then(done => console.log(`initialized ${symbol} dividends`))
+            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+}
+
+function init(symbol) {
+  initPriceHistory(symbol)
+  initDividendHistory(symbol)
+}
+
 router.get('/intraday/latestprice', (req, res) => {
   jwt
     .verifyJWT(req.token)
@@ -93,9 +149,10 @@ router.post('/daily/latestprice', (req, res) => {
               .then(latestprice => {
                 const price = latestprice.price
                 const stock = new StockName({
+                  symbol,
                   price,
-                  stock,
                 })
+                console.log(stock)
                 res.status(200).json({
                   message: `getting ${symbol} latest price (daily)`,
                   stock,

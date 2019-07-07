@@ -1,6 +1,7 @@
 // imports
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+const alphavantage = require('../util/alphavantage')
 
 // connection uri
 const db = require("../configs/mongodbConfig")
