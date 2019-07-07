@@ -55,6 +55,10 @@ export default class AddStockForm extends Component {
       this.state.symbol
     }&apikey=1WJTX23D9MKYZMFE`;
 
+    const latestPriceUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${
+      this.state.symbol
+    }&interval=5min&outputsize=compact&apikey=1WJTX23D9MKYZMFE`;
+
     const setDate = newDate => this.setState({ date: newDate });
     return (
       <View style={styles.form}>
@@ -90,24 +94,35 @@ export default class AddStockForm extends Component {
               .then(res => {
                 const results = res.bestMatches;
                 if (results.length === 1) {
+                  fetch(latestPriceUrl)
+                    .then(res => res.json())
+                    .then(res => {
+                      const data = res["Time Series (5min)"];
+                      const val = data[Object.keys(data)[0]]["4. close"];
+                      this.setState({
+                        price: val
+                      });
+                    })
+                    .catch(err => alert(err));
+
                   this.setState({
-                    symbol: results[0]["1. symbol"].replace(".SGP", ".SI")
-                  });
-                  this.setState({
+                    symbol: results[0]["1. symbol"].replace(".SGP", ".SI"),
                     symbolPlaceholder: results[0]["1. symbol"].replace(
                       ".SGP",
                       ".SI"
-                    )
-                  });
-                  this.setState({
+                    ),
                     name: results[0]["2. name"]
                   });
                   // get price api and update state accordingly
-                  
-                  //here's the hardcoded part(remove after demo)VVVV
+
                   this.setState({
-                    price: this.state.symbol ===  "STEG.SI" ? 4.200 : 0.805
-                  })
+                    price: fetch(latestPriceUrl)
+                      .then(res => res.json())
+                      .then(res => {
+                        const data = res["Time Series (5min)"];
+                        const price = data[Object.keys(data)[0]]["4. close"];
+                      })
+                  });
                 } else {
                   alert("more than 1 results obtained");
                 }
@@ -157,6 +172,18 @@ export default class AddStockForm extends Component {
               currPrice: this.state.units * price
             });
             alert(JSON.stringify(store.getState()));
+          }}
+        />
+        <Button // will remove after testing
+          title="anotherTest"
+          onPress={() => {
+            const test = fetch(latestPriceUrl)
+              .then(res => res.json())
+              .then(res => {
+                const test = res["Time Series (5min)"];
+                const val = test[Object.keys(test)[0]]["4. close"];
+                alert(JSON.stringify(val));
+              });
           }}
         />
       </View>
