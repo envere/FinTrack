@@ -176,34 +176,34 @@ router.post('/daily/price', (req, res) => {
       const ISOdate = req.body.date
       const year = ISOdate.split('-')[0]
       StockPrice
-        .find({ symbol, year })
+        .findOne({ symbol, year })
         .then(stockprice => {
           if (stockprice) {
-            stockprice.days.forEach(day => {
-              if (day.date.toISOString() === ISOdate) {
-                const price = day
-                res.status(200).json({
-                  message: `getting ${symbol} price on ${ISOdate}`,
-                  price,
-                })
-              }
-            })
-            res.sendStatus(404)
+            const filtered = stockprice.days.filter(day => day.date.toISOString().split('T')[0] === ISOdate)
+            if (filtered.length === 0) {
+              res.sendStatus(404)
+            } else {
+              const price = filtered[0]
+              res.status(200).json({
+                message: `getting ${symbol} price on ${ISOdate}`,
+                price,
+              })
+            }
           } else {
             alphavantage
               .daily
               .prices(symbol)
               .then(prices => {
-                prices.forEach(price => {
-                  if (price.date.toISOString() === ISOdate) {
-                    res.status(200).json({
-                      message: `getting ${symbol} price on ${ISOdate}`,
-                      price,
-                    })
-                  }
+                const filtered = prices.filter(price => price.date.toISOString().split('T')[0] === ISOdate)
+                if (filtered.length === 0) {
                   res.sendStatus(404)
-                  init(symbol)
-                })
+                } else {
+                  res.status(200).json({
+                    message: `getting ${symbol} price on ${ISOdate}`,
+                    price,
+                  })
+                }
+                init(symbol)
               })
               .catch(err => res.sendStatus(500))
           }
