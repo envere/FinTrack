@@ -168,6 +168,50 @@ router.post('/daily/latestprice', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
+router.post('/daily/price', (req, res) => {
+  jwt
+    .verifyJWT(req.token)
+    .then(auth => {
+      const symbol = req.body.symbol
+      const ISOdate = req.body.date
+      const year = ISOdate.split('-')[0]
+      StockPrice
+        .find({ symbol, year })
+        .then(stockprice => {
+          if (stockprice) {
+            stockprice.days.forEach(day => {
+              if (day.date.toISOString() === ISOdate) {
+                const price = day
+                res.status(200).json({
+                  message: `getting ${symbol} price on ${ISOdate}`,
+                  price,
+                })
+              }
+            })
+            res.sendStatus(404)
+          } else {
+            alphavantage
+              .daily
+              .prices(symbol)
+              .then(prices => {
+                prices.forEach(price => {
+                  if (price.date.toISOString() === ISOdate) {
+                    res.status(200).json({
+                      message: `getting ${symbol} price on ${ISOdate}`,
+                      price,
+                    })
+                  }
+                  res.sendStatus(404)
+                })
+              })
+              .catch(err => res.sendStatus(500))
+          }
+        })
+        .catch(err => res.sendStatus(500))
+    })
+    .catch(err => res.sendStatus(403))
+})
+
 router.post('/pricerange', (req, res) => {
   jwt
     .verifyJWT(req.token)
