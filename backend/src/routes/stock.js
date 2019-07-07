@@ -158,7 +158,7 @@ router.post('/daily/latestprice', (req, res) => {
                   stock,
                 })
                 stock.save()
-                initPriceHistory(symbol)
+                init(symbol)
               })
               .catch(err => res.sendStatus(500))
           }
@@ -202,6 +202,7 @@ router.post('/daily/price', (req, res) => {
                     })
                   }
                   res.sendStatus(404)
+                  init(symbol)
                 })
               })
               .catch(err => res.sendStatus(500))
@@ -255,7 +256,7 @@ router.post('/pricerange', (req, res) => {
                       message: `${symbol} prices from ${start} to ${end}`,
                       prices,
                     })
-                    initPriceHistory(symbol)
+                    init(symbol)
                   })
                   .catch(err => res.sendStatus(500))
               })
