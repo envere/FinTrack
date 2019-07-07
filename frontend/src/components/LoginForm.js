@@ -49,7 +49,7 @@ class LoginForm extends Component {
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
             } else {
-              this.setState({text: "Logging in..."})
+              this.setState({ text: "Logging in..." });
               fetch(url, {
                 method: "POST",
                 headers: {
@@ -60,14 +60,23 @@ class LoginForm extends Component {
                   username: this.state.username,
                   password: this.state.password
                 })
-              }).then(res => {
-                if (JSON.parse(res.status === 200)) {
-                  alert("Login successful!");
-                  this.props.navigation.navigate("Home");
-                  return res.json().then(res => JSON.stringify(res));
-                }
-                return res.json().then(res => alert("Error: " + res.error));
-              });
+              })
+                .then(res => {
+                  const status = JSON.parse(res.status);
+                  if (status === 200) {
+                    alert("Login successful!");
+                    this.props.navigation.navigate("Home");
+                    return res.json().then(res => JSON.stringify(res));
+                  }
+                  throw Error(status);
+                })
+                .catch(err => {
+                  if (err.message === "403") {
+                    alert("Incorrect password");
+                  } else {
+                    alert("User not found. Please create an account.");
+                  }
+                });
             }
           }}
         >
