@@ -9,11 +9,13 @@ import store from "../data/PortfolioStore";
  * [0] for trade value of <=50k,
  * [1] for 50k< value < 100k
  * [2] for >= 100k
+ * [3] for the minimum trading fee
  */
 const brokerageFeesList = {
-  dbs: [0.0028, 0.0022, 0.0018],
-  ocbc: [0.00275, 0.0022, 0.0018],
-  uob: [0.00275, 0.0022, 0.002]
+  dbs: [0.0028, 0.0022, 0.0018, 25],
+  ocbc: [0.00275, 0.0022, 0.0018, 25],
+  uob: [0.00275, 0.0022, 0.002, 25],
+  citibank: [0.0025, 0.002, 0.0018, 28]
 };
 
 export default class AddStockForm extends Component {
@@ -42,9 +44,9 @@ export default class AddStockForm extends Component {
       brokerFees = brokerFees[2];
     }
     let fees = brokerFees * rawTotal;
-    if (fees < 25) {
-      this.setState({ fees: 25 });
-      return rawTotal + 25;
+    if (fees < brokerFees[3]) {
+      this.setState({ fees: brokerFees[3] });
+      return rawTotal + brokerFees[3];
     }
     this.setState({ fees: fees });
     return rawTotal + fees;
