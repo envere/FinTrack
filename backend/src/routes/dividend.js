@@ -58,11 +58,76 @@ router.post('/dividendrange', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
+      const formatToISO = date => date.toISOString().split('T')[0]
+      const formatToMonthISO = ISOdate => {
+        const array = ISOdate.split('-')
+        array.pop()
+        return array.join('-')
+      }
       const symbol = req.body.symbol
-      const start = new Date(req.body.start)
-      const end = new Date(req.body.end)
-      const startyear = start.getFullYear()
-      const endyear = end.getFullYear()
+      const ISOstart = req.body.start
+      const ISOend = req.body.end
+      const ISOstartmonth = formatToMonthISO(ISOstart)
+      const ISOendmonth = formatToMonthISO(ISOend)
+      DividendPrice
+        .range(symbol, ISOstart, ISOend)
+        .then(buckets => {
+          const dividends = {
+            days: [],
+            months: [],
+          }
+          if (buckets.length === 0) {
+            alphavantage
+              .dailyAdjusted
+              .dividends_range(symbol, ISOstart, ISOend)
+              .then(dailydividendrange => {
+                dividends.days = dailydividendrange.filter(dividend => {
+                  const ISOdate = formatToISO(dividend.date)
+                  return ISOstart <= ISOdate && ISOdate <= ISOend
+                })
+                alphavantage
+                  .monthlyAdjusted
+                  .dividends_range(symbol, ISOstartmonth, ISOendmonth)
+                  .then(monthlydividendrange => {
+                    dividends.months = monthlydividendrange.filter(dividend => {
+                      const ISOdate = formatToMonthISO(formatToISO(dividend.date))
+                      return (ISOstartmonth <= ISOdate && ISOdate <= ISOendmonth)
+                    })
+                  })
+                  .then(done => {
+                    res.status(200).json({
+                      message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+                      dividends,
+                    })
+                    init(symbol)
+                  })
+                  .catch(err => res.sendStatus(500))
+              })
+              .catch(err => res.sendStatus(500))
+          } else {
+            buckets.forEach(bucket => {
+              const days = bucket.days
+              const months = bucket.months
+              days.forEach(day => {
+                const ISOdate = formatToISO(day.date)
+                if (ISOstart <= ISOdate && ISOdate <= ISOend) {
+                  dividends.days.push(day)
+                }
+              })
+              months.forEach(month => {
+                const ISOdate = formatToMonthISO(formatToISO(month.date))
+                if (ISOstartmonth <= ISOdate && ISOdate <= ISOendmonth) {
+                  dividends.months.push(month)
+                }
+              })
+            })
+            res.status(200).json({
+              message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+              dividends
+            })
+          }
+        })
+        .catch(err => res.sendStatus(500))
     })
     .catch(err => res.sendStatus(403))
 })
