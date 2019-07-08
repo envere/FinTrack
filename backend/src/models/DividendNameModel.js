@@ -16,6 +16,17 @@ mongoose
   .then(() => console.log("connected successfully to database [DividendName]"))
   .catch(err => console.log(`connection error to database [DividendName]\nerror: ${err}`))
 
+const DividendSchema = new Schema({
+  dividend: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  }
+}, { _id: false })
+
 const DividendNameSchema = new Schema({
   symbol: {
     type: String,
@@ -23,13 +34,10 @@ const DividendNameSchema = new Schema({
     unique: true,
     uppercase: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  }
+  dividend: DividendSchema,
 })
 
-DividendNameSchema.index({ symbol: "text", price: "text" })
+DividendNameSchema.index({ symbol: "text" })
 
 const DividendName = mongoose.model("DividendName", DividendNameSchema)
 

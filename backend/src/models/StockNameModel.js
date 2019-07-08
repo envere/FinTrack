@@ -16,6 +16,18 @@ mongoose
   .then(() => console.log("connected successfully to database [StockName]"))
   .catch(err => console.log(`connection error to database [StockName]\nerror: ${err}`))
 
+
+const PriceSchema = new Schema({
+  price: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  }
+}, { _id: false })
+
 const StockNameSchema = new Schema({
   symbol: {
     type: String,
@@ -23,13 +35,10 @@ const StockNameSchema = new Schema({
     unique: true,
     uppercase: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  }
+  price: PriceSchema,
 })
 
-StockNameSchema.index({ symbol: "text", price: "text" })
+StockNameSchema.index({ symbol: "text" })
 
 const StockName = mongoose.model("StockName", StockNameSchema)
 
