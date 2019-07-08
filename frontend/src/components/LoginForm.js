@@ -73,8 +73,10 @@ class LoginForm extends Component {
                 .catch(err => {
                   if (err.message === "403") {
                     alert("Incorrect password");
-                  } else {
+                  } else if (err.message === "404") {
                     alert("User not found. Please create an account.");
+                  } else {
+                    alert(err.message);
                   }
                 });
             }
