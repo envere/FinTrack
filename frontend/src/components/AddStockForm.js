@@ -143,9 +143,9 @@ export default class AddStockForm extends Component {
                       .then(res => res.json())
                       .then(res => {
                         const data = res["Time Series (5min)"];
-                        const val = data[Object.keys(data)[0]]["4. close"];
+                        const value = data[Object.keys(data)[0]]["4. close"];
                         this.setState({
-                          price: val
+                          price: value
                         });
                       })
                       .catch(err => alert(err));
