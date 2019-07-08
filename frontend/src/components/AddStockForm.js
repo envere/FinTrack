@@ -52,6 +52,48 @@ export default class AddStockForm extends Component {
     return rawTotal + fees;
   }
 
+  isToday(date) {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  }
+
+  getPriceByDate(symbol, date) {
+    const backendApi =
+      "https://orbital-fintrack.herokuapp.com/stock/daily/price";
+    const token =
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN5bWJvbCI6W10sIl9pZCI6IjVkMTcxNTk5ZmY5NGZmMzczNGJhYmU0ZCIsInVzZXJuYW1lIjoib2Jpd2FuIiwiZW1haWwiOiJoZWxsb3RoZXJlQGplZGljb3VuY2lsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEyJE9QZGozeC9kOFpTMWlXTkVRNUhzRC5BcU1pc3VsZmhWVldCOWM1ODhIRldjUzd1QUw3eVZLIiwiX192IjowfSwiaWF0IjoxNTYxNzkzOTk1fQ.C0JgUYofL3LIHvg_TunIsucsHbcrk9qc1hngFmGbjos";
+
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const month =
+      date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
+    const year = date.getFullYear();
+
+    const data = {
+      date: year + "-" + month + "-" + day,
+      symbol: symbol
+    };
+
+    fetch(backendApi, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(res =>
+        this.setState({
+          price: JSON.parse(res.price.price).toFixed(4)
+        })
+      )
+      .catch(err => alert(err));
+  }
+
   render() {
     const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${
       this.state.symbol
@@ -96,16 +138,21 @@ export default class AddStockForm extends Component {
               .then(res => {
                 const results = res.bestMatches;
                 if (results.length === 1) {
-                  fetch(latestPriceUrl)
-                    .then(res => res.json())
-                    .then(res => {
-                      const data = res["Time Series (5min)"];
-                      const val = data[Object.keys(data)[0]]["4. close"];
-                      this.setState({
-                        price: val
-                      });
-                    })
-                    .catch(err => alert(err));
+                  if (this.isToday(this.state.date)) {
+                    fetch(latestPriceUrl)
+                      .then(res => res.json())
+                      .then(res => {
+                        const data = res["Time Series (5min)"];
+                        const val = data[Object.keys(data)[0]]["4. close"];
+                        this.setState({
+                          price: val
+                        });
+                      })
+                      .catch(err => alert(err));
+                  } else {
+                    // server api: get price by date
+                    this.getPriceByDate(this.state.symbol, this.state.date)
+                  }
 
                   this.setState({
                     symbol: results[0]["1. symbol"].replace(".SGP", ".SI"),
@@ -114,16 +161,6 @@ export default class AddStockForm extends Component {
                       ".SI"
                     ),
                     name: results[0]["2. name"]
-                  });
-                  // get price api and update state accordingly
-
-                  this.setState({
-                    price: fetch(latestPriceUrl)
-                      .then(res => res.json())
-                      .then(res => {
-                        const data = res["Time Series (5min)"];
-                        const price = data[Object.keys(data)[0]]["4. close"];
-                      })
                   });
                 } else {
                   alert("more than 1 results obtained");
@@ -164,7 +201,6 @@ export default class AddStockForm extends Component {
         <Button
           title="add"
           onPress={() => {
-            const price = this.state.symbol === "STEG.SI" ? 4.2 : 0.805;
             store.dispatch({
               type: "ADD",
               symbol: this.state.symbol,
@@ -179,13 +215,8 @@ export default class AddStockForm extends Component {
         <Button // will remove after testing
           title="anotherTest"
           onPress={() => {
-            const test = fetch(latestPriceUrl)
-              .then(res => res.json())
-              .then(res => {
-                const test = res["Time Series (5min)"];
-                const val = test[Object.keys(test)[0]]["4. close"];
-                alert(JSON.stringify(val));
-              });
+            const now = new Date("2015-06-29T03:24:00");
+            this.getPriceByDate("D05.SI", now);
           }}
         />
       </View>
