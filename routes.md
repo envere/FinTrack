@@ -38,7 +38,6 @@ For protected routes, invalid or non existent JWT will result in a 403 response 
   - `account/symbol/update`
 - stock
   - `stock/intraday/latestprice`
-  - `stock/daily/latestprice`
   - `stock/daily/price`
   - `stock/pricerange`
 
@@ -258,24 +257,6 @@ res = {
     date: Date,
     price: Number,
   },
-}
-```
-*successful:* 200
-*token not valid:* 403
-*other errors:* 500
-
-### stock/daily/latestprice
-```
-req.body = {
-  symbol: String,
-}
-
-res = {
-  message: getting $symbol latest price (daily),
-  stock: {
-    price: Number,
-    date: Date,
-  }
 }
 ```
 *successful:* 200

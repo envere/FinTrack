@@ -27,45 +27,6 @@ router.get('/intraday/latestprice', (req, res) => {
     .catch(err => res.sendStatus(403))
 })
 
-router.post('/daily/latestprice', (req, res) => {
-  jwt
-    .verifyJWT(req.token)
-    .then(auth => {
-      const symbol = req.body.symbol
-      StockName
-        .findOne({ symbol: symbol })
-        .then(stock => {
-          if (stock) {
-            res.status(200).json({
-              message: `getting ${symbol} latest price (daily)`,
-              stock,
-            })
-          } else {
-            alphavantage
-              .daily
-              .latestprice(symbol)
-              .then(latestprice => {
-                const price = latestprice.price
-                const stock = new StockName({
-                  symbol,
-                  price,
-                })
-                console.log(stock)
-                res.status(200).json({
-                  message: `getting ${symbol} latest price (daily)`,
-                  stock,
-                })
-                stock.save()
-                init(symbol)
-              })
-              .catch(err => res.sendStatus(500))
-          }
-        })
-        .catch(err => res.sendStatus(500))
-    })
-    .catch(err => res.sendStatus(403))
-})
-
 router.post('/daily/price', (req, res) => {
   jwt
     .verifyJWT(req.token)
