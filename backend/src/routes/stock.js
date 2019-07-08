@@ -100,7 +100,6 @@ router.post('/pricerange', (req, res) => {
               .daily
               .prices_range(symbol, ISOstart, ISOend)
               .then(dailypricerange => {
-                console.log(dailypricerange)
                 prices.days = dailypricerange.filter(price => {
                   const ISOdate = formatToISO(price.date)
                   return ISOstart <= ISOdate && ISOdate <= ISOend
@@ -109,7 +108,6 @@ router.post('/pricerange', (req, res) => {
                   .monthly
                   .prices_range(symbol, ISOstartmonth, ISOendmonth)
                   .then(monthlypricerange => {
-                    console.log(monthlypricerange)
                     prices.months = monthlypricerange.filter(price => {
                       const ISOdate = formatToMonthISO(formatToISO(price.date))
                       return (ISOstartmonth <= ISOdate && ISOdate <= ISOendmonth)
