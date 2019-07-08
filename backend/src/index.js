@@ -13,6 +13,7 @@ app.use("/auth", require("./routes/auth"))
 app.use("/account", jwt.queryJWT, require("./routes/account"))
 app.use("/user", jwt.queryJWT, require("./routes/user"));
 app.use("/stock", jwt.queryJWT, require("./routes/stock"));
+app.use("/dividend", jwt.queryJWT, require("./routes/dividend"));
 
 app.use((req, res, next) => {
   console.log(`${new Date().toString()} => ${req.originalUrl}`);

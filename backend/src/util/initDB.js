@@ -109,9 +109,9 @@ function initDividend(symbol) {
           dividends.forEach(dividend => {
             const year = dividend.date.getFullYear()
             const month = dividend.date.getMonth()
-            const value = dividend.price
+            const value = dividend.dividend
             const bucket = buckets.get(year)
-            bucket.months.push({ date: dividend.date, price: value })
+            bucket.months.push({ date: dividend.date, dividend: value })
           })
           alphavantage
             .dailyAdjusted
@@ -121,9 +121,9 @@ function initDividend(symbol) {
                 const year = dividend.date.getFullYear()
                 const month = dividend.date.getMonth()
                 const date = dividend.date.getDate()
-                const value = dividend.price
+                const value = dividend.dividend
                 const bucket = buckets.get(year)
-                bucket.days.push({ date: dividend.date, price: value })
+                bucket.days.push({ date: dividend.date, dividend: value })
               })
               return buckets
             })
