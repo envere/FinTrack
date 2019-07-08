@@ -92,9 +92,10 @@ function daily_prices(symbol) {
 }
 
 function daily_prices_range(symbol, start, end) {
+  const formatToISO = date => date.toISOString().split('T')[0]
   return new Promise((resolve, reject) => {
     daily_prices(symbol)
-      .then(prices => prices.filter(price => start <= price.date && price.date <= end))
+      .then(prices => prices.filter(price => start <= formatToISO(price.date) && formatToISO(price.date) <= end))
       .then(filteredprices => resolve(filteredprices))
       .catch(err => reject(err))
   })
@@ -126,8 +127,9 @@ function dailyAdjusted_latestprice(symbol) {
       .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
-        const latestprice = timeseries[keys[0]]['4. close']
-        resolve(latestprice)
+        const price = timeseries[keys[0]]['4. close']
+        const date = keys[0]
+        resolve({date, price})
       })
       .catch(err => reject(err))
   })
@@ -141,8 +143,9 @@ function dailyAdjusted_latestadjustedprice(symbol) {
       .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
-        const latestadjustedprice = timeseries[keys[0]]['5. adjusted close']
-        resolve(latestadjustedprice)
+        const adjustedprice = timeseries[keys[0]]['5. adjusted close']
+        const date = keys[0]
+        resolve({date, adjustedprice})
       })
       .catch(err => reject(err))
   })
@@ -156,8 +159,9 @@ function dailyAdjusted_latestdividend(symbol) {
       .then(data => data['Time Series (Daily)'])
       .then(timeseries => {
         const keys = Object.keys(timeseries)
-        const latestdividend = timeseries[keys[0]]['7. dividend amount']
-        resolve(latestdividend)
+        const dividend = timeseries[keys[0]]['7. dividend amount']
+        const date = keys[0]
+        resolve({date, dividend})
       })
       .catch(err => reject(err))
   })
@@ -261,9 +265,15 @@ function monthly_prices(symbol) {
 }
 
 function monthly_prices_range(symbol, start, end) {
+  const formatToISO = date => {
+    const format = date.toISOString().split('T')[0]
+    const array = format.split('-')
+    array.pop()
+    return array.join('-')
+  }
   return new Promise((resolve, reject) => {
     monthly_prices(symbol)
-      .then(prices => prices.filter(price => start <= price.date && price.date <= end))
+      .then(prices => prices.filter(price => start <= formatToISO(price.date) && formatToISO(price.date) <= end))
       .then(filteredprices => resolve(filteredprices))
       .catch(err => reject(err))
   })
