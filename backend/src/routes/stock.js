@@ -78,12 +78,14 @@ router.post('/pricerange', (req, res) => {
     .verifyJWT(req.token)
     .then(auth => {
       const symbol = req.body.symbol
+      const ISOstart = req.body.start
+      const ISOend = req.body.end
       const start = new Date(req.body.start)
       const end = new Date(req.body.end)
-      const startyear = start.getFullYear()
-      const endyear = end.getFullYear()
-      const startmonth = start.getMonth()
-      const endmonth = end.getMonth()
+      const startyear = ISOstart.split('-')[0]
+      const endyear = ISOend.split('-')[0]
+      const startmonth = ISOstart.split('-')[1]
+      const endmonth = ISOend.split('-')[1]
       StockPrice
         .range(symbol, start, end)
         .then(buckets => {
