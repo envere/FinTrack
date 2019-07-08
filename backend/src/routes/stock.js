@@ -77,45 +77,47 @@ router.post('/pricerange', (req, res) => {
   jwt
     .verifyJWT(req.token)
     .then(auth => {
+      const formatToISO = date => date.toISOString().split('T')[0]
+      const formatToMonthISO = ISOdate => {
+        const array = ISOdate.split('-')
+        array.pop()
+        return array.join('-')
+      }
       const symbol = req.body.symbol
       const ISOstart = req.body.start
       const ISOend = req.body.end
-      const start = new Date(req.body.start)
-      const end = new Date(req.body.end)
-      const startyear = ISOstart.split('-')[0]
-      const endyear = ISOend.split('-')[0]
-      const startmonth = ISOstart.split('-')[1]
-      const endmonth = ISOend.split('-')[1]
+      const ISOstartmonth = formatToMonthISO(ISOstart)
+      const ISOendmonth = formatToMonthISO(ISOend)
       StockPrice
-        .range(symbol, start, end)
+        .range(symbol, ISOstart, ISOend)
         .then(buckets => {
           const prices = {
             days: [],
             months: [],
           }
-          if (buckets === []) {
+          if (buckets.length === 0) {
             alphavantage
               .daily
-              .prices_range(symbol, start, end)
+              .prices_range(symbol, ISOstart, ISOend)
               .then(dailypricerange => {
-                prices.days = dailypricerange.filter(price => start <= price.date && price.date <= end)
+                console.log(dailypricerange)
+                prices.days = dailypricerange.filter(price => {
+                  const ISOdate = formatToISO(price.date)
+                  return ISOstart <= ISOdate && ISOdate <= ISOend
+                })
                 alphavantage
                   .monthly
-                  .prices_range(symbol, start, end)
+                  .prices_range(symbol, ISOstartmonth, ISOendmonth)
                   .then(monthlypricerange => {
+                    console.log(monthlypricerange)
                     prices.months = monthlypricerange.filter(price => {
-                      const checklower = startyear === price.date.getFullYear()
-                        ? startmonth <= price.date.getMonth()
-                        : startyear < price.date.getFullYear()
-                      const checkupper = endyear === price.date.getFullYear()
-                        ? price.date.getMonth() <= endmonth
-                        : price.date.getFullYear() < endyear
-                      return checklower && checkupper
+                      const ISOdate = formatToMonthISO(formatToISO(price.date))
+                      return (ISOstartmonth <= ISOdate && ISOdate <= ISOendmonth)
                     })
                   })
                   .then(done => {
                     res.status(200).json({
-                      message: `${symbol} prices from ${start} to ${end}`,
+                      message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
                       prices,
                     })
                     init(symbol)
@@ -128,24 +130,20 @@ router.post('/pricerange', (req, res) => {
               const days = bucket.days
               const months = bucket.months
               days.forEach(day => {
-                if (start <= day.date && day.date <= end) {
+                const ISOdate = formatToISO(day.date)
+                if (ISOstart <= ISOdate && ISOdate <= ISOend) {
                   prices.days.push(day)
                 }
               })
               months.forEach(month => {
-                const checklower = startyear === month.date.getFullYear()
-                  ? startmonth <= month.date.getMonth()
-                  : startyear < month.date.getFullYear()
-                const checkupper = endyear === month.date.getFullYear()
-                  ? month.date.getMonth() <= endmonth
-                  : month.date.getFullYear() < endyear
-                if (checklower && checkupper) {
+                const ISOdate = formatToMonthISO(formatToISO(month.date))
+                if (ISOstartmonth <= ISOdate && ISOdate <= ISOendmonth) {
                   prices.months.push(month)
                 }
               })
             })
             res.status(200).json({
-              message: `${symbol} prices from ${start} to ${end}`,
+              message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
               prices,
             })
           }
