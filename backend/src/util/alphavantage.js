@@ -218,6 +218,16 @@ function dailyAdjusted_dividends(symbol) {
   })
 }
 
+function dailyAdjusted_dividends_range(symbol, start, end) {
+  const formatToISO = date => date.toISOString().split('T')[0]
+  return new Promise((resolve, reject) => {
+    dailyAdjusted_dividends(symbol)
+      .then(dividends => dividends.filter(dividend => start <= formatToISO(dividend.date) && formatToISO(dividend.date) <= end))
+      .then(filtereddividends => resolve(filtereddividends))
+      .catch(err => reject(err))
+  })
+}
+
 function monthly_equity(symbol) {
   return new Promise((resolve, reject) => {
     axios
@@ -383,6 +393,21 @@ function monthlyAdjusted_dividends(symbol) {
   })
 }
 
+function monthlyAdjusted_dividends_range(symbol, start, end) {
+  const formatToISO = date => {
+    const format = date.toISOString().split('T')[0]
+    const array = format.split('-')
+    array.pop()
+    return array.join('-')
+  }
+  return new Promise((resolve, reject) => {
+    monthlyAdjusted_dividends(symbol)
+      .then(dividends => dividends.filter(dividend => start <= formatToISO(dividend.date) && formatToISO(dividend.date) <= end))
+      .then(filtereddividends => resolve(filtereddividends))
+      .catch(err => reject(err))
+  })
+}
+
 const intraday = {
   equity: intraday_equity,
   timeseries: intraday_timeseries,
@@ -404,6 +429,7 @@ const dailyAdjusted = {
   prices: dailyAdjusted_prices,
   adjustedprices: dailyAdjusted_adjustedprices,
   dividends: dailyAdjusted_dividends,
+  dividends_range: dailyAdjusted_dividends_range,
 }
 const monthly = {
   equity: monthly_equity,
@@ -421,6 +447,7 @@ const monthlyAdjusted = {
   prices: monthlyAdjusted_prices,
   adjustedprices: monthlyAdjusted_adjustedprices,
   dividends: monthlyAdjusted_dividends,
+  dividends_range: monthlyAdjusted_dividends_range,
 }
 
 module.exports = {
