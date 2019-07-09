@@ -20,6 +20,7 @@ For protected routes, invalid or non existent JWT will result in a 403 response 
 400 => bad request
 403 => forbidden
 404 => resource not found
+500 => bad request
 
 **JWT should be in http request Authorization header**
 `req.headers['authorization] = <token>`
@@ -40,6 +41,9 @@ For protected routes, invalid or non existent JWT will result in a 403 response 
   - `stock/intraday/latestprice`
   - `stock/daily/price`
   - `stock/pricerange`
+- dividend
+  - `dividend/daily/dividend`
+  - `dividend/dividendrange`
 
 ### auth/register
 ```
@@ -85,7 +89,6 @@ res = {
 ### user/getusers
 ```
 GET
-
 res = {
   message: list of all users,
   users: [{
@@ -106,7 +109,6 @@ res = {
 ### user/getuser
 ```
 GET
-
 req.query = {
   username: username,
 }
@@ -145,7 +147,6 @@ res = {
 ### account/deleteaccount
 ```
 POST
-
 req.body = {
   id: String,               // user account document object id
   password: String,   // password
@@ -165,6 +166,7 @@ res = {
 
 ### account/symbol/add
 ```
+POST
 req.body = {
   id: String,
   symbol: String,
@@ -196,6 +198,7 @@ res = {
 
 ### account/symbol/update
 ```
+POST
 req.body = {
   id: String,
   symbol: String,
@@ -227,6 +230,7 @@ res = {
 
 ### account/symbol/delete
 ```
+POST
 req.body = {
   id: String,
   symbol: String,
@@ -247,6 +251,7 @@ res = {
 
 ### stock/intraday/latestprice
 ```
+GET
 req.body = {
   symbol: String
 }
@@ -266,6 +271,7 @@ res = {
 
 ### stock/daily/price
 ```
+POST
 req.body = {
   symbol: String,
   date: String,       // ISO format (YYYY-MM-DD)
@@ -287,6 +293,7 @@ res = {
 
 ### stock/pricerange
 ```
+POST
 req.body = {
   symbol: String,
   start: String,      // ISO format (YYYY-MM-DD)
@@ -308,4 +315,50 @@ res = {
 
 ### dividend/daily/dividend
 ```
+POST
+req.body = {
+  symbol: String,
+  date: String,       // ISO format (YYYY-MM-DD)
+}
+
+res = {
+  message: getting $symbol dividend on $date,
+  dividend: {
+    date: Date,
+    dividend: Number,
+  }
+}
 ```
+*successful:* 200
+*token not valid:* 403
+*price not found:* 404
+*other errors:* 500
+
+### dividend/dividendrange
+```
+POST
+req.body = {
+  symbol: String,
+  start: String,    // ISO format (YYYY-MM-DD)
+  end: String,    // ISO format (YYYY-MM-DD)
+}
+
+res = {
+  message: $symbol dividends from $start to $end,
+  dividends: {
+    days: [{
+      date: Date,
+      dividend: Number,
+    }],
+    months: [{
+      date: Date,
+      dividend: Number,
+    }]
+  }
+}
+```
+*successful:* 200
+*start > end:* 400
+*token not valid:* 403
+*res.dividends.days === [] && res.dividends.months === []:* 404
+*other errors:* 500
