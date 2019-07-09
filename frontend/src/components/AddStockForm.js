@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
+import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
 /**
@@ -29,7 +30,8 @@ export default class AddStockForm extends Component {
       units: 0,
       date: "",
       price: 0,
-      fees: 0
+      fees: 0,
+      token: ""
     };
   }
 
@@ -55,7 +57,9 @@ export default class AddStockForm extends Component {
 
   processSymbol(symbol) {
     const replaceSGP = symbol.replace(".SGP", ".SI");
-    switch (replaceSGP) {
+    switch (
+      replaceSGP // hardcoding to change symbol to more widely used ones
+    ) {
       case "AEMN.SI":
         return "A17U.SI";
       case "SPOS.SI":
@@ -77,8 +81,12 @@ export default class AddStockForm extends Component {
   getPriceByDate(symbol, date) {
     const backendApi =
       "https://orbital-fintrack.herokuapp.com/stock/daily/price";
-    const token =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN5bWJvbCI6W10sIl9pZCI6IjVkMTcxNTk5ZmY5NGZmMzczNGJhYmU0ZCIsInVzZXJuYW1lIjoib2Jpd2FuIiwiZW1haWwiOiJoZWxsb3RoZXJlQGplZGljb3VuY2lsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEyJE9QZGozeC9kOFpTMWlXTkVRNUhzRC5BcU1pc3VsZmhWVldCOWM1ODhIRldjUzd1QUw3eVZLIiwiX192IjowfSwiaWF0IjoxNTYxNzkzOTk1fQ.C0JgUYofL3LIHvg_TunIsucsHbcrk9qc1hngFmGbjos";
+
+    RNSecureStorage.get("user").then(val =>
+      this.setState({
+        token: val
+      })
+    );
 
     const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     const month =
@@ -94,7 +102,7 @@ export default class AddStockForm extends Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token
+        Authorization: "Bearer " + this.state.token
       },
       body: JSON.stringify(data)
     })
@@ -106,7 +114,8 @@ export default class AddStockForm extends Component {
       )
       .catch(err =>
         alert(
-          "Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc."
+          err +
+            "Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc."
         )
       );
   }
