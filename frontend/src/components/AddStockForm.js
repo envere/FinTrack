@@ -35,6 +35,7 @@ export default class AddStockForm extends Component {
 
   updateFees() {
     let brokerFees = brokerageFeesList[this.state.bank];
+    const minimumFees = brokerFees[3];
     const rawTotal = this.state.units * this.state.price;
     if (rawTotal < 50000) {
       brokerFees = brokerFees[0];
@@ -43,10 +44,10 @@ export default class AddStockForm extends Component {
     } else {
       brokerFees = brokerFees[2];
     }
-    let fees = brokerFees * rawTotal;
-    if (fees < brokerFees[3]) {
-      this.setState({ fees: brokerFees[3] });
-      return rawTotal + brokerFees[3];
+    const fees = brokerFees * rawTotal;
+    if (fees < minimumFees) {
+      this.setState({ fees: minimumFees });
+      return rawTotal + minimumFees;
     }
     this.setState({ fees: fees });
     return rawTotal + fees;
