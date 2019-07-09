@@ -17,10 +17,14 @@ router.get('/intraday/latestprice', (req, res) => {
         .intraday
         .latestprice(symbol)
         .then(latestprice => {
-          res.status(200).json({
-            message: `latest price ${latestprice.price} at time ${latestprice.date} (intraday)`,
-            latestprice,
-          })
+          if (latestprice) {
+            res.status(200).json({
+              message: `latest price ${latestprice.price} at time ${latestprice.date} (intraday)`,
+              latestprice,
+            })
+          } else {
+            res.sendStatus(404)
+          }
         })
         .catch(err => res.sendStatus(500))
     })
@@ -88,6 +92,10 @@ router.post('/pricerange', (req, res) => {
       const ISOend = req.body.end
       const ISOstartmonth = formatToMonthISO(ISOstart)
       const ISOendmonth = formatToMonthISO(ISOend)
+      if (ISOstart > ISOend) {
+        res.sendStatus(400)
+        return
+      }
       StockPrice
         .range(symbol, ISOstart, ISOend)
         .then(buckets => {

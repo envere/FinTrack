@@ -261,6 +261,7 @@ res = {
 ```
 *successful:* 200
 *token not valid:* 403
+*price not found:* 404
 *other errors:* 500
 
 ### stock/daily/price
@@ -280,6 +281,7 @@ res = {
 ```
 *successful:* 200
 *token not valid:* 403
+*price not found:* 404
 *other errors:* 500
 
 
@@ -300,5 +302,10 @@ res = {
 }
 ```
 *successful:* 200
+*start > end:* 400
 *token not valid:* 403
 *other errors:* 500
+
+### dividend/daily/dividend
+```
+```

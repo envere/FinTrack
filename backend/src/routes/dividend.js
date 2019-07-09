@@ -69,6 +69,10 @@ router.post('/dividendrange', (req, res) => {
       const ISOend = req.body.end
       const ISOstartmonth = formatToMonthISO(ISOstart)
       const ISOendmonth = formatToMonthISO(ISOend)
+      if (ISOstart > ISOend) {
+        res.sendStatus(400)
+        return
+      }
       DividendPrice
         .range(symbol, ISOstart, ISOend)
         .then(buckets => {
