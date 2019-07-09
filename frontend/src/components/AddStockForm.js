@@ -53,6 +53,18 @@ export default class AddStockForm extends Component {
     return rawTotal + fees;
   }
 
+  processSymbol(symbol) {
+    const replaceSGP = symbol.replace(".SGP", ".SI");
+    switch (replaceSGP) {
+      case "AEMN.SI":
+        return "A17U.SI";
+      case "SPOS.SI":
+        return "S08.SI";
+      default:
+        return replaceSGP;
+    }
+  }
+
   isToday(date) {
     const today = new Date();
     return (
@@ -146,13 +158,13 @@ export default class AddStockForm extends Component {
                     data => data["4. region"] === "Singapore"
                   );
                   if (results.length === 1) {
+                    const newSymbol = this.processSymbol(
+                      results[0]["1. symbol"]
+                    );
                     this.setState(
                       {
-                        symbol: results[0]["1. symbol"].replace(".SGP", ".SI"),
-                        symbolPlaceholder: results[0]["1. symbol"].replace(
-                          ".SGP",
-                          ".SI"
-                        ),
+                        symbol: newSymbol,
+                        symbolPlaceholder: newSymbol,
                         name: results[0]["2. name"]
                       },
                       () => {
