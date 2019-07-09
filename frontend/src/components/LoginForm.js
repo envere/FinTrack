@@ -48,7 +48,7 @@ class LoginForm extends Component {
           onPress={() => {
             //this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
             this.setState({
-              username: this.state.username.toLowerCase()
+              username: this.state.username
             });
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
@@ -75,7 +75,7 @@ class LoginForm extends Component {
                   throw Error(status);
                 })
                 .then(res => {
-                  RNSecureStorage.set(this.state.username, res.token, {
+                  RNSecureStorage.set("user", res.token, {
                     accessible: ACCESSIBLE.WHEN_UNLOCKED
                   }).then(
                     res => {
