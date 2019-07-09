@@ -80,6 +80,7 @@ router.post('/dividendrange', (req, res) => {
             days: [],
             months: [],
           }
+          const isEmpty = dividends => dividends.days.length === 0 && dividends.months.length === 0
           if (buckets.length === 0) {
             alphavantage
               .dailyAdjusted
@@ -99,10 +100,14 @@ router.post('/dividendrange', (req, res) => {
                     })
                   })
                   .then(done => {
-                    res.status(200).json({
-                      message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
-                      dividends,
-                    })
+                    if (isEmpty(dividends)) {
+                      res.sendStatus(404)
+                    } else {
+                      res.status(200).json({
+                        message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+                        dividends,
+                      })
+                    }
                     init(symbol)
                   })
                   .catch(err => res.sendStatus(500))
@@ -125,10 +130,14 @@ router.post('/dividendrange', (req, res) => {
                 }
               })
             })
-            res.status(200).json({
-              message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
-              dividends
-            })
+            if (isEmpty(dividends)) {
+              res.sendStatus(404)
+            } else {
+              res.status(200).json({
+                message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+                dividends
+              })
+            }
           }
         })
         .catch(err => res.sendStatus(500))
