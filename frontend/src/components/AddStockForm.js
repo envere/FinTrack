@@ -199,7 +199,10 @@ export default class AddStockForm extends Component {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
           }}
           ref={input => (this.units = input)}
-          onSubmitEditing={() => this.price.focus()}
+          onSubmitEditing={() => {
+            this.updateFees();
+            this.price.focus();
+          }}
         />
         <TextInput
           style={styles.textbox}
