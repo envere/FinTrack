@@ -103,6 +103,7 @@ router.post('/pricerange', (req, res) => {
             days: [],
             months: [],
           }
+          const isEmpty = prices => prices.days.length === 0 && prices.months.length === 0
           if (buckets.length === 0) {
             alphavantage
               .daily
@@ -122,10 +123,14 @@ router.post('/pricerange', (req, res) => {
                     })
                   })
                   .then(done => {
-                    res.status(200).json({
-                      message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
-                      prices,
-                    })
+                    if (isEmpty(prices)) {
+                      res.sendStatus(404)
+                    } else {
+                      res.status(200).json({
+                        message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
+                        prices,
+                      })
+                    }
                     init(symbol)
                   })
                   .catch(err => res.sendStatus(500))
@@ -148,10 +153,14 @@ router.post('/pricerange', (req, res) => {
                 }
               })
             })
-            res.status(200).json({
-              message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
-              prices,
-            })
+            if (isEmpty(prices)) {
+              res.sendStatus(404)
+            } else {
+              res.status(200).json({
+                message: `${symbol} prices from ${ISOstart} to ${ISOend}`,
+                prices,
+              })
+            }
           }
         })
         .catch(err => res.sendStatus(500))
