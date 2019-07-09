@@ -5,6 +5,7 @@ const DividendPrice = require('../models/DividendPriceModel')
 const alphavantage = require('../util/alphavantage')
 
 function initStock(symbol) {
+  console.log(`initStock(${symbol})`)
   // StockName
   //   .deleteMany({ symbol })
   //   .then(done => {
@@ -71,6 +72,7 @@ function initStock(symbol) {
 }
 
 function initDividend(symbol) {
+  console.log(`initDividend(${symbol})`)
   // DividendName
   //   .deleteMany({ symbol })
   //   .then(done => {
