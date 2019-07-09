@@ -69,7 +69,7 @@ export default class AddStockForm extends Component {
 
     const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     const month =
-      date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
+      date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
     const year = date.getFullYear();
 
     const data = {
@@ -91,7 +91,7 @@ export default class AddStockForm extends Component {
           price: JSON.parse(res.price.price).toFixed(4)
         })
       )
-      .catch(err => alert(err));
+      .catch(err => alert("Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc."));
   }
 
   render() {
@@ -125,7 +125,6 @@ export default class AddStockForm extends Component {
           placeHolderText="Date purchased"
           placeHolderTextStyle={{ color: "#d3d3d3" }}
           onDateChange={setDate}
-          ref={input => (this.date = input)}
           disabled={false}
         />
         <TextInput
@@ -153,7 +152,6 @@ export default class AddStockForm extends Component {
                         .catch(err => alert(err));
                     } else {
                       // server api: get price by date
-                      alert("diff date");
                       this.getPriceByDate(this.state.symbol, this.state.date);
                     }
 
