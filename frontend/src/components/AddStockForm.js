@@ -99,9 +99,9 @@ export default class AddStockForm extends Component {
       this.state.symbol
     }&apikey=1WJTX23D9MKYZMFE`;
 
-    const latestPriceUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${
+    const latestPriceUrl = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${
       this.state.symbol
-    }&interval=5min&outputsize=compact&apikey=1WJTX23D9MKYZMFE`;
+    }&apikey=1WJTX23D9MKYZMFE`;
 
     const setDate = newDate => this.setState({ date: newDate });
     return (
@@ -139,19 +139,20 @@ export default class AddStockForm extends Component {
                 const results = res.bestMatches;
                 if (results.length === 1) {
                   if (this.isToday(this.state.date)) {
+                    alert("hi");
                     fetch(latestPriceUrl)
                       .then(res => res.json())
                       .then(res => {
-                        const data = res["Time Series (5min)"];
-                        const value = data[Object.keys(data)[0]]["4. close"];
+                        const data = res["Global Quote"]["05. price"];
                         this.setState({
-                          price: value
+                          price: data 
                         });
                       })
                       .catch(err => alert(err));
                   } else {
                     // server api: get price by date
-                    this.getPriceByDate(this.state.symbol, this.state.date)
+                    alert("diff date");
+                    this.getPriceByDate(this.state.symbol, this.state.date);
                   }
 
                   this.setState({
