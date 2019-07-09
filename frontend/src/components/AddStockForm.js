@@ -133,41 +133,44 @@ export default class AddStockForm extends Component {
           placeholder={this.state.symbolPlaceholder}
           onChangeText={text => this.setState({ symbol: text })}
           onSubmitEditing={() => {
-            fetch(url)
-              .then(res => res.json())
-              .then(res => {
-                const results = res.bestMatches;
-                if (results.length === 1) {
-                  if (this.isToday(this.state.date)) {
-                    alert("hi");
-                    fetch(latestPriceUrl)
-                      .then(res => res.json())
-                      .then(res => {
-                        const data = res["Global Quote"]["05. price"];
-                        this.setState({
-                          price: data 
-                        });
-                      })
-                      .catch(err => alert(err));
-                  } else {
-                    // server api: get price by date
-                    alert("diff date");
-                    this.getPriceByDate(this.state.symbol, this.state.date);
-                  }
+            if (this.state.date === "") {
+              alert("Please enter the date first!");
+            } else {
+              fetch(url)
+                .then(res => res.json())
+                .then(res => {
+                  const results = res.bestMatches;
+                  if (results.length === 1) {
+                    if (this.isToday(this.state.date)) {
+                      fetch(latestPriceUrl)
+                        .then(res => res.json())
+                        .then(res => {
+                          const data = res["Global Quote"]["05. price"];
+                          this.setState({
+                            price: data
+                          });
+                        })
+                        .catch(err => alert(err));
+                    } else {
+                      // server api: get price by date
+                      alert("diff date");
+                      this.getPriceByDate(this.state.symbol, this.state.date);
+                    }
 
-                  this.setState({
-                    symbol: results[0]["1. symbol"].replace(".SGP", ".SI"),
-                    symbolPlaceholder: results[0]["1. symbol"].replace(
-                      ".SGP",
-                      ".SI"
-                    ),
-                    name: results[0]["2. name"]
-                  });
-                } else {
-                  alert("more than 1 results obtained");
-                }
-              });
-            this.units.focus();
+                    this.setState({
+                      symbol: results[0]["1. symbol"].replace(".SGP", ".SI"),
+                      symbolPlaceholder: results[0]["1. symbol"].replace(
+                        ".SGP",
+                        ".SI"
+                      ),
+                      name: results[0]["2. name"]
+                    });
+                  } else {
+                    alert("more than 1 results obtained");
+                  }
+                });
+              this.units.focus();
+            }
           }}
         />
         <TextInput
