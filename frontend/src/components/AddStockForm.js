@@ -103,9 +103,8 @@ export default class AddStockForm extends Component {
       this.state.symbol
     }&apikey=1WJTX23D9MKYZMFE`;
 
-    const latestPriceUrl = symbol => `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${
-      symbol
-    }&apikey=1WJTX23D9MKYZMFE`;
+    const latestPriceUrl = symbol =>
+      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=1WJTX23D9MKYZMFE`;
 
     const setDate = newDate => this.setState({ date: newDate });
     return (
@@ -157,7 +156,11 @@ export default class AddStockForm extends Component {
                       },
                       () => {
                         if (this.isToday(this.state.date)) {
-                          fetch(latestPriceUrl(results[0]["1. symbol"].replace(".SGP", ".SI")))
+                          fetch(
+                            latestPriceUrl(
+                              results[0]["1. symbol"].replace(".SGP", ".SI")
+                            )
+                          )
                             .then(res => res.json())
                             .then(res => {
                               const data = res["Global Quote"]["05. price"];
