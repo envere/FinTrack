@@ -7,6 +7,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
+import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 const url = "https://orbital-fintrack.herokuapp.com/auth/login";
 
@@ -46,6 +47,9 @@ class LoginForm extends Component {
           style={styles.button}
           onPress={() => {
             //this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
+            this.setState({
+              username: this.state.username
+            });
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
             } else {
@@ -66,11 +70,26 @@ class LoginForm extends Component {
                   if (status === 200) {
                     alert("Login successful!");
                     this.props.navigation.navigate("Home");
-                    return res.json().then(res => JSON.stringify(res));
+                    return res.json();
                   }
                   throw Error(status);
                 })
+                .then(res => {
+                  RNSecureStorage.set("user", res.token, {
+                    accessible: ACCESSIBLE.WHEN_UNLOCKED
+                  }).then(
+                    res => {
+                      console.log(res);
+                    },
+                    err => {
+                      console.log(err);
+                    }
+                  );
+                })
                 .catch(err => {
+                  this.setState({
+                    text: "Login"
+                  });
                   if (err.message === "403") {
                     alert("Incorrect password");
                   } else if (err.message === "404") {
