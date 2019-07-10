@@ -249,8 +249,8 @@ export default class AddStockForm extends Component {
           <Text>Stock price: ${this.state.price * this.state.units}</Text>
           <Text>Brokerage fee: ${this.state.fees}</Text>
           <Text>
-            Total amount:
-             ${this.state.fees + this.state.units * this.state.price}
+            Total amount: $
+            {this.state.fees + this.state.units * this.state.price}
           </Text>
         </View>
         <Button
