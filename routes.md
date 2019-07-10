@@ -148,7 +148,7 @@ res = {
 ```
 POST
 req.body = {
-  id: String,               // user account document object id
+  _id: String,               // user account document object id
   password: String,   // password
 }
 
@@ -168,7 +168,7 @@ res = {
 ```
 POST
 req.body = {
-  id: String,
+  _id: String,
   symbol: String,
   units: Number,
   initialvalue: Number,
@@ -200,7 +200,7 @@ res = {
 ```
 POST
 req.body = {
-  id: String,
+  _id: String,
   symbol: String,
   units: Number,
   initialvalue: Number,
@@ -232,7 +232,7 @@ res = {
 ```
 POST
 req.body = {
-  id: String,
+  _id: String,
   symbol: String,
 }
 
