@@ -1,23 +1,17 @@
 # Routes
 
-## Unprotected Routes
-- auth
-
-## Protected Routes
-- account
-- user
-- stock
-
 ## Unprotected vs Protected
 Unprotected routes do not require JWT in the http request for the backend to give a valid response.
 Protected routes requires JWT in the http request for the backend to give a valid response.
 
 For protected routes, invalid or non existent JWT will result in a 403 response from backend.
+If you receive 401, access token is invalid, use `auth/refresh` to get a new access token by using your refresh token.
 
 ## Status Codes
 200 => ok
 201 => resource created
 400 => bad request
+401 => not authorized
 403 => forbidden
 404 => resource not found
 500 => bad request
@@ -29,6 +23,7 @@ For protected routes, invalid or non existent JWT will result in a 403 response 
 - auth
   - `auth/register`
   - `auth/login`
+  - `auth/refresh`
 - user
   - `user/getusers`
   - `user/getuser`
@@ -62,8 +57,6 @@ res = {
   }
 }
 ```
-*successful:* 201
-*all errors:* 500
 
 ### auth/login
 ```
@@ -82,9 +75,23 @@ res = {
   }
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*other errors:* 500
+
+### auth/refresh
+```
+req.body = {
+  _id: String,
+}
+
+// if refresh token expiring before new access token
+res = {
+  accesstoken: String,
+  refreshtoken: String,
+}
+// if refresh token is still valid after next access token
+res = {
+  accesstoken: String,
+}
+```
 
 ### user/getusers
 ```
@@ -102,9 +109,6 @@ res = {
   }]
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*other errors:* 500
 
 ### user/getuser
 ```
@@ -140,9 +144,6 @@ res = {
   }]
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*other errors:* 500
 
 ### account/deleteaccount
 ```
@@ -160,9 +161,6 @@ res = {
   },
 }
 ```
-*successful:* 200
-*token not valid / password failed:* 403
-*other errors:* 500
 
 ### account/symbol/add
 ```
@@ -191,10 +189,6 @@ res = {
   },
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*user account not found*: 404
-*other errors:* 500
 
 ### account/symbol/update
 ```
@@ -223,10 +217,6 @@ res = {
   },
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*user account not found*: 404
-*other errors:* 500
 
 ### account/symbol/delete
 ```
@@ -244,10 +234,6 @@ res = {
   },
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*user account not found*: 404
-*other errors:* 500
 
 ### stock/intraday/latestprice
 ```
@@ -264,10 +250,6 @@ res = {
   },
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*price not found:* 404
-*other errors:* 500
 
 ### stock/daily/price
 ```
@@ -285,10 +267,6 @@ res = {
   }
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*price not found:* 404
-*other errors:* 500
 
 
 ### stock/pricerange
@@ -308,10 +286,6 @@ res = {
   }]
 }
 ```
-*successful:* 200
-*start > end:* 400
-*token not valid:* 403
-*other errors:* 500
 
 ### dividend/daily/dividend
 ```
@@ -329,10 +303,6 @@ res = {
   }
 }
 ```
-*successful:* 200
-*token not valid:* 403
-*price not found:* 404
-*other errors:* 500
 
 ### dividend/dividendrange
 ```
@@ -357,8 +327,3 @@ res = {
   }
 }
 ```
-*successful:* 200
-*start > end:* 400
-*token not valid:* 403
-*res.dividends.days === [] && res.dividends.months === []:* 404
-*other errors:* 500
