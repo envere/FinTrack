@@ -178,11 +178,7 @@ export default class AddStockForm extends Component {
                       },
                       () => {
                         if (this.isToday(this.state.date)) {
-                          fetch(
-                            latestPriceUrl(
-                              results[0]["1. symbol"].replace(".SGP", ".SI")
-                            )
-                          )
+                          fetch(latestPriceUrl(newSymbol))
                             .then(res => res.json())
                             .then(res => {
                               const data = res["Global Quote"]["05. price"];
@@ -245,6 +241,18 @@ export default class AddStockForm extends Component {
           }
           ref={input => (this.fees = input)}
         />
+        <View>
+          <Text>Summary:</Text>
+          <Text>
+            {this.state.name} ({this.state.symbol})
+          </Text>
+          <Text>Stock price: ${this.state.price * this.state.units}</Text>
+          <Text>Brokerage fee: ${this.state.fees}</Text>
+          <Text>
+            Total amount:
+             ${this.state.fees + this.state.units * this.state.price}
+          </Text>
+        </View>
         <Button
           title="add"
           onPress={() => {
@@ -257,13 +265,6 @@ export default class AddStockForm extends Component {
               currPrice: this.state.units * price
             });
             alert(JSON.stringify(store.getState()));
-          }}
-        />
-        <Button // will remove after testing
-          title="anotherTest"
-          onPress={() => {
-            const now = new Date("2015-06-29T03:24:00");
-            this.getPriceByDate("D05.SI", now);
           }}
         />
       </View>
