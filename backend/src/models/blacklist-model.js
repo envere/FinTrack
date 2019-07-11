@@ -18,20 +18,21 @@ mongoose
   .catch(err => console.log(`connection error to database [Blacklist]\nerror: ${err}`))
 
 const BlacklistSchema = new Schema({
-  token: {
-    type: String,
-    required: true, 
-    unique: true,
-  },
-  exp: {
-    type: Number,
-    required: true,
-  },
   userid: {
     type: String,
     required: true,
   },
+  token: {
+    type: String,
+    required: true,
+  },
+  expireAt: {
+    type: Date,
+    required: true,
+  },
 })
+
+BlacklistSchema.index({ 'expireAt': 1 }, { expireAfterSeconds: 0 })
 
 const Blacklist = mongoose.model('Blacklist', BlacklistSchema)
 

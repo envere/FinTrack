@@ -1,5 +1,7 @@
 const User = require('../models/user-model')
+const Blacklist = require('../models/blacklist-model')
 const bcrypt = require('../util/bcrypt')
+const jwt = require('../util/jwt')
 const express = require('express')
 const router = express.Router()
 
@@ -71,7 +73,7 @@ router.post('/symbol/add', (req, res) => {
           res.status(200).json({
             message: `${symbol} is already under ${user.username}'s account`,
             user: {
-              _id, 
+              _id,
               username,
             },
           })
@@ -135,7 +137,25 @@ router.post('/symbol/update', (req, res) => {
 })
 
 router.post('/logout', (req, res) => {
-
+  const _id = req.body._id
+  const accesstoken = req.accesstoken
+  const refreshtoken = req.refreshtoken
+  const addBlacklist = (userid, token) => {
+    const exp = jwt.payload_JWT(token).exp
+    const expireAt = new Date(exp * 1000)
+    const blacklist = new Blacklist({
+      userid,
+      token,
+      expireAt,
+    })
+    return blacklist
+      .save()
+      .catch(err => res.sendStatus(500))
+  }
+  Promise
+    .all([addBlacklist(_id, accesstoken), addBlacklist(_id, refreshtoken)])
+    .then(done => res.status(200).json({ message: `logged out` }))
+    .catch(err => res.sendStatus(500))
 })
 
 router.post('/symbol/delete', (req, res) => {

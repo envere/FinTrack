@@ -1,4 +1,4 @@
-const DividendPrice = require('../models/dividendprice-model')
+const DividendPrice = require('../models/dividend-price-model')
 const alphavantage = require('../util/alphavantage')
 const init = require('../util/init-stocks-dividends')
 const express = require('express')

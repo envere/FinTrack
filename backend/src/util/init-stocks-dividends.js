@@ -1,7 +1,7 @@
-const StockName = require('../models/stockname-model')
-const StockPrice = require('../models/stockprice-model')
-const DividendName = require('../models/dividendname-model')
-const DividendPrice = require('../models/dividendprice-model')
+const StockName = require('../models/stock-name-model')
+const StockPrice = require('../models/stock-price-model')
+const DividendName = require('../models/dividend-name-model')
+const DividendPrice = require('../models/dividend-price-model')
 const alphavantage = require('../util/alphavantage')
 
 function initStock(symbol) {
