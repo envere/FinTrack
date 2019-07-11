@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const saltRounds = require('../configs/bcryptConfig').saltRounds
+const saltRounds = require('../configs/bcrypt-config').saltRounds
 
 module.exports = {
   hash: function (plaintext_password) {

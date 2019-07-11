@@ -1,6 +1,6 @@
-const Blacklist = require('../models/BlacklistModel')
+const Blacklist = require('../models/blacklist-model')
 const jwt = require('jsonwebtoken')
-const jwtConfig = require('../configs/jwtConfig')
+const jwtConfig = require('../configs/jwt-config')
 const access_secret = jwtConfig.access_secret
 const refresh_secret = jwtConfig.refresh_secret
 

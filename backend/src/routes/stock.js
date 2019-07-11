@@ -1,10 +1,6 @@
-const StockName = require('../models/StockNameModel')
-const StockPrice = require('../models/StockPriceModel')
-const DividendName = require('../models/DividendNameModel')
-const DividendPrice = require('../models/DividendPriceModel')
+const StockPrice = require('../models/stockprice-model')
 const alphavantage = require('../util/alphavantage')
-const jwt = require('../util/jwt')
-const init = require('../util/initDB')
+const init = require('../util/init-stocks-dividends')
 const express = require('express')
 const router = express.Router()
 

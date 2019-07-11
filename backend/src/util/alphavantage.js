@@ -1,5 +1,5 @@
 const axios = require('axios')
-const alphavantageConfig = require('../configs/alphavantageConfig')
+const alphavantageConfig = require('../configs/alphavantage-config')
 const key = alphavantageConfig.key
 
 // url

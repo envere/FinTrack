@@ -1,6 +1,5 @@
-const User = require('../models/UserModel')
+const User = require('../models/user-model')
 const bcrypt = require('../util/bcrypt')
-const jwt = require('../util/jwt')
 const express = require('express')
 const router = express.Router()
 

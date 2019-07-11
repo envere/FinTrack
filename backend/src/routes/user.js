@@ -1,6 +1,5 @@
-const User = require("../models/UserModel");
-const jwt = require("../util/jwt");
-const express = require("express");
+const User = require("../models/user-model")
+const express = require("express")
 const router = express.Router();
 
 router.get("/getusers", (req, res) => {
@@ -20,12 +19,12 @@ router.get("/getusers", (req, res) => {
       res.status(200).json({
         message: "list of all users",
         users,
-      });
+      })
     })
     .catch(err => {
       res.sendStatus(500)
-    });
-});
+    })
+})
 
 router.get("/getuser", (req, res) => {
   const username = req.query.username
@@ -68,6 +67,6 @@ router.get("/getuser", (req, res) => {
       })
       .catch(err => res.sendStatus(500))
   }
-});
+})
 
-module.exports = router;
+module.exports = router
