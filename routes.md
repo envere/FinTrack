@@ -37,6 +37,7 @@ If you receive 401, access token is invalid, use `auth/refresh` to get a new acc
   - `dividend/daily/dividend`
   - `dividend/dividendrange`
 - transaction
+  - `transaction/get`
   - `transaction/add`
   - `transaction/delete`
   - `transaction/update`
@@ -255,6 +256,31 @@ res = {
   }
 }
 ```
+
+### transaction/get
+```
+req.body = {
+  userid: String,     // _id from user account
+}
+
+res = {
+  message: getting transactions from $userid,
+  transaction: {
+    _id: String,            // take note this is transactionid used for delete and update routes
+    userid: String,
+    history: [{
+      _id: String,
+      units: Number,
+      price: Number,
+      tradeValue: Number,
+      category: String,
+      date: Date,
+      symbol: String,
+    }]
+  }
+} 
+```
+
 ### transaction/add
 ```
 req.body = {

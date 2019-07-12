@@ -2,6 +2,17 @@ const Transaction = require('../models/transaction-model')
 const express = require('express')
 const router = express.Router()
 
+router.get('/get', (req, res) => {
+  const userid = req.body.userid
+  Transaction
+    .findOne({ userid })
+    .then(transaction => res.status(200).json({
+      message: `getting transactions from ${userid}`,
+      transaction,
+    }))
+    .catch(err => res.sendStatus(500))
+})
+
 router.post('/add', (req, res) => {
   const userid = req.body.userid
   const ISOdate = req.body.date
