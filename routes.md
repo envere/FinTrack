@@ -36,6 +36,10 @@ If you receive 401, access token is invalid, use `auth/refresh` to get a new acc
 - dividend
   - `dividend/daily/dividend`
   - `dividend/dividendrange`
+- transaction
+  - `transaction/add`
+  - `transaction/delete`
+  - `transaction/update`
 
 ### auth/register
 ```
@@ -247,6 +251,91 @@ res = {
     months: [{
       date: Date,
       dividend: Number,
+    }]
+  }
+}
+```
+### transaction/add
+```
+req.body = {
+  userid: String,       // _id from user account
+  date: String,         // ISO format
+  category: String,     // BUY / SELL etc
+  symbol: String,       // stock symbol
+  units: Number,        // number of units
+  price: Number,        // price
+  tradeValue: Number,   // tradevalue
+}
+
+res = {
+  message: added transaction,
+  transaction: {
+    _id: String,            // take note this is transactionid used for delete and update routes
+    userid: String,
+    history: [{
+      _id: String,
+      units: Number,
+      price: Number,
+      tradeValue: Number,
+      category: String,
+      date: Date,
+      symbol: String,
+    }]
+  }
+}
+```
+
+### transaction/delete
+```
+req.body = {
+  userid: String,           // _id from user account
+  transactionid: String,    // _id from transaction
+}
+
+res = {
+  message: added transaction,
+  transaction: {
+    _id: String,            // take note this is transactionid used for delete and update routes
+    userid: String,
+    history: [{
+      _id: String,
+      units: Number,
+      price: Number,
+      tradeValue: Number,
+      category: String,
+      date: Date,
+      symbol: String,
+    }]
+  }
+}
+```
+
+### transaction/update
+```
+req.body = {
+  userid: String,           // _id from user account
+  transactionid: String,    // _id from transaction
+  units: Number,      [OPTIONAL]
+  price: Number,      [OPTIONAL]
+  tradeValue: Number, [OPTIONAL]
+  category: String,   [OPTIONAL]
+  date: Date,         [OPTIONAL]
+  symbol: String,     [OPTIONAL]
+}
+
+res = {
+  message: added transaction,
+  transaction: {
+    _id: String,            // take note this is transactionid used for delete and update routes
+    userid: String,
+    history: [{
+      _id: String,
+      units: Number,
+      price: Number,
+      tradeValue: Number,
+      category: String,
+      date: Date,
+      symbol: String,
     }]
   }
 }
