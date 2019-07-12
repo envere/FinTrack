@@ -1,5 +1,5 @@
 // imports
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // connection uri
@@ -12,9 +12,9 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
-    dbName: "fintrack_database"
+    dbName: 'fintrack_database'
   })
-  .then(() => console.log("connected successfully to database [Transaction]"))
+  .then(() => console.log('connected successfully to database [Transaction]'))
   .catch(err => console.log(`connection error to database [Transaction]\nerror: ${err}`))
 
 const HistorySchema = new Schema({
@@ -42,22 +42,14 @@ const HistorySchema = new Schema({
     type: Number,
     default: 0,
   },
-}, { _id: false })
+})
 
 const TransactionSchema = new Schema({
   userid: {
     type: String,
     required: true,
   },
-  year: {
-    type: Number,
-    required: true,
-  },
-  month: {
-    type: Number,
-    required: true,
-  },
-  history: [HistorySchema],
+  history: [HistorySchema]
 })
 
 const Transaction = mongoose.model('Transaction', TransactionSchema)
