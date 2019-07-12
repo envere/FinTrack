@@ -16,6 +16,16 @@ mongoose
   .then(() => console.log("connected successfully to database [DividendPrice]"))
   .catch(err => console.log(`connection error to database [DividendPrice]\nerror: ${err}`))
 
+const DividendSchema = new Schema({
+  dividend: {
+    type: Number,
+    default: 0,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+}, { _id: false })
 
 const DividendPriceSchema = new Schema({
   symbol: {
@@ -27,8 +37,8 @@ const DividendPriceSchema = new Schema({
     type: Number,
     required: true,
   },
-  days: [],
-  months: [],
+  days: [DividendSchema],
+  months: [DividendSchema],
 })
 
 DividendPriceSchema.statics.latest = function (symbol) {

@@ -17,6 +17,17 @@ mongoose
   .catch(err => console.log(`connection error to database [StockPrice]\nerror: ${err}`))
 
 
+const StockSchema = new Schema({
+  price: {
+    type: Number,
+    default: 0,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+}, { _id: false })
+
 const StockPriceSchema = new Schema({
   symbol: {
     type: String,
@@ -27,8 +38,8 @@ const StockPriceSchema = new Schema({
     type: Number,
     required: true,
   },
-  days: [],
-  months: [],
+  days: [StockSchema],
+  months: [StockSchema],
 })
 
 StockPriceSchema.statics.latest = function (symbol) {
