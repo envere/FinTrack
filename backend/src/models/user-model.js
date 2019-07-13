@@ -1,5 +1,5 @@
 // imports
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // connection uri
@@ -12,9 +12,9 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
-    dbName: "fintrack_database"
+    dbName: 'fintrack_database'
   })
-  .then(() => console.log("connected successfully to database [User]"))
+  .then(() => console.log('connected successfully to database [User]'))
   .catch(err => console.log(`connection error to database [User]\nerror: ${err}`))
 
 const symbolSchema = new Schema({
