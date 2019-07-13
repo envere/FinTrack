@@ -1,6 +1,23 @@
+const SymbolName = require('../models/symbol-name-model')
 const StockPrice = require('../models/stock-price-model')
 const DividendPrice = require('../models/dividend-price-model')
 const alphavantage = require('../util/alphavantage')
+
+function initSymbolName(symbol) {
+  console.log(`initSymbolName(${symbol})`)
+  SymbolName
+    .findOne({ symbol })
+    .then(doc => {
+      if (!doc) {
+        const symbolname = new SymbolName({ symbol })
+        return symbolname.save()
+      } else {
+        return null
+      }
+    })
+    .then(saved => console.log(`initialized ${symbol} symbol name`))
+    .catch(err => console.log(err))
+}
 
 function initStock(symbol) {
   console.log(`initStock(${symbol})`)
@@ -103,6 +120,7 @@ function initDividend(symbol) {
 }
 
 module.exports = symbol => {
+  initSymbolName(symbol)
   initStock(symbol)
   initDividend(symbol)
 }
