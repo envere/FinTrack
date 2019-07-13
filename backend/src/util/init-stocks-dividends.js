@@ -1,28 +1,9 @@
-const StockName = require('../models/stock-name-model')
 const StockPrice = require('../models/stock-price-model')
-const DividendName = require('../models/dividend-name-model')
 const DividendPrice = require('../models/dividend-price-model')
 const alphavantage = require('../util/alphavantage')
 
 function initStock(symbol) {
   console.log(`initStock(${symbol})`)
-  // StockName
-  //   .deleteMany({ symbol })
-  //   .then(done => {
-  //     alphavantage
-  //       .daily
-  //       .latestprice(symbol)
-  //       .then(latestprice => {
-  //         const price = latestprice
-  //         const stockname = new StockName({
-  //           symbol,
-  //           price,
-  //         })
-  //         stockname.save()
-  //       })
-  //       .catch(err => console.log(err))
-  //   })
-  //   .catch(err => console.log(err))
   StockPrice
     .deleteMany({ symbol })
     .then(done => {
@@ -73,23 +54,6 @@ function initStock(symbol) {
 
 function initDividend(symbol) {
   console.log(`initDividend(${symbol})`)
-  // DividendName
-  //   .deleteMany({ symbol })
-  //   .then(done => {
-  //     alphavantage
-  //       .dailyAdjusted
-  //       .latestdividend(symbol)
-  //       .then(latestdividend => {
-  //         const dividend = latestdividend
-  //         const dividendname = new DividendName({
-  //           symbol,
-  //           dividend,
-  //         })
-  //         dividendname.save()
-  //       })
-  //       .catch(err => console.log(err))
-  //   })
-  //   .catch(err => console.log(err))
   DividendPrice
     .deleteMany({ symbol })
     .then(done => {
