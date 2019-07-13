@@ -14,7 +14,7 @@ If you receive 401, access token is invalid, use `auth/refresh` to get a new acc
 401 => not authorized\
 403 => forbidden\
 404 => resource not found\
-500 => bad request\
+500 => bad request
 
 **JWT should be in http request Authorization header**
 `req.headers['authorization] = <token>`
