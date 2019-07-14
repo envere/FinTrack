@@ -102,20 +102,24 @@ router.post('/update', (req, res) => {
       if (transaction) {
         const history = transaction.history
         const elem = history.find(elem => elem._id.toString() === _id)
-        elem.category = (req_category === undefined) ? elem.category : req_category
-        elem.date = (ISOdate === undefined) ? elem.date : new Date(ISOdate)
-        elem.symbol = (req_symbol === undefined) ? elem.symbol : req_symbol
-        elem.units = (req_units === undefined) ? elem.units : req_units
-        elem.price = (req_price === undefined) ? elem.price : req_price
-        elem.tradeValue = (req_tradeValue === undefined) ? elem.tradeValue : req_tradeValue
-        Transaction
-          .findOneAndUpdate({ userid }, { history })
-          .then(transaction => Transaction.findOne({ userid }))
-          .then(transaction => res.status(200).json({
-            message: `updated transaction`,
-            transaction,
-          }))
-          .catch(err => res.sendStatus(500))
+        if (elem) {
+          elem.category = (req_category === undefined) ? elem.category : req_category
+          elem.date = (ISOdate === undefined) ? elem.date : new Date(ISOdate)
+          elem.symbol = (req_symbol === undefined) ? elem.symbol : req_symbol
+          elem.units = (req_units === undefined) ? elem.units : req_units
+          elem.price = (req_price === undefined) ? elem.price : req_price
+          elem.tradeValue = (req_tradeValue === undefined) ? elem.tradeValue : req_tradeValue
+          Transaction
+            .findOneAndUpdate({ userid }, { history })
+            .then(transaction => Transaction.findOne({ userid }))
+            .then(transaction => res.status(200).json({
+              message: `updated transaction`,
+              transaction,
+            }))
+            .catch(err => res.sendStatus(500))
+        } else {
+          res.sendStatus(404)
+        }
       } else {
         res.sendStatus(404)
       }

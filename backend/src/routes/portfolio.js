@@ -96,7 +96,7 @@ router.post('/delete', (req, res) => {
     .catch(err => res.sendStatus(500))
 })
 
-router.post('update', (req, res) => {
+router.post('/update', (req, res) => {
   const userid = req.body.userid
   const symbol = req.body.symbol
   const req_name = req.body.name
@@ -126,7 +126,7 @@ router.post('update', (req, res) => {
             }))
             .catch(err => res.sendStatus(500))
         } else {
-
+          res.sendStatus(404)
         }
       } else {
         res.sendStatus(404)
