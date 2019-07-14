@@ -6,10 +6,16 @@ router.get('/get', (req, res) => {
   const userid = req.body.userid
   Transaction
     .findOne({ userid })
-    .then(transaction => res.status(200).json({
-      message: `getting transactions from ${userid}`,
-      transaction,
-    }))
+    .then(transaction => {
+      if (transaction) {
+        res.status(200).json({
+          message: `getting transactions from ${userid}`,
+          transaction,
+        })
+      } else {
+        res.sendStatus(404)
+      }
+    })
     .catch(err => res.sendStatus(500))
 })
 
@@ -36,25 +42,21 @@ router.post('/add', (req, res) => {
     .findOne({ userid })
     .then(transaction => {
       if (transaction) {
-        return Transaction
+        Transaction
           .findOneAndUpdate(
             { userid },
             { $push: { history: transactionHistory } }
           )
+          .then(transaction => Transaction.findOne({ userid }))
+          .then(transaction => res.status(200).json({
+            message: `added transaction`,
+            transaction,
+          }))
+          .catch(err => res.sendStatus(500))
       } else {
-        const history = [transactionHistory]
-        const transaction = new Transaction({
-          userid,
-          history,
-        })
-        return transaction.save()
+        res.sendStatus(404)
       }
     })
-    .then(transaction => Transaction.findOne({ userid }))
-    .then(transaction => res.status(200).json({
-      message: `added transaction`,
-      transaction,
-    }))
     .catch(err => res.sendStatus(500))
 })
 

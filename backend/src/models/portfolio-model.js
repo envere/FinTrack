@@ -18,6 +18,11 @@ mongoose
   .catch(err => console.log(`connection error to database [Portfolio]\nerror: ${err}`))
 
 const SymbolSchema = new Schema({
+  symbol: {
+    type: String,
+    unique: true,
+    required: true,
+  },
   name: {
     type: String,
     default: "",

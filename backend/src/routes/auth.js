@@ -1,4 +1,6 @@
 const User = require("../models/user-model")
+const Transaction = require('../models/transaction-model')
+const Portfolio = require('../models/portfolio-model')
 const express = require("express")
 const bcrypt = require("../util/bcrypt")
 const jwt = require('../util/jwt')
@@ -13,21 +15,32 @@ router.post("/register", (req, res) => {
   bcrypt
     .hash(plaintext_password)
     .then(hash => {
+      const password = hash
       const user = new User({
-        username: username,
-        email: email,
-        password: hash,
-        symbols: [],
+        username,
+        email,
+        password,
       })
-      user
-        .save()
-        .then(user => {
+      return user.save()
+    })
+    .then(user => {
+      console.log(user)
+      const _id = user._id
+      const username = user.username
+      const addTransaction = userid => {
+        const transaction = new Transaction({ userid })
+        return transaction.save()
+      }
+      const addPortfolio = userid => {
+        const portfolio = new Portfolio({userid})
+        return portfolio.save()
+      }
+      Promise
+        .all([addTransaction(_id), addPortfolio(_id)])
+        .then(done => {
           res.status(201).json({
             message: `added ${username}`,
-            user: {
-              _id: user._id,
-              username: user.username,
-            },
+            user: { _id, username }
           })
         })
         .catch(err => res.sendStatus(500))

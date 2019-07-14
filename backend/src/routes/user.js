@@ -8,11 +8,9 @@ router.get("/getusers", (req, res) => {
     .then(users => users.map(user => {
       const _id = user._id
       const username = user.username
-      const symbols = user.symbols
       return {
         _id,
         username,
-        symbols,
       }
     }))
     .then(users => {
@@ -34,13 +32,11 @@ router.get("/getuser", (req, res) => {
       .then(user => {
         const _id = user._id
         const username = user.username
-        const symbols = user.symbols
         res.status(200).json({
           message: `getting user by username: ${username}`,
           user: {
             _id,
             username,
-            symbols,
           },
         })
       })
@@ -52,11 +48,9 @@ router.get("/getuser", (req, res) => {
       .then(users => users.map(user => {
         const _id = user._id
         const username = user.username
-        const symbols = user.symbols
         return {
           _id,
           username,
-          symbols,
         }
       }))
       .then(users => {

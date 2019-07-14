@@ -17,12 +17,6 @@ mongoose
   .then(() => console.log('connected successfully to database [User]'))
   .catch(err => console.log(`connection error to database [User]\nerror: ${err}`))
 
-const symbolSchema = new Schema({
-  symbol: String,
-  units: Number,
-  initialvalue: Number,
-}, { _id: false })
-
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -39,7 +33,6 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  symbols: [symbolSchema],
 })
 
 UserSchema.index({ username: "text" })
