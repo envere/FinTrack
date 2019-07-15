@@ -28,42 +28,45 @@ function updateStock(symbol) {
       for (let i = latestYear + 1; i <= nowYear; ++i) {
         years.push(i)
       }
-      const buckets = []
-      buckets.push(StockPrice.latest(symbol))
+      const newBuckets = []
       years.forEach(year => {
-        const stockprice = new StockPrice({
-          symbol,
-          year,
-        })
-        buckets.push(stockprice.save())
+        const stockprice = new StockPrice({symbol, year})
+        newBuckets.push(stockprice.save())
       })
       Promise
-        .all(buckets)
+        .all(newBuckets)
+        .then(done => {
+          const buckets = []
+          buckets.push(StockPrice.latest(symbol))
+          years.forEach(year => buckets.push(StockPrice.findOne({symbol, year})))
+          return Promise.all(buckets)
+        })
         .then(buckets => {
           const ISOdate = latestDate.toISOString().split('T')[0]
           const ISOnow = (new Date()).toISOString().split('T')[0]
           const days = alphavantage.daily.prices_range(symbol, ISOdate, ISOnow)
           const months = alphavantage.monthly.prices_range(symbol, ISOdate, ISOnow)
-          return Promise
+          Promise
             .all([days, months])
-            .then(data => {
-              const days = data[0]
-              const months = data[1]
-              return {
-                buckets,
-                days,
-                months,
-              }
+            .then(prices => {
+              const days = prices[0]
+              const months = prices[1]
+              const map = new Map()
+              buckets.forEach(bucket => map.set(bucket.year, bucket))
+              days.forEach(price => map.get(price.date.getFullYear()).days.push(price))
+              months.forEach(price => map.get(price.date.getFullYear()).months.push(price))
+              const updateBuckets = buckets.map(bucket => {
+                const year = bucket.year
+                const days = bucket.days
+                const months = bucket.months
+                return StockPrice.findOneAndUpdate({symbol, year}, {days, months})
+              })
+              return Promise.all(updateBuckets)
             })
-            .then(data => {
-              console.log(data)
-            })
+            .then(done => console.log(`updated ${symbol}'s stock\n${done}`))
+            .catch(err => console.log(err))
         })
-        .then(data => console.log(data))
         .catch(err => console.log(err))
-      const ISOdate = latestDate.toISOString().split('T')[0]
-      const ISOnow = (new Date()).toISOString().split('T')[0]
-
     })
     .catch(err => console.log(err))
 }
@@ -87,4 +90,4 @@ function updateAll() {
     .catch(err => console.log(err))
 }
 
-getAllSymbols().then(x => console.log(x)).catch(err => console.log(err))
+updateStock('MSFT')
