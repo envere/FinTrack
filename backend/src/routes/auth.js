@@ -32,7 +32,7 @@ router.post("/register", (req, res) => {
         return transaction.save()
       }
       const addPortfolio = userid => {
-        const portfolio = new Portfolio({userid})
+        const portfolio = new Portfolio({ userid })
         return portfolio.save()
       }
       Promise
@@ -93,28 +93,19 @@ router.post("/login", (req, res) => {
 
 router.post('/refresh', jwt.authenticate_refresh_JWT(), (req, res) => {
   const _id = req.body._id
-  const refreshexp = jwt.payload_JWT(req.refreshtoken).exp
-  const nextaccessexp = Math.floor((new Date()).getTime() / 1000) + jwtConfig.access_duration
   const accessPromise = jwt.sign_access_JWT({ _id }, { expiresIn: jwtConfig.access_duration })
   const refreshPromise = jwt.sign_refresh_JWT({ _id }, { expiresIn: jwtConfig.refresh_duration })
-  if (refreshexp <= nextaccessexp) {
-    Promise
-      .all([accessPromise, refreshPromise])
-      .then(tokens => {
-        const accesstoken = tokens[0]
-        const refreshtoken = tokens[1]
-        res.status(200).json({
-          accesstoken,
-          refreshtoken,
-        })
+  Promise
+    .all([accessPromise, refreshPromise])
+    .then(tokens => {
+      const accesstoken = tokens[0]
+      const refreshtoken = tokens[1]
+      res.status(200).json({
+        accesstoken,
+        refreshtoken,
       })
-      .catch(err => res.sendStatus(500))
-  } else {
-    Promise
-      .resolve(accessPromise)
-      .then(access_token => res.status(200).json({ access_token }))
-      .catch(err => res.sendStatus(500))
-  }
+    })
+    .catch(err => res.sendStatus(500))
 })
 
 module.exports = router
