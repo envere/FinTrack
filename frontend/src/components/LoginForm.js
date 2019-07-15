@@ -95,6 +95,26 @@ class LoginForm extends Component {
                       console.log(err);
                     }
                   );
+                  RNSecureStorage.set("userid", res.user._id, {
+                    accessible: ACCESSIBLE.WHEN_UNLOCKED
+                  }).then(
+                    res => {
+                      console.log(res);
+                    },
+                    err => {
+                      console.log(err);
+                    }
+                  );
+                  RNSecureStorage.set("username", res.user.username, {
+                    accessible: ACCESSIBLE.WHEN_UNLOCKED
+                  }).then(
+                    res => {
+                      console.log(res);
+                    },
+                    err => {
+                      console.log(err);
+                    }
+                  );
                 })
                 .catch(err => {
                   this.setState({
