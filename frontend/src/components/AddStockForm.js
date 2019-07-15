@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Dimensions, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  Button,
+  Picker
+} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
@@ -254,6 +261,20 @@ export default class AddStockForm extends Component {
           }
           ref={input => (this.fees = input)}
         />
+        <Picker
+          selectedValue={this.state.bank}
+          style={{ height: 50, width: 150 }}
+          onValueChange={(itemValue, itemIndex) => {
+            this.setState({ bank: itemValue });
+            this.updateFees();
+          }}
+        >
+          <Picker.Item label="DBS" value="dbs" />
+          <Picker.Item label="OCBC" value="ocbc" />
+          <Picker.Item label="UOB" value="uob" />
+          <Picker.Item label="Citibank" value="citibank" />
+        </Picker>
+
         <View>
           <Text>Summary:</Text>
           <Text>
