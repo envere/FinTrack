@@ -5,6 +5,7 @@ import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
+
 /**
  * array indices:
  * [0] for trade value of <=50k,
@@ -256,17 +257,14 @@ export default class AddStockForm extends Component {
         <Button
           title="add"
           onPress={() => {
-            store.dispatch({
-              type: "ADD",
-              symbol: this.state.symbol,
-              name: this.state.name,
-              startPrice: this.updateFees(),
-              date: this.state.date,
-              currPrice: this.state.units * price
-            });
-            alert(JSON.stringify(store.getState()));
+            this.storePortfolioData().then(res=>alert(res));
           }}
         />
+        <Button
+        title="test"
+        onPress={()=>{
+          //do something
+        }}/>
       </View>
     );
   }

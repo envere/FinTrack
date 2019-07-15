@@ -75,7 +75,17 @@ class LoginForm extends Component {
                   throw Error(status);
                 })
                 .then(res => {
-                  RNSecureStorage.set("user", res.token, {
+                  RNSecureStorage.set("accessToken", res.accesstoken, {
+                    accessible: ACCESSIBLE.WHEN_UNLOCKED
+                  }).then(
+                    res => {
+                      console.log(res);
+                    },
+                    err => {
+                      console.log(err);
+                    }
+                  );
+                  RNSecureStorage.set("refreshToken", res.refreshtoken, {
                     accessible: ACCESSIBLE.WHEN_UNLOCKED
                   }).then(
                     res => {
