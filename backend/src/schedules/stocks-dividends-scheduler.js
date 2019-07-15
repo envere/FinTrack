@@ -7,7 +7,7 @@ const DividendPrice = require('../models/dividend-price-model')
 function getAllSymbols() {
   return SymbolName
     .find()
-    .then(symbolnames => symbolnames.filter(symbolname => symbolname.symbol))
+    .then(symbolnames => symbolnames.map(symbolname => symbolname.symbol))
     .catch(err => console.log(err))
 }
 
@@ -25,7 +25,7 @@ function updateStock(symbol) {
       const latestYear = latestDate.getFullYear()
       const nowYear = (new Date).getFullYear()
       const years = []
-      for (let i = latestYear + 1; i <= 2021; ++i) {
+      for (let i = latestYear + 1; i <= nowYear; ++i) {
         years.push(i)
       }
       const buckets = []
@@ -56,7 +56,7 @@ function updateStock(symbol) {
               }
             })
             .then(data => {
-
+              console.log(data)
             })
         })
         .then(data => console.log(data))
@@ -86,3 +86,5 @@ function updateAll() {
     .then(symbols => symbols.forEach(symbol => update(symbol)))
     .catch(err => console.log(err))
 }
+
+getAllSymbols().then(x => console.log(x)).catch(err => console.log(err))
