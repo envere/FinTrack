@@ -55,16 +55,15 @@ function updateStock(symbol) {
                 months,
               }
             })
+            .then(data => {
+
+            })
         })
         .then(data => console.log(data))
         .catch(err => console.log(err))
       const ISOdate = latestDate.toISOString().split('T')[0]
       const ISOnow = (new Date()).toISOString().split('T')[0]
 
-    })
-    .then(buckets => {
-      const days = alphavantage.days
-      const months = alphavantage.month
     })
     .catch(err => console.log(err))
 }
@@ -87,5 +86,3 @@ function updateAll() {
     .then(symbols => symbols.forEach(symbol => update(symbol)))
     .catch(err => console.log(err))
 }
-
-init('MSFT')
