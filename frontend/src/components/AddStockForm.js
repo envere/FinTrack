@@ -138,8 +138,38 @@ export default class AddStockForm extends Component {
   }
 
   addStock() {
+    const formFilled =
+      this.state.symbol &&
+      this.state.date &&
+      this.state.fees &&
+      this.state.price &&
+      this.state.name &&
+      this.state.units;
+    if (!formFilled) {
+      alert("Please fill up all the forms!");
+      return;
+    }
+    const stock = {
+      userid: this.state.userid,
+      symbol: this.state.symbol,
+      name: this.state.name,
+      units: this.state.units,
+      investedCapital: this.state.units * this.state.price + this.state.fees,
+      dividends: 0,
+      currentValue: this.state.units * this.state.price
+    };
     const api = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    const stock = {};
+    fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify(stock)
+    })
+      .then(res => res.json())
+      .then(res => alert(res))
+      .catch(err => alert(err))
   }
 
   render() {
@@ -287,7 +317,7 @@ export default class AddStockForm extends Component {
             {this.state.fees + this.state.units * this.state.price}
           </Text>
         </View>
-        <Button title="add" onPress={() => {}} />
+        <Button title="add" onPress={() => {this.addStock()}} />
         <Button
           title="test"
           onPress={() => {
