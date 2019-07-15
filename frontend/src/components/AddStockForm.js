@@ -5,6 +5,7 @@ import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
+import { nullLiteral } from "@babel/types";
 
 /**
  * array indices:
@@ -26,13 +27,15 @@ export default class AddStockForm extends Component {
     this.state = {
       bank: "dbs", // default value for testing
       symbolPlaceholder: "Stock name",
-      symbol: "",
-      name: "",
-      units: 0,
-      date: "",
-      price: 0,
-      fees: 0,
-      token: ""
+      symbol: null,
+      name: null,
+      units: null,
+      date: null,
+      price: null,
+      fees: null,
+      token: null,
+      refresh: null,
+      userid: null
     };
   }
 
@@ -83,9 +86,15 @@ export default class AddStockForm extends Component {
     const backendApi =
       "https://orbital-fintrack.herokuapp.com/stock/daily/price";
 
-    RNSecureStorage.get("user").then(val =>
+    RNSecureStorage.get("accessToken").then(val =>
       this.setState({
         token: val
+      })
+    );
+
+    RNSecureStorage.get("refreshToken").then(val =>
+      this.setState({
+        refresh: val
       })
     );
 
@@ -119,6 +128,11 @@ export default class AddStockForm extends Component {
             "Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc."
         )
       );
+  }
+
+  addStock() {
+    const api = "https://orbital-fintrack.herokuapp.com/portfolio/add";
+    const stock = {};
   }
 
   render() {
@@ -158,7 +172,7 @@ export default class AddStockForm extends Component {
           placeholder={this.state.symbolPlaceholder}
           onChangeText={text => this.setState({ symbol: text })}
           onSubmitEditing={() => {
-            if (this.state.date === "") {
+            if (!this.state.date) {
               alert("Please enter the date first!");
             } else {
               fetch(url)
@@ -224,9 +238,7 @@ export default class AddStockForm extends Component {
         />
         <TextInput
           style={styles.textbox}
-          placeholder={
-            this.state.price === 0 ? "Price" : this.state.price.toString()
-          }
+          placeholder={this.state.price ? this.state.price.toString() : "Price"}
           onChangeText={text => {
             this.setState({ price: parseFloat(text) }, () => this.updateFees());
           }}
@@ -236,7 +248,7 @@ export default class AddStockForm extends Component {
         <TextInput
           style={styles.textbox}
           placeholder={
-            this.state.fees === 0 || isNaN(this.state.fees)
+            !this.state.fees || isNaN(this.state.fees)
               ? "Trading fees"
               : this.state.fees.toString()
           }
@@ -254,17 +266,14 @@ export default class AddStockForm extends Component {
             {this.state.fees + this.state.units * this.state.price}
           </Text>
         </View>
+        <Button title="add" onPress={() => {}} />
         <Button
-          title="add"
+          title="test"
           onPress={() => {
-            this.storePortfolioData().then(res=>alert(res));
+            //do something
+            alert("hi");
           }}
         />
-        <Button
-        title="test"
-        onPress={()=>{
-          //do something
-        }}/>
       </View>
     );
   }
