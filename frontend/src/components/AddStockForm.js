@@ -174,8 +174,8 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => (res))
-      .catch(err =>(err));
+      .then(res => res)
+      .catch(err => err);
 
     const transactionsUrl =
       "https://orbital-fintrack.herokuapp.com/transaction/add";
@@ -188,8 +188,8 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => (res))
-      .catch(err => (err));
+      .then(res => res)
+      .catch(err => err);
   }
 
   render() {
@@ -218,10 +218,15 @@ export default class AddStockForm extends Component {
           timeZoneOffsetInMinutes={undefined}
           modalTransparent={false}
           animationType={"fade"}
-          androidMode={"default"}
+          androidMode={"calendar"}
           placeHolderText="Date purchased"
           placeHolderTextStyle={{ color: "#d3d3d3" }}
-          onDateChange={setDate}
+          onDateChange={date => {
+            setDate(date);
+            if (this.state.symbol) {
+              this.getPriceByDate(this.state.symbol, date);
+            }
+          }}
           disabled={false}
         />
         <TextInput
