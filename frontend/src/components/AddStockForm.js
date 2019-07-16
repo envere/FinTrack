@@ -113,6 +113,12 @@ export default class AddStockForm extends Component {
       })
     );
 
+    RNSecureStorage.get("userid").then(val =>
+      this.setState({
+        userid: val
+      })
+    );
+    
     const data = {
       date: this.dateConvertToIso(date),
       symbol: symbol
@@ -162,10 +168,11 @@ export default class AddStockForm extends Component {
       dividends: 0,
       currentValue: this.state.units * this.state.price,
       category: "ADD",
-      date: this.dateConvertToIso(this.state.date)
+      date: this.dateConvertToIso(this.state.date),
+      price: this.state.price
     };
     const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    fetch(portfolioUrl, {
+    /*fetch(portfolioUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -176,7 +183,7 @@ export default class AddStockForm extends Component {
       .then(res => res.json())
       .then(res => res)
       .catch(err => err);
-
+*/
     const transactionsUrl =
       "https://orbital-fintrack.herokuapp.com/transaction/add";
     fetch(transactionsUrl, {
@@ -188,8 +195,8 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => res)
-      .catch(err => err);
+      .then(res => alert(JSON.stringify(res.transaction.history)))
+      .catch(err => alert(err));
   }
 
   render() {
