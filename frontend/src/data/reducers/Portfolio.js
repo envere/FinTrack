@@ -9,7 +9,11 @@ const portfolio = (state = initialState, action) => {
         ...state,
         transactions: action.history
       };
-
+    case "PORTFOLIO":
+      return {
+        ...state,
+        stockList: action.portfolio
+      }
     default:
       return state;
   }
