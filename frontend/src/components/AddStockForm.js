@@ -162,7 +162,7 @@ export default class AddStockForm extends Component {
       dividends: 0,
       currentValue: this.state.units * this.state.price,
       category: "ADD",
-      ISOdate: ""
+      date: this.dateConvertToIso(this.state.date)
     };
     const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
     fetch(portfolioUrl, {
@@ -174,12 +174,22 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => alert(res))
-      .catch(err => alert(err));
+      .then(res => (res))
+      .catch(err =>(err));
 
     const transactionsUrl =
-      "https://orbital-fintrack.herokuapp.com/transactions/add";
-    const ISOdate = req.body.date;
+      "https://orbital-fintrack.herokuapp.com/transaction/add";
+    fetch(transactionsUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify(stock)
+    })
+      .then(res => res.json())
+      .then(res => (res))
+      .catch(err => (err));
   }
 
   render() {
@@ -274,6 +284,7 @@ export default class AddStockForm extends Component {
         <TextInput
           style={styles.textbox}
           placeholder="Units"
+          keyboardType="numeric"
           onChangeText={text => {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
           }}
@@ -286,6 +297,7 @@ export default class AddStockForm extends Component {
         <TextInput
           style={styles.textbox}
           placeholder={this.state.price ? this.state.price.toString() : "Price"}
+          keyboardType="numeric"
           onChangeText={text => {
             this.setState({ price: parseFloat(text) }, () => this.updateFees());
           }}
@@ -300,6 +312,7 @@ export default class AddStockForm extends Component {
               : this.state.fees.toString()
           }
           ref={input => (this.fees = input)}
+          keyboardType="numeric"
         />
         <Picker
           selectedValue={this.state.bank}
