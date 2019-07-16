@@ -89,6 +89,14 @@ export default class AddStockForm extends Component {
     );
   }
 
+  dateConvertToIso(date) {
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const month =
+      date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+    const year = date.getFullYear();
+    return year + "-" + month + "-" + day;
+  }
+
   getPriceByDate(symbol, date) {
     const backendApi =
       "https://orbital-fintrack.herokuapp.com/stock/daily/price";
@@ -105,13 +113,8 @@ export default class AddStockForm extends Component {
       })
     );
 
-    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    const month =
-      date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-    const year = date.getFullYear();
-
     const data = {
-      date: year + "-" + month + "-" + day,
+      date: this.dateConvertToIso(date),
       symbol: symbol
     };
 
@@ -155,11 +158,14 @@ export default class AddStockForm extends Component {
       name: this.state.name,
       units: this.state.units,
       investedCapital: this.state.units * this.state.price + this.state.fees,
+      tradeValue: this.state.units * this.state.price + this.state.fees,
       dividends: 0,
-      currentValue: this.state.units * this.state.price
+      currentValue: this.state.units * this.state.price,
+      category: "ADD",
+      ISOdate: ""
     };
-    const api = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    fetch(api, {
+    const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
+    fetch(portfolioUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -169,7 +175,11 @@ export default class AddStockForm extends Component {
     })
       .then(res => res.json())
       .then(res => alert(res))
-      .catch(err => alert(err))
+      .catch(err => alert(err));
+
+    const transactionsUrl =
+      "https://orbital-fintrack.herokuapp.com/transactions/add";
+    const ISOdate = req.body.date;
   }
 
   render() {
@@ -317,7 +327,12 @@ export default class AddStockForm extends Component {
             {this.state.fees + this.state.units * this.state.price}
           </Text>
         </View>
-        <Button title="add" onPress={() => {this.addStock()}} />
+        <Button
+          title="add"
+          onPress={() => {
+            this.addStock();
+          }}
+        />
         <Button
           title="test"
           onPress={() => {
