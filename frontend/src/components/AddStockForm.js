@@ -195,7 +195,13 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => alert(JSON.stringify(res.transaction.history)))
+      .then(res => {
+        store.dispatch({
+          type: "TRANSACTIONS",
+          history: res.transaction.history
+        })
+        alert(JSON.stringify(store.getState()))
+      })
       .catch(err => alert(err));
   }
 
