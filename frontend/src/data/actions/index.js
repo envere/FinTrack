@@ -1,3 +1,3 @@
-export const addStock = stock => {
-  type: "ADD", stock;
+export const updateTransactions = history => {
+  type: "TRANSACTIONS", history;
 };

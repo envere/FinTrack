@@ -113,6 +113,12 @@ export default class AddStockForm extends Component {
       })
     );
 
+    RNSecureStorage.get("userid").then(val =>
+      this.setState({
+        userid: val
+      })
+    );
+    
     const data = {
       date: this.dateConvertToIso(date),
       symbol: symbol
@@ -162,10 +168,11 @@ export default class AddStockForm extends Component {
       dividends: 0,
       currentValue: this.state.units * this.state.price,
       category: "ADD",
-      ISOdate: ""
+      date: this.dateConvertToIso(this.state.date),
+      price: this.state.price
     };
     const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    fetch(portfolioUrl, {
+    /*fetch(portfolioUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -174,12 +181,28 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => alert(res))
-      .catch(err => alert(err));
-
+      .then(res => res)
+      .catch(err => err);
+*/
     const transactionsUrl =
-      "https://orbital-fintrack.herokuapp.com/transactions/add";
-    const ISOdate = req.body.date;
+      "https://orbital-fintrack.herokuapp.com/transaction/add";
+    fetch(transactionsUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify(stock)
+    })
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch({
+          type: "TRANSACTIONS",
+          history: res.transaction.history
+        })
+        alert(JSON.stringify(store.getState()))
+      })
+      .catch(err => alert(err));
   }
 
   render() {
@@ -208,10 +231,15 @@ export default class AddStockForm extends Component {
           timeZoneOffsetInMinutes={undefined}
           modalTransparent={false}
           animationType={"fade"}
-          androidMode={"default"}
+          androidMode={"calendar"}
           placeHolderText="Date purchased"
           placeHolderTextStyle={{ color: "#d3d3d3" }}
-          onDateChange={setDate}
+          onDateChange={date => {
+            setDate(date);
+            if (this.state.symbol) {
+              this.getPriceByDate(this.state.symbol, date);
+            }
+          }}
           disabled={false}
         />
         <TextInput
@@ -274,6 +302,7 @@ export default class AddStockForm extends Component {
         <TextInput
           style={styles.textbox}
           placeholder="Units"
+          keyboardType="numeric"
           onChangeText={text => {
             this.setState({ units: parseFloat(text) }, () => this.updateFees());
           }}
@@ -286,6 +315,7 @@ export default class AddStockForm extends Component {
         <TextInput
           style={styles.textbox}
           placeholder={this.state.price ? this.state.price.toString() : "Price"}
+          keyboardType="numeric"
           onChangeText={text => {
             this.setState({ price: parseFloat(text) }, () => this.updateFees());
           }}
@@ -300,6 +330,7 @@ export default class AddStockForm extends Component {
               : this.state.fees.toString()
           }
           ref={input => (this.fees = input)}
+          keyboardType="numeric"
         />
         <Picker
           selectedValue={this.state.bank}
