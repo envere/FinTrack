@@ -24,7 +24,6 @@ router.post("/register", (req, res) => {
       return user.save()
     })
     .then(user => {
-      console.log(user)
       const _id = user._id
       const username = user.username
       const addTransaction = userid => {
