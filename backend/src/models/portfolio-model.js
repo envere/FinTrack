@@ -20,7 +20,6 @@ mongoose
 const SymbolSchema = new Schema({
   symbol: {
     type: String,
-    unique: true,
     required: true,
   },
   name: {
