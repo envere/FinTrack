@@ -22,9 +22,17 @@ const HistorySchema = new Schema({
     type: Date,
     required: true,
   },
-  value: {
+  totalCapital: {
     type: Number,
-    required: true,
+    default: 0,
+  },
+  totalValue: {
+    type: Number,
+    default: 0,
+  },
+  realisedProfits: {
+    type: Number,
+    default: 0,
   },
 }, { _id: false })
 

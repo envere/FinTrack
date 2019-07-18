@@ -58,6 +58,10 @@ const PortfolioSchema = new Schema({
     type: Number,
     default: 0,
   },
+  realisedProfits: {
+    type: Number,
+    default: 0,
+  },
   symbols: [SymbolSchema],
 })
 
