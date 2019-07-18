@@ -13,7 +13,7 @@ function updateUserPortfolio(userid) {
   const year = date.getFullYear()
   const portfolio = Portfolio.findOne({ userid })
   const checkHistory = PortfolioHistory.findOne({ userid, year })
-  Promise
+  return Promise
     .all([portfolio, checkHistory])
     .then(data => {
       const portfolio = data[0]
@@ -28,25 +28,21 @@ function updateUserPortfolio(userid) {
           { $push: { history: obj } }
         )
       } else {
-        const history = []
+        const history = [obj]
         const portfoliohistory = new PortfolioHistory({ userid, year, history })
-        return portfoliohistory
-          .save()
-          .then(done => PortfolioHistory.findOneAndUpdate(
-            { userid, year },
-            { $push: { history: obj } }
-          ))
+        return portfoliohistory.save()
       }
     })
     .then(updated => console.log(`${userid}'s portfolio logged`))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err + 'outer ERROR'))
 }
 
 function updateAllUsers() {
   getUserIds()
-    .then(userid => updateUserPortfolio(userid))
+    .then(userids => userids.map(userid => updateUserPortfolio(userid)))
+    .then(updates => Promise.all(updates))
+    .then(done => console.log('updated all users'))
     .catch(err => console.log(err))
 }
 
 updateAllUsers()
-// getUserIds().then(console.log).catch(console.log)
