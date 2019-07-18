@@ -17,22 +17,24 @@ function updateUserPortfolio(userid) {
     .all([portfolio, checkHistory])
     .then(data => {
       const portfolio = data[0]
+      const history = data[1]
       const totalCapital = portfolio.totalCapital
       const totalValue = portfolio.totalValue
       const realisedProfits = portfolio.realisedProfits
       const obj = { date, totalCapital, totalValue, realisedProfits }
-      if (checkHistory) {
+      if (history) {
         return PortfolioHistory.findOneAndUpdate(
           { userid, year },
-          { $push: { history, obj } }
+          { $push: { history: obj } }
         )
       } else {
-        const portfoliohistory = new PortfolioHistory({userid, year})
+        const history = []
+        const portfoliohistory = new PortfolioHistory({ userid, year, history })
         return portfoliohistory
           .save()
           .then(done => PortfolioHistory.findOneAndUpdate(
-            {userid, year},
-            {$push: {history, obj}}
+            { userid, year },
+            { $push: { history: obj } }
           ))
       }
     })
@@ -43,8 +45,8 @@ function updateUserPortfolio(userid) {
 function updateAllUsers() {
   getUserIds()
     .then(userid => updateUserPortfolio(userid))
-    .then(done => console.log(`all users updated`))
     .catch(err => console.log(err))
 }
 
 updateAllUsers()
+// getUserIds().then(console.log).catch(console.log)
