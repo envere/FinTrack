@@ -48,6 +48,13 @@ const PortfolioHistorySchema = new Schema({
   history: [HistorySchema]
 })
 
+PortfolioHistorySchema.statics.latest = function (userid) {
+  return this
+    .find({ userid })
+    .sort({ year: -1 })
+    .then(sorted => sorted.length === 0 ? null : sorted[0])
+}
+
 const PortfolioHistory = mongoose.model('PortfolioHistory', PortfolioHistorySchema)
 
 module.exports = PortfolioHistory

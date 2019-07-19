@@ -171,5 +171,40 @@ router.post('/update', (req, res) => {
     .catch(err => res.sendStatus(500))
 })
 
+router.post('/sync', (req, res) => {
+  const userid = req.body.userid
+  const req_totalCapital = req.body.totalCapital
+  const req_totalValue = req.body.totalValue
+  const req_realisedProfits = req.body.realisedProfits
+
+  Portfolio
+    .findOne({ userid })
+    .then(portfolio => {
+      if (portfolio) {
+        const totalCapital = (req_totalCapital === undefined) ? portfolio.totalCapital : req_totalCapital
+        const totalValue = (req_totalValue === undefined) ? portfolio.totalValue : req_totalValue
+        const realisedProfits = (req_realisedProfits === undefined) ? portfolio.realisedProfits : req_realisedProfits
+        Portfolio
+          .findOneAndUpdate(
+            { userid },
+            { totalCapital, totalValue, realisedProfits }
+          )
+          .then(portfolio => Portfolio.findOne({ userid }))
+          .then(portfolio => res.status(200).json({
+            message: `updated ${symbol}'s portfolio`,
+            portfolio,
+          }))
+      } else {
+        res.sendStatus(404)
+      }
+    })
+    .catch(err => res.sendStatus(500))
+})
+
+router.get('/logs', (req, res) => {
+  const size = req.query.size
+  const userid = req.query.userid
+  
+})
 
 module.exports = router

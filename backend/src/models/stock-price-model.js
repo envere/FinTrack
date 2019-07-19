@@ -46,8 +46,7 @@ StockPriceSchema.statics.latest = function (symbol) {
   return this
     .find({ symbol })
     .sort({ year: -1 })
-    .then(sorted => sorted[0])
-    .catch(err => console.log(err))
+    .then(sorted => sorted.length === 0 ? null : sorted[0])
 }
 
 StockPriceSchema.statics.range = function (symbol, start, end) {
