@@ -123,7 +123,7 @@ class LoginForm extends Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-           // this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
+            // this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
             } else {
