@@ -21,7 +21,8 @@
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
-    "rn-secure-storage": "^1.1.1"
+    "rn-secure-storage": "^1.1.1",
+    "victory": "^32.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
