@@ -100,6 +100,11 @@ export default class AddStockForm extends Component {
     }
   }
 
+  symbolExistsInPortfolio(symbol) {
+    const portfolio = store.getState().stockList;
+    return portfolio.filter(stock => stock.symbol === symbol).length !== 0;
+  }
+
   isToday(date) {
     const today = new Date();
     return (
@@ -173,18 +178,6 @@ export default class AddStockForm extends Component {
       date: this.dateConvertToIso(this.state.date),
       price: this.state.price
     };
-    const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    fetch(portfolioUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this.state.token
-      },
-      body: JSON.stringify(stock)
-    })
-      .then(res => res.json())
-      .then(res => alert(JSON.stringify(res)))
-      .catch(err => err);
 
     const transactionsUrl =
       "https://orbital-fintrack.herokuapp.com/transaction/add";
@@ -204,6 +197,27 @@ export default class AddStockForm extends Component {
         });
       })
       .catch(err => alert(err));
+
+    const portfolioUrl = this.symbolExistsInPortfolio(stock.symbol)
+      ? "https://orbital-fintrack.herokuapp.com/portfolio/update"
+      : "https://orbital-fintrack.herokuapp.com/portfolio/add";
+
+    fetch(portfolioUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify(stock)
+    })
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch({
+          type: "PORTFOLIO",
+          portfolio: res.portfolio.symbols
+        });
+      })
+      .catch(err => err);
   }
 
   render() {
@@ -369,12 +383,7 @@ export default class AddStockForm extends Component {
           title="test"
           onPress={() => {
             //do something
-            store.dispatch({
-              type: "PORTFOLIO",
-              portfolio: "testtesthi"
-            })
-            const data = store.getState().transactions;
-            alert(JSON.stringify(data));
+            alert(this.symbolExistsInPortfolio("D05.SI"));
           }}
         />
       </View>
