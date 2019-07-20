@@ -46,6 +46,26 @@ export default class AddStockForm extends Component {
     };
   }
 
+  componentDidMount() {
+    RNSecureStorage.get("accessToken").then(val =>
+      this.setState({
+        token: val
+      })
+    );
+
+    RNSecureStorage.get("refreshToken").then(val =>
+      this.setState({
+        refresh: val
+      })
+    );
+
+    RNSecureStorage.get("userid").then(val =>
+      this.setState({
+        userid: val
+      })
+    );
+  }
+
   updateFees() {
     let brokerFees = brokerageFeesList[this.state.bank];
     const minimumFees = brokerFees[3];
@@ -101,24 +121,6 @@ export default class AddStockForm extends Component {
     const backendApi =
       "https://orbital-fintrack.herokuapp.com/stock/daily/price";
 
-    RNSecureStorage.get("accessToken").then(val =>
-      this.setState({
-        token: val
-      })
-    );
-
-    RNSecureStorage.get("refreshToken").then(val =>
-      this.setState({
-        refresh: val
-      })
-    );
-
-    RNSecureStorage.get("userid").then(val =>
-      this.setState({
-        userid: val
-      })
-    );
-    
     const data = {
       date: this.dateConvertToIso(date),
       symbol: symbol
@@ -199,8 +201,8 @@ export default class AddStockForm extends Component {
         store.dispatch({
           type: "TRANSACTIONS",
           history: res.transaction.history
-        })
-        alert(JSON.stringify(store.getState()))
+        });
+        alert(JSON.stringify(store.getState()));
       })
       .catch(err => alert(err));
   }
