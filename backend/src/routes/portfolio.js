@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/get', (req, res) => {
-  const userid = req.body.userid
+  const userid = req.query.userid
   Portfolio
     .findOne({ userid })
     .then(portfolio => {
