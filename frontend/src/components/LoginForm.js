@@ -21,6 +21,83 @@ class LoginForm extends Component {
     };
   }
 
+  login() {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Origin": "*"
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password
+      })
+    })
+      .then(res => {
+        const status = JSON.parse(res.status);
+        if (status === 200) {
+          alert("Login successful!");
+          this.props.navigation.navigate("Home");
+          return res.json();
+        }
+        throw Error(status);
+      })
+      .then(res => {
+        RNSecureStorage.set("accessToken", res.accesstoken, {
+          accessible: ACCESSIBLE.WHEN_UNLOCKED
+        }).then(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        RNSecureStorage.set("refreshToken", res.refreshtoken, {
+          accessible: ACCESSIBLE.WHEN_UNLOCKED
+        }).then(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        RNSecureStorage.set("userid", res.user._id, {
+          accessible: ACCESSIBLE.WHEN_UNLOCKED
+        }).then(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        RNSecureStorage.set("username", res.user.username, {
+          accessible: ACCESSIBLE.WHEN_UNLOCKED
+        }).then(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      })
+      .catch(err => {
+        this.setState({
+          text: "Login"
+        });
+        if (err.message === "403") {
+          alert("Incorrect password");
+        } else if (err.message === "404") {
+          alert("User not found. Please create an account.");
+        } else {
+          alert(err);
+        }
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -46,88 +123,12 @@ class LoginForm extends Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            //this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
-            this.setState({
-              username: this.state.username
-            });
+           // this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
             if (this.state.username === "" || this.state.password === "") {
               alert("Please enter your credentials");
             } else {
               this.setState({ text: "Logging in..." });
-              fetch(url, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Origin": "*"
-                },
-                body: JSON.stringify({
-                  username: this.state.username,
-                  password: this.state.password
-                })
-              })
-                .then(res => {
-                  const status = JSON.parse(res.status);
-                  if (status === 200) {
-                    alert("Login successful!");
-                    this.props.navigation.navigate("Home");
-                    return res.json();
-                  }
-                  throw Error(status);
-                })
-                .then(res => {
-                  RNSecureStorage.set("accessToken", res.accesstoken, {
-                    accessible: ACCESSIBLE.WHEN_UNLOCKED
-                  }).then(
-                    res => {
-                      console.log(res);
-                    },
-                    err => {
-                      console.log(err);
-                    }
-                  );
-                  RNSecureStorage.set("refreshToken", res.refreshtoken, {
-                    accessible: ACCESSIBLE.WHEN_UNLOCKED
-                  }).then(
-                    res => {
-                      console.log(res);
-                    },
-                    err => {
-                      console.log(err);
-                    }
-                  );
-                  RNSecureStorage.set("userid", res.user._id, {
-                    accessible: ACCESSIBLE.WHEN_UNLOCKED
-                  }).then(
-                    res => {
-                      console.log(res);
-                    },
-                    err => {
-                      console.log(err);
-                    }
-                  );
-                  RNSecureStorage.set("username", res.user.username, {
-                    accessible: ACCESSIBLE.WHEN_UNLOCKED
-                  }).then(
-                    res => {
-                      console.log(res);
-                    },
-                    err => {
-                      console.log(err);
-                    }
-                  );
-                })
-                .catch(err => {
-                  this.setState({
-                    text: "Login"
-                  });
-                  if (err.message === "403") {
-                    alert("Incorrect password");
-                  } else if (err.message === "404") {
-                    alert("User not found. Please create an account.");
-                  } else {
-                    alert(err.message);
-                  }
-                });
+              this.login();
             }
           }}
         >
