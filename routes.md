@@ -400,7 +400,7 @@ res = {
   }
 }
 ```
-##### POST /portfolio/sync
+##### POST /portfolio/save
 This route updates totalCapital, totalValue, realisedProfits of a user's portfolio
 ```
 req.body = {

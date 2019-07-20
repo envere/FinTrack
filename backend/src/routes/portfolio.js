@@ -171,7 +171,7 @@ router.post('/update', (req, res) => {
     .catch(err => res.sendStatus(500))
 })
 
-router.post('/sync', (req, res) => {
+router.post('/save', (req, res) => {
   const userid = req.body.userid
   const req_totalCapital = req.body.totalCapital
   const req_totalValue = req.body.totalValue
