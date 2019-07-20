@@ -29,7 +29,7 @@ Therefore just store _id as it is, and use it in requests when needed, if error,
 - Portfolio
 - PortfolioHistory
 - Transaction
-
+```
 User = {
   username: String,
   email: String,
@@ -78,6 +78,7 @@ Transaction = {
   userid: String,
   history = [{category: String, date: Date, symbol: String, units: Number, price: Number, tradeValue: Number}]
 }
+```
 
 ## Categories
 - auth
