@@ -247,6 +247,22 @@ res = {
 }
 ```
 
+##### GET /stock/daily/latestprice
+This route gets the latest price in database
+```
+req.query = {
+  symbol = String
+}
+
+res = {
+  message: String,
+  latest: {
+    date: Date,
+    price: Number,
+  }
+}
+```
+
 ##### POST /stock/daily/price
 This route gets stock price by date.
 ```
@@ -443,6 +459,99 @@ res = {
     totalValue: Number,
     realisedProfits: Number,
   }]
+}
+```
+
+##### POST /portfolio/symbol/units/:action
+This route adds/subtracts number of units in portfolio symbol object
+```
+req.params = {
+  :action: "add" OR "sub"
+}
+
+req.body = {
+  userid = String,
+  symbol = String,
+  units = Number,
+}
+
+res = {
+  message: String,
+  portfolio: {
+    userid: String,
+    totalCapital: Number,
+    totalValue: Number,
+    symbols: [{
+      symbol: String,
+      name: String,
+      units: Number.
+      investedCapital: Number,
+      dividends: Number,
+      currentValue: Number,
+    }]
+  }
+}
+```
+
+##### POST /portfolio/investedCapital/:action
+This route updates investedCapital of a symbol obj
+```
+req.params = {
+  :action: "add" OR "sub"
+}
+
+req.body = {
+  userid = String,
+  symbol = String,
+  investedCapital = Number
+}
+
+res = {
+  message: String,
+  portfolio: {
+    userid: String,
+    totalCapital: Number,
+    totalValue: Number,
+    symbols: [{
+      symbol: String,
+      name: String,
+      units: Number.
+      investedCapital: Number,
+      dividends: Number,
+      currentValue: Number,
+    }]
+  }
+}
+```
+
+##### POST /portfolio/dividends/:action
+This route updates dividends in symbol object
+```
+req.params = {
+  :action: 'add' OR 'sub'
+}
+
+req.body = {
+  userid: String,
+  symbol: String,
+  dividends: Number,
+}
+
+res = {
+  message: String,
+  portfolio: {
+    userid: String,
+    totalCapital: Number,
+    totalValue: Number,
+    symbols: [{
+      symbol: String,
+      name: String,
+      units: Number.
+      investedCapital: Number,
+      dividends: Number,
+      currentValue: Number,
+    }]
+  }
 }
 ```
 

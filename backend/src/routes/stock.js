@@ -22,6 +22,25 @@ router.get('/intraday/latestprice', (req, res) => {
     .catch(err => res.sendStatus(500))
 })
 
+router.get('/daily/latestprice', (req, res) => {
+  const symbol = req.query.symbol
+  StockPrice
+    .latest(symbol)
+    .then(stock => {
+      if (stock) {
+        const days = stock.days
+        const latest = days.reduce((prev, next) => next.date > prev.date ? next : prev, { date: 0 })
+        res.status(200).json({
+          message: `getting latest stock price`,
+          latest,
+        })
+      } else {
+        res.sendStatus(404)
+      }
+    })
+    .catch(err => res.sendStatus(500))
+})
+
 router.post('/daily/price', (req, res) => {
   const symbol = req.body.symbol
   const ISOdate = req.body.date
