@@ -1,4 +1,7 @@
 const User = require('../models/user-model')
+const Transaction = require('../models/transaction-model')
+const Portfolio = require('../models/portfolio-model')
+const PortfolioHistory = require('../models/portfolio-history-model')
 const Blacklist = require('../models/blacklist-model')
 const bcrypt = require('../util/bcrypt')
 const jwt = require('../util/jwt')
@@ -18,17 +21,20 @@ router.post('/deleteaccount', (req, res) => {
           .checkPassword(supplied_password, user.password)
           .then(isValid => {
             if (isValid) {
-              User
-                .findByIdAndDelete(_id)
-                .then(user => {
+              const userid = _id
+              const user = User.findByIdAndDelete(_id)
+              const transaction = Transaction.findOneAndDelete({ userid })
+              const portfolio = Portfolio.findOneAndDelete({ userid })
+              const portfoliohistory = PortfolioHistory.deleteMany({ userid })
+              Promise
+                .all([user, transaction, portfolio, portfoliohistory])
+                .then(done => {
+                  const user = done[0]
                   const _id = user._id
                   const username = user.username
                   res.status(200).json({
                     message: `removed ${user.username} from database`,
-                    user: {
-                      _id,
-                      username,
-                    },
+                    user: { _id, username },
                   })
                 })
             } else {
