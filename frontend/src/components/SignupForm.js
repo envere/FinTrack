@@ -7,6 +7,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
+import { updateExpression } from "@babel/types";
 
 const url = "https://orbital-fintrack.herokuapp.com/auth/register";
 
@@ -22,7 +23,8 @@ class SignupForm extends Component {
       username: "",
       email: "",
       password: "",
-      password2: ""
+      password2: "",
+      text: "Sign up!"
     };
   }
   render() {
@@ -44,7 +46,7 @@ class SignupForm extends Component {
           placeholderTextColor="#ffffff"
           selectionColor="#fff"
           keyboardType="email-address"
-          ref={input => (this.email= input)}
+          ref={input => (this.email = input)}
           onChangeText={text => this.setState({ email: text })}
           onSubmitEditing={() => this.password.focus()}
         />
@@ -76,6 +78,7 @@ class SignupForm extends Component {
             } else if (!pwCheck) {
               alert("Please ensure that your 2nd password is the same.");
             } else {
+              this.setState({ text: "Signing up..." });
               fetch(url, {
                 method: "POST",
                 headers: {
@@ -87,18 +90,22 @@ class SignupForm extends Component {
                   email: this.state.email,
                   password: this.state.password
                 })
-              }).then(res => {
-                if (JSON.parse(res.status) === 201) {
-                  alert("Sign up successful!");
-                  this.props.navigation.navigate("Login");
-                } else {
-                  alert("Error: Username/email is in use");
-                }
-              });
+              })
+                .then(res => {
+                  if (res.status === 201) {
+                    alert("Sign up successful!");
+                    return this.props.navigation.navigate("Login");
+                  }
+                  throw res.status;
+                })
+                .catch(err => {
+                  this.setState({ text: "Sign up!" });
+                  alert("Error: Username/email is already in use.");
+                });
             }
           }}
         >
-          <Text style={styles.buttonText}>{this.props.type}</Text>
+          <Text style={styles.buttonText}>{this.state.text}</Text>
         </TouchableOpacity>
       </View>
     );

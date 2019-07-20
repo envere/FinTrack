@@ -12,6 +12,21 @@ export default class TransactionsScreen extends Component {
       stockData: store.getState().transactions
     };
   }
+
+  componentDidMount() {
+    store.subscribe(() =>
+      this.setState({
+        stockData: store.getState().transactions
+      })
+    );
+  }
+
+  replace(category) {
+    if (category === "ADD") {
+      return "BUY";
+    }
+    return category;
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -39,10 +54,12 @@ export default class TransactionsScreen extends Component {
                 marginHorizontal: "10%"
               }}
             >
-              <Text>{item.symbol}</Text>
+              <Text>
+                {this.replace(item.category)}: {item.symbol}
+              </Text>
               <View>
-                <Text>${item.price}</Text>
-                <Text>{`${item.date.getDate()}/${item.date.getMonth()}/${item.date.getFullYear()}`}</Text>
+                <Text>${item.tradeValue}</Text>
+                <Text>{item.date}</Text>
               </View>
             </View>
           )}
@@ -50,12 +67,9 @@ export default class TransactionsScreen extends Component {
         />
         <Button
           title="Refresh"
-          onPress={
-            () =>
-              // this refreshes by getting the updated redux state (if any)
-              this.setState({ stockData: store.getState().transactions })
-
-            // we also need to fetch the latest price api through this button
+          onPress={() =>
+            // this refreshes by getting the updated redux state (if any)
+            this.setState({ stockData: store.getState().transactions })
           }
         />
         <BottomTab />

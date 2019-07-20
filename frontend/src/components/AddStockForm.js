@@ -12,7 +12,6 @@ import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
-import { nullLiteral } from "@babel/types";
 
 /**
  * array indices:
@@ -44,6 +43,26 @@ export default class AddStockForm extends Component {
       refresh: null,
       userid: null
     };
+  }
+
+  componentDidMount() {
+    RNSecureStorage.get("accessToken").then(val =>
+      this.setState({
+        token: val
+      })
+    );
+
+    RNSecureStorage.get("refreshToken").then(val =>
+      this.setState({
+        refresh: val
+      })
+    );
+
+    RNSecureStorage.get("userid").then(val =>
+      this.setState({
+        userid: val
+      })
+    );
   }
 
   updateFees() {
@@ -80,6 +99,11 @@ export default class AddStockForm extends Component {
     }
   }
 
+  symbolExistsInPortfolio(symbol) {
+    const portfolio = store.getState().stockList;
+    return portfolio.filter(stock => stock.symbol === symbol).length !== 0;
+  }
+
   isToday(date) {
     const today = new Date();
     return (
@@ -101,24 +125,6 @@ export default class AddStockForm extends Component {
     const backendApi =
       "https://orbital-fintrack.herokuapp.com/stock/daily/price";
 
-    RNSecureStorage.get("accessToken").then(val =>
-      this.setState({
-        token: val
-      })
-    );
-
-    RNSecureStorage.get("refreshToken").then(val =>
-      this.setState({
-        refresh: val
-      })
-    );
-
-    RNSecureStorage.get("userid").then(val =>
-      this.setState({
-        userid: val
-      })
-    );
-    
     const data = {
       date: this.dateConvertToIso(date),
       symbol: symbol
@@ -171,19 +177,7 @@ export default class AddStockForm extends Component {
       date: this.dateConvertToIso(this.state.date),
       price: this.state.price
     };
-    const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    /*fetch(portfolioUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this.state.token
-      },
-      body: JSON.stringify(stock)
-    })
-      .then(res => res.json())
-      .then(res => res)
-      .catch(err => err);
-*/
+
     const transactionsUrl =
       "https://orbital-fintrack.herokuapp.com/transaction/add";
     fetch(transactionsUrl, {
@@ -199,10 +193,30 @@ export default class AddStockForm extends Component {
         store.dispatch({
           type: "TRANSACTIONS",
           history: res.transaction.history
-        })
-        alert(JSON.stringify(store.getState()))
+        });
       })
       .catch(err => alert(err));
+
+    const portfolioUrl = this.symbolExistsInPortfolio(stock.symbol)
+      ? "https://orbital-fintrack.herokuapp.com/portfolio/update"
+      : "https://orbital-fintrack.herokuapp.com/portfolio/add";
+
+    fetch(portfolioUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify(stock)
+    })
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch({
+          type: "PORTFOLIO",
+          portfolio: res.portfolio.symbols
+        });
+      })
+      .catch(err => err);
   }
 
   render() {
@@ -368,7 +382,7 @@ export default class AddStockForm extends Component {
           title="test"
           onPress={() => {
             //do something
-            alert("hi");
+            alert(this.symbolExistsInPortfolio("D05.SI"));
           }}
         />
       </View>

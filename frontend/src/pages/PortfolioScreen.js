@@ -12,6 +12,15 @@ export default class PortfolioScreen extends Component {
       stockData: store.getState().stockList
     };
   }
+
+  componentDidMount() {
+    store.subscribe(() =>
+      this.setState({
+        stockData: store.getState().stockList
+      })
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -40,16 +49,9 @@ export default class PortfolioScreen extends Component {
               }}
             >
               <View>
-                <Text>{item.symbol}</Text>
-                <Text>{item.name}</Text>
+                <Text>{JSON.stringify(item)}</Text>
               </View>
-              <View>
-                <Text>{`${(
-                  ((item.currPrice - item.startPrice) / item.startPrice) *
-                  100
-                ).toFixed(2)}%`}</Text>
-                <Text>{`$${item.currPrice - item.startPrice}`}</Text>
-              </View>
+              <View />
             </View>
           )}
           keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs

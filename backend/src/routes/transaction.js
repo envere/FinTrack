@@ -2,8 +2,8 @@ const Transaction = require('../models/transaction-model')
 const express = require('express')
 const router = express.Router()
 
-router.get('/get', (req, res) => {
-  const userid = req.body.userid
+router.get('/get/:userid', (req, res) => {
+  const userid = req.params.userid
   Transaction
     .findOne({ userid })
     .then(transaction => {
