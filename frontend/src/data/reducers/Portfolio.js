@@ -7,13 +7,21 @@ const portfolio = (state = initialState, action) => {
     case "TRANSACTIONS":
       return {
         ...state,
-        transactions: action.history
+        transactions: action.history.sort((stock1, stock2) => {
+          if (stock2.date > stock1.date) {
+            return 1;
+          } else if (stock2.date < stock1.date) {
+            return -1;
+          } else {
+            return 0;
+          }
+        })
       };
     case "PORTFOLIO":
       return {
         ...state,
         stockList: action.portfolio
-      }
+      };
     default:
       return state;
   }
