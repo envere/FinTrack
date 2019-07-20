@@ -204,7 +204,19 @@ router.post('/sync', (req, res) => {
 router.get('/logs', (req, res) => {
   const size = req.query.size
   const userid = req.query.userid
-  
+  PortfolioHistory
+    .find({ userid })
+    .sort({ year: -1 })
+    .then(portfolios => {
+      const logs = []
+      portfolios.forEach(portfolio => portfolio.history.reduceRight((prev, next) => logs.push(next), null))
+      logs.splice(size)
+      res.status(200).json({
+        message: `getting ${userid}'s logs, size: ${logs.length}`,
+        logs,
+      })
+    })
+    .catch(err => res.sendStatus(500))
 })
 
 module.exports = router

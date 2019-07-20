@@ -339,6 +339,51 @@ res = {
   }
 }
 ```
+##### POST /portfolio/sync
+This route updates totalCapital, totalValue, realisedProfits of a user's portfolio
+```
+req.body = {
+  userid: String,
+  totalCapital: Number,
+  totalValue: Number,
+  realisedProfits: Number,
+}
+
+res = {
+  message: String,
+  portfolio: {
+    userid: String,
+    totalCapital: Number,
+    totalValue: Number,
+    symbols: [{
+      symbol: String,
+      name: String,
+      units: Number.
+      investedCapital: Number,
+      dividends: Number,
+      currentValue: Number,
+    }]
+  }
+}
+```
+##### GET /portfolio/logs
+This route gets you the history of portfolio stats, totalCapital, totalValue, realisedProfits
+```
+req.query = {
+  userid: String,
+  size: Number,       // number of data points
+}
+
+res = {
+  message: String,
+  logs: [{
+    date: Date,
+    totalCapital: Number,
+    totalValue: Number,
+    realisedProfits: Number,
+  }]
+}
+```
 
 ### Transaction
 - /transaction/get
