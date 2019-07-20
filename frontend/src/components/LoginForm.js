@@ -15,10 +15,75 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
-      text: "Login"
+      username: null,
+      password: null,
+      text: "Login",
+      token: null
     };
+  }
+
+  saveTokens(res) {
+    this.setState({ token: res.accesstoken });
+    RNSecureStorage.set("accessToken", res.accesstoken, {
+      accessible: ACCESSIBLE.WHEN_UNLOCKED
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    RNSecureStorage.set("refreshToken", res.refreshtoken, {
+      accessible: ACCESSIBLE.WHEN_UNLOCKED
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    RNSecureStorage.set("userid", res.user._id, {
+      accessible: ACCESSIBLE.WHEN_UNLOCKED
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    RNSecureStorage.set("username", res.user.username, {
+      accessible: ACCESSIBLE.WHEN_UNLOCKED
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  getUserData(res) {
+    const portfolioUrl = "";
+    const transactionsUrl =
+      "https://orbital-fintrack.herokuapp.com/transactions/get";
+    fetch(transactionsUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      },
+      body: JSON.stringify({
+        userid: res.user._id
+      })
+    })
+      .then(response => {
+        alert(response);
+      })
+      .catch(err => alert(err));
   }
 
   login() {
@@ -37,52 +102,14 @@ class LoginForm extends Component {
         const status = JSON.parse(res.status);
         if (status === 200) {
           alert("Login successful!");
-          this.props.navigation.navigate("Home");
+          //this.props.navigation.navigate("Home");
           return res.json();
         }
         throw Error(status);
       })
       .then(res => {
-        RNSecureStorage.set("accessToken", res.accesstoken, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED
-        }).then(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
-        RNSecureStorage.set("refreshToken", res.refreshtoken, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED
-        }).then(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
-        RNSecureStorage.set("userid", res.user._id, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED
-        }).then(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
-        RNSecureStorage.set("username", res.user.username, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED
-        }).then(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
+        this.saveTokens(res);
+        this.getUserData(res);
       })
       .catch(err => {
         this.setState({
@@ -124,12 +151,12 @@ class LoginForm extends Component {
           style={styles.button}
           onPress={() => {
             // this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
-            if (this.state.username === "" || this.state.password === "") {
-              alert("Please enter your credentials");
-            } else {
+            if (this.state.username || this.state.password) {
               this.setState({ text: "Logging in..." });
               this.login();
+              return;
             }
+            return alert("Please enter your credentials");
           }}
         >
           <Text style={styles.buttonText}>{this.state.text}</Text>
