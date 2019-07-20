@@ -19,6 +19,66 @@ Therefore just store _id as it is, and use it in requests when needed, if error,
 - 404 => resource not found   [whatever you are searching for doesnt exist in the server]
 - 500 => server side error    [server bug, LMK so i can fix, should not happen unless hosting issue]
 
+
+## Schemas
+- User
+- SymbolName
+- StockPrice
+- DividendPrice
+- Blacklist
+- Portfolio
+- PortfolioHistory
+- Transaction
+
+User = {
+  username: String,
+  email: String,
+  password: String,
+}
+
+SymbolName = {
+  symbol: String,
+}
+
+StockPrice = {
+  symbol: String,
+  year: Number,
+  days: [{price: Number, date: Date}]
+  months: [{price: Number, date: Date}]
+}
+
+DividendPrice = {
+  symbol: String,
+  year: Number,
+  days: [{dividend: Number, date: Date}]
+  months: [{dividend: Nymber, date: Date}]
+}
+
+Blacklist = {
+  userid: String,
+  token: String,
+  expireAt: Date,
+}
+
+Portfolio = {
+  userid: String,
+  totalCapital: Number,
+  totalValue: Number,
+  realisedProfits: Number,
+  symbols: [{symbol: String, name: String, units: Number, investedCapital: Number, dividends: Number, currentValue: Number}]
+}
+
+PortfolioHistory = {
+  userid: String,
+  year: Number,
+  history: [{date: Date, totalCapital: Number, totalValue: Number, realisedProfits: Number}]
+}
+
+Transaction = {
+  userid: String,
+  history = [{category: String, date: Date, symbol: String, units: Number, price: Number, tradeValue: Number}]
+}
+
 ## Categories
 - auth
 - account
