@@ -174,7 +174,7 @@ export default class AddStockForm extends Component {
       price: this.state.price
     };
     const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
-    /*fetch(portfolioUrl, {
+    fetch(portfolioUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -183,9 +183,9 @@ export default class AddStockForm extends Component {
       body: JSON.stringify(stock)
     })
       .then(res => res.json())
-      .then(res => res)
+      .then(res => alert(JSON.stringify(res)))
       .catch(err => err);
-*/
+
     const transactionsUrl =
       "https://orbital-fintrack.herokuapp.com/transaction/add";
     fetch(transactionsUrl, {
@@ -202,7 +202,6 @@ export default class AddStockForm extends Component {
           type: "TRANSACTIONS",
           history: res.transaction.history
         });
-        alert(JSON.stringify(store.getState()));
       })
       .catch(err => alert(err));
   }
@@ -370,6 +369,10 @@ export default class AddStockForm extends Component {
           title="test"
           onPress={() => {
             //do something
+            store.dispatch({
+              type: "PORTFOLIO",
+              portfolio: "testtesthi"
+            })
             const data = store.getState().transactions;
             alert(JSON.stringify(data));
           }}
