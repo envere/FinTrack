@@ -87,7 +87,24 @@ class LoginForm extends Component {
       })
       .catch(err => alert(err));
 
-    const portfolioUrl = "";
+    const portfolioUrl =
+      "https://orbital-fintrack.herokuapp.com/portfolio/get/?userid=" +
+      res.user._id;
+    fetch(portfolioUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch({
+          type: "PORTFOLIO",
+          portfolio: res.portfolio.symbols
+        });
+      })
+      .catch(err => alert(err));
   }
 
   login() {

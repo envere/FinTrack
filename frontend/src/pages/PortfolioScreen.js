@@ -49,7 +49,7 @@ export default class PortfolioScreen extends Component {
               }}
             >
               <View>
-                <Text>{item}</Text>
+                <Text>{JSON.stringify(item)}</Text>
               </View>
               <View />
             </View>
