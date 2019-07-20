@@ -106,7 +106,6 @@ class LoginForm extends Component {
         const status = JSON.parse(res.status);
         if (status === 200) {
           alert("Login successful!");
-          //this.props.navigation.navigate("Home");
           return res.json();
         }
         throw Error(status);
@@ -114,6 +113,7 @@ class LoginForm extends Component {
       .then(res => {
         this.saveTokens(res);
         this.getUserData(res);
+        this.props.navigation.navigate("Home");
       })
       .catch(err => {
         this.setState({
