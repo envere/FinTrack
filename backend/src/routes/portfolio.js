@@ -219,4 +219,33 @@ router.get('/logs', (req, res) => {
     .catch(err => res.sendStatus(500))
 })
 
+router.post('symbol/units/:action', (req, res) => {
+  const userid = req.body.userid
+  const symbol = req.body.symbol
+  const action = req.params.action
+  const units = req.body.action
+  Portfolio
+    .findOne({ userid })
+    .then(portfolio => {
+      const symbols = portfolio.symbols
+      const obj = symbols.find(x => x.symbol === symbol)
+      if (obj) {
+        if (action === 'add') obj.units += units
+        else if (action === 'sub') obj.units -= units
+        else res.sendStatus(400)
+        Portfolio
+          .findOneAndUpdate({ userid }, symbols)
+          .then(done => Portfolio.findOne({ userid }))
+          .then(portfolio => res.status(200).json({
+            message: `updated units`,
+            portfolio,
+          }))
+          .catch(err => res.sendStatus(500))
+      } else {
+        res.sendStatus(404)
+      }
+    })
+    .catch(err => res.sendStatus(500))
+})
+
 module.exports = router

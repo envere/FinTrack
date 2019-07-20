@@ -446,6 +446,37 @@ res = {
 }
 ```
 
+##### POST /portfolio/symbol/units/:action
+This route adds/subtracts number of units in portfolio symbol object
+```
+req.params = {
+  :action: "add" OR "sub"
+}
+
+req.body = {
+  userid = String,
+  symbol = String,
+  units = Number,
+}
+
+res = {
+  message: String,
+  portfolio: {
+    userid: String,
+    totalCapital: Number,
+    totalValue: Number,
+    symbols: [{
+      symbol: String,
+      name: String,
+      units: Number.
+      investedCapital: Number,
+      dividends: Number,
+      currentValue: Number,
+    }]
+  }
+}
+```
+
 ### Transaction
 - /transaction/get
 - /transaction/add
