@@ -370,7 +370,8 @@ export default class AddStockForm extends Component {
           title="test"
           onPress={() => {
             //do something
-            alert("hi");
+            const data = store.getState().transactions;
+            alert(JSON.stringify(data));
           }}
         />
       </View>

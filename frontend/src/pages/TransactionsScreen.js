@@ -41,8 +41,8 @@ export default class TransactionsScreen extends Component {
             >
               <Text>{item.symbol}</Text>
               <View>
-                <Text>${item.price}</Text>
-                <Text>{`${item.date.getDate()}/${item.date.getMonth()}/${item.date.getFullYear()}`}</Text>
+                <Text>${item.tradeValue}</Text>
+                <Text>{item.date}</Text>
               </View>
             </View>
           )}
