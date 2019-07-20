@@ -20,6 +20,7 @@ app.use('/user', authenticate_access_JWT(), require('./routes/user'))
 app.use('/stock', authenticate_access_JWT(), require('./routes/stock'))
 app.use('/dividend', authenticate_access_JWT(), require('./routes/dividend'))
 app.use('/transaction', authenticate_access_JWT(), require('./routes/transaction'))
+app.use('/portfolio', authenticate_access_JWT(), require('./routes/portfolio'))
 
 app.use((req, res, next) => {
   res.status(404).send('error 404, Resource Not Found')
