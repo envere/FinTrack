@@ -230,17 +230,84 @@ router.post('symbol/units/:action', (req, res) => {
       const symbols = portfolio.symbols
       const obj = symbols.find(x => x.symbol === symbol)
       if (obj) {
-        if (action === 'add') obj.units += units
-        else if (action === 'sub') obj.units -= units
-        else res.sendStatus(400)
-        Portfolio
-          .findOneAndUpdate({ userid }, symbols)
-          .then(done => Portfolio.findOne({ userid }))
-          .then(portfolio => res.status(200).json({
-            message: `updated units`,
-            portfolio,
-          }))
-          .catch(err => res.sendStatus(500))
+        if (action !== 'add' || action !== 'sub') {
+          res.sendStatus(404)
+        } else {
+          if (action === 'add') obj.units += units
+          if (action === 'sub') obj.units -= units
+          Portfolio
+            .findOneAndUpdate({ userid }, symbols)
+            .then(done => Portfolio.findOne({ userid }))
+            .then(portfolio => res.status(200).json({
+              message: `updated units`,
+              portfolio,
+            }))
+            .catch(err => res.sendStatus(500))
+        }
+      } else {
+        res.sendStatus(404)
+      }
+    })
+    .catch(err => res.sendStatus(500))
+})
+
+router.post('symbol/investedCapital/:action', (req, res) => {
+  const userid = req.body.userid
+  const symbol = req.body.symbol
+  const action = req.params.action
+  const investedCapital = req.body.investedCapital
+  Portfolio
+    .findOne({ userid })
+    .then(portfolio => {
+      const symbols = portfolio.symbols
+      const obj = symbols.find(x => x.symbol === symbol)
+      if (obj) {
+        if (action !== 'add' || action !== 'sub') {
+          res.sendStatus(404)
+        } else {
+          if (action === 'add') obj.investedCapital += investedCapital
+          if (action === 'sub') obj.investedCapital -= investedCapital
+          Portfolio
+            .findOneAndUpdate({ userid }, symbols)
+            .then(done => Portfolio.findOne({ userid }))
+            .then(portfolio => res.status(200).json({
+              message: `updated investedCapital`,
+              portfolio,
+            }))
+            .catch(err => res.sendStatus(500))
+        }
+      } else {
+        res.sendStatus(404)
+      }
+    })
+    .catch(err => res.sendStatus(500))
+})
+
+router.post('/symbol/dividend/:action', (req, res) => {
+  const userid = req.body.userid
+  const symbol = req.body.symbol
+  const action = req.params.action
+  const dividends = req.body.dividend
+  Portfolio
+    .findOne({ userid })
+    .then(portfolio => {
+      const symbols = portfolio.symbols
+      const obj = symbols.find(x => x.symbol === symbol)
+      if (obj) {
+        if (action !== 'add' || action !== 'sub') {
+          res.sendStatus(400)
+        } else {
+          if (action === 'add') obj.dividends += dividends
+          if (action === 'sub') obj.dividends -= dividends
+          Portfolio
+            .findOneAndUpdate({ userid }, symbols)
+            .then(done => Portfolio.findOne({ userid }))
+            .then(portfolio => res.status(200).json({
+              message: `updated dividends`,
+              portfolio,
+            }))
+            .catch(err => res.sendStatus(500))
+        }
       } else {
         res.sendStatus(404)
       }
