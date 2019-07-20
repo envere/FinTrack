@@ -9,6 +9,8 @@ import {
 import { withNavigation } from "react-navigation";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
+import store from "../data/PortfolioStore";
+
 const url = "https://orbital-fintrack.herokuapp.com/auth/login";
 
 class LoginForm extends Component {
@@ -67,23 +69,25 @@ class LoginForm extends Component {
   }
 
   getUserData(res) {
-    const portfolioUrl = "";
     const transactionsUrl =
-      "https://orbital-fintrack.herokuapp.com/transactions/get";
+      "https://orbital-fintrack.herokuapp.com/transaction/get/" + res.user._id;
     fetch(transactionsUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.state.token
-      },
-      body: JSON.stringify({
-        userid: res.user._id
-      })
+      }
     })
-      .then(response => {
-        alert(response);
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch({
+          type: "TRANSACTIONS",
+          history: res.transaction.history
+        });
       })
       .catch(err => alert(err));
+
+    const portfolioUrl = "";
   }
 
   login() {
