@@ -12,7 +12,6 @@ import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
-import { nullLiteral } from "@babel/types";
 
 /**
  * array indices:
