@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, FlatList } from "react-native";
-import { ListItem, Left, Right } from "native-base";
+import { ListItem, Left, Right, Container } from "native-base";
 
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
@@ -38,7 +38,7 @@ export default class TransactionsScreen extends Component {
   }
   render() {
     return (
-      <View style={styles.container}>
+      <Container>
         <PageHeader text="Transactions" navigation={this.props.navigation} />
         <View style={styles.headerView}>
           <Text style={styles.header}>Stock</Text>
@@ -75,14 +75,13 @@ export default class TransactionsScreen extends Component {
           }}
         />
         <BottomTab />
-      </View>
+        </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
     justifyContent: "space-between",
     backgroundColor: "#F5FCFF"
   },
@@ -97,6 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 22
   },
   list: {
-    height: "76.7%", // not too sure how to constrain layout so it's hardcoded
+    height: "73.5%", // not too sure how to constrain layout so it's hardcoded 73.5
   }
 });
