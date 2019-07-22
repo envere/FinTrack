@@ -45,28 +45,27 @@ export default class TransactionsScreen extends Component {
           <Text style={styles.header}>Date/Price</Text>
         </View>
         <View style={styles.list}>
-        <FlatList
-          data={this.state.stockData}
-          renderItem={({ item }) => (
-            <ListItem>
-              <Left>
-                <View>
-                <Text>
-                  {this.replace(item.category)}: {item.symbol} (${item.price.toFixed(2)})
-                </Text>
-                <Text>
-                  Units: {item.units}
-                </Text>
-                </View>
-              </Left>
-              <Right>
-                <Text>${item.tradeValue.toFixed(2)}</Text>
-                <Text>{this.formatStringDate(item.date)}</Text>
-              </Right>
-            </ListItem>
-          )}
-          keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
-        />
+          <FlatList
+            data={this.state.stockData}
+            renderItem={({ item }) => (
+              <ListItem>
+                <Left>
+                  <View>
+                    <Text>
+                      {this.replace(item.category)}: {item.symbol} ($
+                      {item.price.toFixed(2)})
+                    </Text>
+                    <Text>Units: {item.units}</Text>
+                  </View>
+                </Left>
+                <Right>
+                  <Text>${item.tradeValue.toFixed(2)}</Text>
+                  <Text>{this.formatStringDate(item.date)}</Text>
+                </Right>
+              </ListItem>
+            )}
+            keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
+          />
         </View>
         <Button
           title="Refresh"
@@ -75,7 +74,7 @@ export default class TransactionsScreen extends Component {
           }}
         />
         <BottomTab />
-        </Container>
+      </Container>
     );
   }
 }
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "80%",
-    marginHorizontal: "10%",
+    marginHorizontal: "10%"
   },
   header: {
     fontWeight: "bold",
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
   list: {
     marginHorizontal: "5%",
-    width:"90%",
-    height: "73.5%", // not too sure how to constrain layout so it's hardcoded 73.5
+    width: "90%",
+    height: "73.5%" // not too sure how to constrain layout so it's hardcoded 73.5
   }
 });
