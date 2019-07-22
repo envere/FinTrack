@@ -42,9 +42,13 @@ export default class PortfolioScreen extends Component {
         title: `${stock.symbol} (${this.calculatePercentage(stock)})\n${
           stock.name
         }`,
-        content: `Units: ${stock.units}\nCapital Invested: $${
-          stock.investedCapital.toFixed(2)
-        }\nCurrent Value: $${stock.currentValue.toFixed(2)}\nAverage Buying Price: $${(
+        content: `Units: ${
+          stock.units
+        }\nCapital Invested: $${stock.investedCapital.toFixed(
+          2
+        )}\nCurrent Value: $${stock.currentValue.toFixed(
+          2
+        )}\nAverage Buying Price: $${(
           stock.investedCapital / stock.units
         ).toFixed(4)}`
       };
@@ -65,7 +69,7 @@ export default class PortfolioScreen extends Component {
           <Text style={styles.header}>Profit/Loss</Text>
         </View>
         <View style={styles.list}>
-        {/*}  <FlatList
+          {/*}  <FlatList
             data={this.state.stockData}
             renderItem={({ item }) => (
               <ListItem>
