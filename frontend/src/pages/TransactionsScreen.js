@@ -52,7 +52,7 @@ export default class TransactionsScreen extends Component {
               <Left>
                 <View>
                 <Text>
-                  {this.replace(item.category)}: {item.symbol}
+                  {this.replace(item.category)}: {item.symbol} (${item.price.toFixed(2)})
                 </Text>
                 <Text>
                   Units: {item.units}
