@@ -21,6 +21,14 @@ export default class TransactionsScreen extends Component {
     );
   }
 
+  formatStringDate(date) {
+    const dateOnly = date.substring(0, 10);
+    const day = dateOnly.substring(8, 10);
+    const month = dateOnly.substring(5, 7);
+    const year = dateOnly.substring(0, 4);
+    return `${day}-${month}-${year}`;
+  }
+
   replace(category) {
     if (category === "ADD") {
       return "BUY";
@@ -58,8 +66,8 @@ export default class TransactionsScreen extends Component {
                 {this.replace(item.category)}: {item.symbol}
               </Text>
               <View>
-                <Text>${item.tradeValue}</Text>
-                <Text>{item.date}</Text>
+                <Text>${item.tradeValue.toFixed(2)}</Text>
+                <Text>{this.formatStringDate(item.date)}</Text>
               </View>
             </View>
           )}
@@ -67,10 +75,9 @@ export default class TransactionsScreen extends Component {
         />
         <Button
           title="Refresh"
-          onPress={() =>
+          onPress={() => {
             // this refreshes by getting the updated redux state (if any)
-            this.setState({ stockData: store.getState().transactions })
-          }
+          }}
         />
         <BottomTab />
       </View>
