@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, FlatList } from "react-native";
+import { ListItem, Left, Right } from "native-base";
 
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
@@ -39,40 +40,34 @@ export default class TransactionsScreen extends Component {
     return (
       <View style={styles.container}>
         <PageHeader text="Transactions" navigation={this.props.navigation} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "80%",
-            marginHorizontal: "10%"
-          }}
-        >
+        <View style={styles.headerView}>
           <Text style={styles.header}>Stock</Text>
           <Text style={styles.header}>Date/Price</Text>
         </View>
+        <View style={styles.list}>
         <FlatList
           data={this.state.stockData}
           renderItem={({ item }) => (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "80%",
-                marginHorizontal: "10%"
-              }}
-            >
-              <Text>
-                {this.replace(item.category)}: {item.symbol}
-              </Text>
-              <View>
+            <ListItem>
+              <Left>
+                <View>
+                <Text>
+                  {this.replace(item.category)}: {item.symbol}
+                </Text>
+                <Text>
+                  Units: {item.units}
+                </Text>
+                </View>
+              </Left>
+              <Right>
                 <Text>${item.tradeValue.toFixed(2)}</Text>
                 <Text>{this.formatStringDate(item.date)}</Text>
-              </View>
-            </View>
+              </Right>
+            </ListItem>
           )}
           keyExtractor={(item, index) => index.toString()} // pasted from SO to fix bugs
         />
+        </View>
         <Button
           title="Refresh"
           onPress={() => {
@@ -87,11 +82,21 @@ export default class TransactionsScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
     backgroundColor: "#F5FCFF"
+  },
+  headerView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginHorizontal: "10%",
   },
   header: {
     fontWeight: "bold",
     fontSize: 22
+  },
+  list: {
+    height: "76.7%", // not too sure how to constrain layout so it's hardcoded
   }
 });
