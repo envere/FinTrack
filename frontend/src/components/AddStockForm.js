@@ -33,6 +33,7 @@ export default class AddStockForm extends Component {
     this.state = {
       bank: "dbs", // default value for testing
       symbolPlaceholder: "Stock name",
+      priceToday: null,
       symbol: null,
       name: null,
       units: null,
@@ -104,6 +105,28 @@ export default class AddStockForm extends Component {
     return portfolio.filter(stock => stock.symbol === symbol).length !== 0;
   }
 
+  updateStock(stockToBeAdded) {
+    //this is only for portfolio route
+    if (this.symbolExistsInPortfolio(stockToBeAdded.symbol)) {
+      const existingStock = store
+        .getState()
+        .stockList.filter(stock => stock.symbol === stockToBeAdded.symbol)[0];
+      const newStock = {
+        userid: stockToBeAdded.userid,
+        symbol: stockToBeAdded.symbol,
+        name: stockToBeAdded.name,
+        units: existingStock.units + stockToBeAdded.units,
+        investedCapital:
+          (existingStock.investedCapital + stockToBeAdded.investedCapital),
+        dividends: 0,
+        currentValue:
+          (existingStock.units + stockToBeAdded.units) * this.state.priceToday
+      };
+      return newStock;
+    }
+    return stockToBeAdded;
+  }
+
   isToday(date) {
     const today = new Date();
     return (
@@ -172,7 +195,7 @@ export default class AddStockForm extends Component {
       investedCapital: this.state.units * this.state.price + this.state.fees,
       tradeValue: this.state.units * this.state.price + this.state.fees,
       dividends: 0,
-      currentValue: this.state.units * this.state.price,
+      currentValue: this.state.units * this.state.priceToday,
       category: "ADD",
       date: this.dateConvertToIso(this.state.date),
       price: this.state.price
@@ -197,9 +220,9 @@ export default class AddStockForm extends Component {
       })
       .catch(err => alert(err));
 
-    const portfolioUrl = this.symbolExistsInPortfolio(stock.symbol)
-      ? "https://orbital-fintrack.herokuapp.com/portfolio/update"
-      : "https://orbital-fintrack.herokuapp.com/portfolio/add";
+    const portfolioUrl = "https://orbital-fintrack.herokuapp.com/portfolio/add";
+
+    const portfolioStock = this.updateStock(stock);
 
     fetch(portfolioUrl, {
       method: "POST",
@@ -207,7 +230,7 @@ export default class AddStockForm extends Component {
         "Content-Type": "application/json",
         Authorization: "Bearer " + this.state.token
       },
-      body: JSON.stringify(stock)
+      body: JSON.stringify(portfolioStock)
     })
       .then(res => res.json())
       .then(res => {
@@ -287,7 +310,8 @@ export default class AddStockForm extends Component {
                             .then(res => {
                               const data = res["Global Quote"]["05. price"];
                               this.setState({
-                                price: data
+                                price: data,
+                                priceToday: data
                               });
                             })
                             .catch(err =>
@@ -301,6 +325,19 @@ export default class AddStockForm extends Component {
                             this.state.symbol,
                             this.state.date
                           );
+                          fetch(latestPriceUrl(newSymbol))
+                            .then(res => res.json())
+                            .then(res => {
+                              const data = res["Global Quote"]["05. price"];
+                              this.setState({
+                                priceToday: data
+                              });
+                            })
+                            .catch(err =>
+                              alert(
+                                "Server is busy, please wait for about 1 min"
+                              )
+                            );
                         }
                       }
                     );
@@ -382,7 +419,21 @@ export default class AddStockForm extends Component {
           title="test"
           onPress={() => {
             //do something
-            alert(this.symbolExistsInPortfolio("D05.SI"));
+            const stock = {
+              userid: this.state.userid,
+              symbol: this.state.symbol,
+              name: this.state.name,
+              units: this.state.units,
+              investedCapital: this.state.units * this.state.price + this.state.fees,
+              tradeValue: this.state.units * this.state.price + this.state.fees,
+              dividends: 0,
+              currentValue: this.state.units * this.state.priceToday,
+              category: "ADD",
+              date: this.dateConvertToIso(this.state.date),
+              price: this.state.price
+            };
+            this.updateStock(stock)
+            //alert(JSON.stringify(store.getState().stockList))
           }}
         />
       </View>
