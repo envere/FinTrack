@@ -96,6 +96,8 @@ const styles = StyleSheet.create({
     fontSize: 22
   },
   list: {
+    marginHorizontal: "5%",
+    width:"90%",
     height: "73.5%", // not too sure how to constrain layout so it's hardcoded 73.5
   }
 });
