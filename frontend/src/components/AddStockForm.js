@@ -413,27 +413,13 @@ export default class AddStockForm extends Component {
           title="add"
           onPress={() => {
             this.addStock();
+            this.props.setModalVisible(false); // to close the modal
           }}
         />
         <Button
           title="test"
           onPress={() => {
             //do something
-            const stock = {
-              userid: this.state.userid,
-              symbol: this.state.symbol,
-              name: this.state.name,
-              units: this.state.units,
-              investedCapital: this.state.units * this.state.price + this.state.fees,
-              tradeValue: this.state.units * this.state.price + this.state.fees,
-              dividends: 0,
-              currentValue: this.state.units * this.state.priceToday,
-              category: "ADD",
-              date: this.dateConvertToIso(this.state.date),
-              price: this.state.price
-            };
-            this.updateStock(stock)
-            //alert(JSON.stringify(store.getState().stockList))
           }}
         />
       </View>

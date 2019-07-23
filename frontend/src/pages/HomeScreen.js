@@ -6,8 +6,6 @@ import {
   Text,
   Modal,
   Dimensions,
-  TouchableHighlight,
-  TextInput
 } from "react-native";
 
 import PageHeader from "../components/PageHeader";
@@ -37,7 +35,7 @@ export default class HomeScreen extends Component {
           visible={this.state.modalVisible}
           onRequestClose={() => this.setModalVisible(!this.state.modalVisible)}
         >
-          <AddStockForm />
+          <AddStockForm setModalVisible={this.setModalVisible.bind(this)}/>
         </Modal>
         <Button
           title="Add stock"
