@@ -62,6 +62,7 @@ export default class HomeScreen extends Component {
           <AddStockForm setModalVisible={this.setModalVisible.bind(this)} />
         </Modal>
         <VictoryPie
+          animate={{ duration: 1000 }}
           data={this.state.pieData}
           innerRadius={80}
           padAngle={2}
