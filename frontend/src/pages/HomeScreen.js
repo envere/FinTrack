@@ -7,8 +7,7 @@ import {
   Modal,
   Dimensions
 } from "react-native";
-import { VictoryPie, VictoryChart, VictoryTheme } from "victory-native";
-import Svg from "react-native-svg";
+import { VictoryPie } from "victory-native";
 
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
@@ -29,7 +28,7 @@ export default class HomeScreen extends Component {
       const data = store.getState().stockList;
       const totalCapital = data
         .map(stock => stock.investedCapital)
-        .reduce((acc, val) => acc + val);
+        .reduce((acc, val) => acc + val, 0);
       const makePercent = num => ((num / totalCapital) * 100).toFixed(1) + "%";
       this.setState({
         pieData: data.map(stock => {
