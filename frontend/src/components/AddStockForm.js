@@ -117,7 +117,7 @@ export default class AddStockForm extends Component {
         name: stockToBeAdded.name,
         units: existingStock.units + stockToBeAdded.units,
         investedCapital:
-          (existingStock.investedCapital + stockToBeAdded.investedCapital),
+          existingStock.investedCapital + stockToBeAdded.investedCapital,
         dividends: 0,
         currentValue:
           (existingStock.units + stockToBeAdded.units) * this.state.priceToday
@@ -240,6 +240,7 @@ export default class AddStockForm extends Component {
         });
       })
       .catch(err => err);
+    this.props.setModalVisible(false); // to close the modal
   }
 
   render() {
@@ -413,7 +414,6 @@ export default class AddStockForm extends Component {
           title="add"
           onPress={() => {
             this.addStock();
-            this.props.setModalVisible(false); // to close the modal
           }}
         />
         <Button
