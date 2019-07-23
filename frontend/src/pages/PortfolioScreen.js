@@ -22,11 +22,15 @@ export default class PortfolioScreen extends Component {
   }
 
   componentDidMount() {
-    store.subscribe(() =>
+    this.unsubscribe = store.subscribe(() =>
       this.setState({
         stockData: store.getState().stockList
       })
     );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   calculatePercentage(stock) {

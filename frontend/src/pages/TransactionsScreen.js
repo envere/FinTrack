@@ -15,11 +15,15 @@ export default class TransactionsScreen extends Component {
   }
 
   componentDidMount() {
-    store.subscribe(() =>
+    this.unsubscribe = store.subscribe(() =>
       this.setState({
         stockData: store.getState().transactions
       })
     );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   formatStringDate(date) {

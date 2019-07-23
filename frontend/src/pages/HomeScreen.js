@@ -25,7 +25,7 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    store.subscribe(() => {
+    this.unsubscribe = store.subscribe(() => {
       const data = store.getState().stockList;
       const totalCapital = data
         .map(stock => stock.investedCapital)
@@ -40,6 +40,10 @@ export default class HomeScreen extends Component {
         })
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   setModalVisible(visible) {
