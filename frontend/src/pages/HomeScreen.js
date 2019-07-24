@@ -19,7 +19,8 @@ export default class HomeScreen extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      pieData: null
+      pieData: null,
+      showPie: false
     };
   }
 
@@ -48,6 +49,34 @@ export default class HomeScreen extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+
+  graphSelector() {
+    if (this.state.showPie) {
+      return (
+        <View>
+          <Text style={styles.header}>Asset Allocation</Text>
+          <VictoryPie
+            animate={{ duration: 1000 }}
+            data={this.state.pieData}
+            innerRadius={80}
+            padAngle={2}
+            labelRadius={93}
+            style={{
+              labels: { fill: "white", fontSize: 15, fontWeight: "bold" }
+            }}
+          />
+        </View>
+      );
+    }
+    return <Text>hi</Text>;
+  }
+
+  toggleGraph(boolean) {
+    this.setState({
+      showPie: boolean
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -61,16 +90,17 @@ export default class HomeScreen extends Component {
         >
           <AddStockForm setModalVisible={this.setModalVisible.bind(this)} />
         </Modal>
-        <VictoryPie
-          animate={{ duration: 1000 }}
-          data={this.state.pieData}
-          innerRadius={80}
-          padAngle={2}
-          labelRadius={93}
-          style={{
-            labels: { fill: "white", fontSize: 15, fontWeight: "bold" }
-          }}
-        />
+        <View style={styles.segment}>
+          <Button
+            title="Portfolio Performance"
+            onPress={() => this.toggleGraph(false)}
+          />
+          <Button
+            title="Asset Allocation"
+            onPress={() => this.toggleGraph(true)}
+          />
+        </View>
+        <View>{this.graphSelector()}</View>
         <Button
           title="Add stock"
           onPress={() => {
@@ -88,11 +118,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5FCFF"
   },
+  segment: {
+    alignContent: "center",
+    flexDirection: "row"
+  },
   modal: {
     justifyContent: "center",
     borderRadius: 0,
     shadowRadius: 10,
     width: Dimensions.get("window") - 80,
     height: 280
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: 30
   }
 });
