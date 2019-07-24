@@ -1,4 +1,6 @@
 rootProject.name = 'FinTrack'
+include ':react-native-svg'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
 include ':rn-secure-storage'
 project(':rn-secure-storage').projectDir = new File(rootProject.projectDir, '../node_modules/rn-secure-storage/android')
 include ':@react-native-community_async-storage'

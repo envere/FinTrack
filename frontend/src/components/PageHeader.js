@@ -28,7 +28,6 @@ export default class PageHeader extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
   },
   text: {
     fontSize: 28,
