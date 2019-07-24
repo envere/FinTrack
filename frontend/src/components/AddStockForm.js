@@ -170,7 +170,7 @@ export default class AddStockForm extends Component {
       .catch(err =>
         alert(
           err +
-            "Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc."
+            "Please ensure that the stock market is open on that date. (Non-weekends, public holidays etc.)"
         )
       );
   }

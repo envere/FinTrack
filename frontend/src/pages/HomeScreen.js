@@ -7,7 +7,7 @@ import {
   Modal,
   Dimensions
 } from "react-native";
-import { VictoryPie } from "victory-native";
+import { VictoryPie, VictoryChart, VictoryLine } from "victory-native";
 
 import PageHeader from "../components/PageHeader";
 import BottomTab from "../navigation/BottomTab";
@@ -20,24 +20,42 @@ export default class HomeScreen extends Component {
     this.state = {
       modalVisible: false,
       pieData: null,
+      transactionsData: null,
+      portfolioData: null,
       showPie: false
     };
   }
 
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
-      const data = store.getState().stockList;
-      const totalCapital = data
+      const data = store.getState();
+
+      const totalCapital = data.stockList
         .map(stock => stock.investedCapital)
         .reduce((acc, val) => acc + val, 0);
       const makePercent = num => ((num / totalCapital) * 100).toFixed(1) + "%";
+
+      const transactionsArr = data.transactions
+      .reverse()
+        .map(transaction => [transaction.tradeValue])
+        .reduce((acc, curr) => acc.concat(acc[acc.length - 1] + curr[0]))
+      const dates = data.transactions.map(transaction => new Date(transaction.date.substring(0,10))).reverse()
+      ;
+      const transactionsData = [];
+      for (i = 0; i < dates.length; i++) {
+        transactionsData[i] = {
+          y: transactionsArr[i],
+          x: Date.parse(dates[i])
+        };
+      }
       this.setState({
-        pieData: data.map(stock => {
+        pieData: data.stockList.map(stock => {
           return {
             x: `${stock.symbol}\n(${makePercent(stock.investedCapital)})`,
             y: stock.investedCapital
           };
-        })
+        }),
+        transactionsData: transactionsData 
       });
     });
   }
@@ -68,7 +86,20 @@ export default class HomeScreen extends Component {
         </View>
       );
     }
-    return <Text>hi</Text>;
+    return (
+      <View>
+        <VictoryChart scale={{ x: "time" }}>
+          <VictoryLine
+            interpolation="stepAfter"
+            style={{
+              data: { stroke: "#c43a31" },
+              parent: { border: "2px solid #ccc" }
+            }}
+            data={this.state.transactionsData}
+          />
+        </VictoryChart>
+      </View>
+    );
   }
 
   toggleGraph(boolean) {
@@ -104,7 +135,9 @@ export default class HomeScreen extends Component {
         <Button
           title="Add stock"
           onPress={() => {
-            this.setModalVisible(true);
+            //this.setModalVisible(true);
+            //alert(JSON.stringify(this.state.transactionsData));
+            alert(JSON.stringify(store.getState().transactions.map(x=>x.date).reverse()))
           }}
         />
         <BottomTab />
