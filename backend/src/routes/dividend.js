@@ -3,6 +3,12 @@ const alphavantage = require('../util/alphavantage')
 const init = require('../util/init-stocks-dividends')
 const express = require('express')
 const router = express.Router()
+const scrape = require('../util/scraper')
+
+const checkSG = async symbol => {
+  const array = symbol.split('.')
+  return array.length > 1 && array[1] === 'SI'
+}
 
 router.post('/daily/dividend', (req, res) => {
   const symbol = req.body.symbol
@@ -23,9 +29,8 @@ router.post('/daily/dividend', (req, res) => {
           })
         }
       } else {
-        alphavantage
-          .dailyAdjusted
-          .dividends(symbol)
+        checkSG(symbol)
+          .then(check => check ? scrape(symbol) : alphavantage.dailyAdjusted.dividends(symbol))
           .then(dividends => {
             const filtered = dividends.filter(dividend => dividend.date.toISOString().split('T')[0] === ISOdate)
             if (filtered.length === 0) {
@@ -69,6 +74,15 @@ router.post('/dividendrange', (req, res) => {
       .range(symbol, ISOstart, ISOend)
       .then(buckets => {
         if (buckets.length === 0) {
+          const scrapeSGDividends = scrape(symbol)
+            .then(dividendrange => {
+              dividends.days = dividendrange.filter(dividend => {
+                const ISOdate = formatToISO(dividend.date)
+                return ISOstart <= ISOdate && ISOdate <= ISOend
+              })
+            })
+            .catch(err => res.sendStatus(500))
+
           const alphaDailyAdjusted = alphavantage
             .dailyAdjusted
             .dividends_range(symbol, ISOstart, ISOend)
@@ -89,20 +103,38 @@ router.post('/dividendrange', (req, res) => {
               })
             })
             .catch(err => res.sendStatus(500))
-          Promise
-            .all([alphaDailyAdjusted, alphaMonthlyAdjusted])
-            .then(done => isEmpty(dividends))
-            .then(isEmpty => {
-              if (isEmpty) {
-                res.sendStatus(404)
-              } else {
-                res.status(200).json({
-                  message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
-                  dividends,
-                })
-              }
-            })
-            .catch(err => res.sendStatus(500))
+
+          if (checkSG(symbol)) {
+            Promise
+              .resolve(scrapeSGDividends)
+              .then(done => isEmpty(dividends))
+              .then(isEmpty => {
+                if (isEmpty) {
+                  res.sendStatus(404)
+                } else {
+                  res.status(200).json({
+                    message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+                    dividends,
+                  })
+                }
+              })
+              .catch(err => res.sendStatus(500))
+          } else {
+            Promise
+              .all([alphaDailyAdjusted, alphaMonthlyAdjusted])
+              .then(done => isEmpty(dividends))
+              .then(isEmpty => {
+                if (isEmpty) {
+                  res.sendStatus(404)
+                } else {
+                  res.status(200).json({
+                    message: `${symbol} dividends from ${ISOstart} to ${ISOend}`,
+                    dividends,
+                  })
+                }
+              })
+              .catch(err => res.sendStatus(500))
+          }
           init(symbol)
         } else {
           buckets.forEach(bucket => {
