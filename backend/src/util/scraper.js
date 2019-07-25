@@ -16,7 +16,7 @@ module.exports = async symbol => {
     const dates = tableRows[4]
     for (let i = 1; i < dividends.length && i < dates.length; ++i) {
       const dividend = dividends[i]
-      const date = dates[i]
+      const date = new Date(dates[i])
       data.push({ dividend, date })
     }
     return data
