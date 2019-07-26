@@ -3,6 +3,12 @@ const alphavantage = require('../util/alphavantage')
 const SymbolName = require('../models/symbol-name-model')
 const StockPrice = require('../models/stock-price-model')
 const DividendPrice = require('../models/dividend-price-model')
+const scrape = require('../util/scraper')
+
+const checkSG = symbol => {
+  const array = symbol.split('.')
+  return array.length > 1 && array[1] === 'SI'
+}
 
 function updateStock(symbol) {
   return StockPrice
@@ -95,10 +101,15 @@ function updateDividend(symbol) {
           return Promise.all(buckets)
         })
         .then(buckets => {
-          const ISOdate = latestDate.toISOString().split('T')[0]
-          const ISOnow = (new Date()).toISOString().split('T')[0]
-          const days = alphavantage.dailyAdjusted.dividends_range(symbol, ISOdate, ISOnow)
-          const months = alphavantage.monthlyAdjusted.dividends_range(symbol, ISOdate, ISOnow)
+          const formatISO = date => date.toISOString().split('T')[0]
+          const ISOdate = formatISO(latestDate)
+          const ISOnow = formatISO(new Date())
+          const days = checkSG(symbol) 
+            ? scrape(symbol).then(dividends => dividends.filter(dividend => ISOdate <= formatISO(dividend.date) && formatISO(dividend.date) <= ISOnow))
+            : alphavantage.dailyAdjusted.dividends_range(symbol, ISOdate, ISOnow)
+          const months = checkSG(symbol) 
+            ? []
+            : alphavantage.monthlyAdjusted.dividends_range(symbol, ISOdate, ISOnow)
           Promise
             .all([days, months])
             .then(dividends => {
@@ -131,4 +142,7 @@ function update(symbol) {
     .catch(err => console.log(`update error ${symbol}`))
 }
 
-update('D05.SI')
+SymbolName
+  .find()
+  .then(symbolnames => symbolnames.map(symbolname => update(symbolname.symbol)))
+  .catch(console.log)
