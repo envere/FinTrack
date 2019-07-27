@@ -59,7 +59,7 @@ export default class HomeScreen extends Component {
       for (i = 0; i < dates.length; i++) {
         transactionsData[i] = {
           y: transactionsArr[i],
-          x: Date.parse(dates[i])
+          x: dates[i]
         };
       }
 
@@ -138,21 +138,20 @@ export default class HomeScreen extends Component {
 
               const newArr = this.state.priceHistory
                 .concat(history)
-                // self note: may need help with reducer
                 .reduce((acc, curr) => {
                   if (acc.map(stock => stock.date).includes(curr.date)) {
                     return acc.map(stock => {
                       if (stock.date === curr.date) {
                         return {
                           price: stock.price + curr.price,
-                          date: acc.date
+                          date: stock.date
                         };
                       }
                       return stock;
                     });
                   }
                   return acc.concat(curr);
-                }, []);
+                }, [])
               this.setState({
                 priceHistory: newArr
               });
@@ -201,6 +200,20 @@ export default class HomeScreen extends Component {
     return (
       <View>
         <VictoryChart scale={{ x: "time" }}>
+          <VictoryLine
+            animate={{ duration: 500 }}
+            interpolation="stepAfter"
+            style={{
+              data: { stroke: "#c43a31" },
+              parent: { border: "2px solid #ccc" }
+            }}
+            data={/*(this.state.priceHistory.map(stock=>{
+              return {
+                x: new Date(stock.date.substring(0,10)),
+                y: stock.price
+              }
+            })*/[{x:new Date(), y:2}]}
+          />
           <VictoryLine
             animate={{ duration: 500 }}
             interpolation="stepAfter"
