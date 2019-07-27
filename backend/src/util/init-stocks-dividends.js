@@ -7,6 +7,7 @@ const scrape = require('../util/scraper')
 function initSymbolName(symbol) {
   console.log(`initSymbolName(${symbol})`)
   SymbolName
+    .deleteMany({ symbol })
     .findOne({ symbol })
     .then(doc => {
       if (!doc) {
@@ -28,9 +29,11 @@ function initStock(symbol) {
       alphavantage
         .monthly
         .prices(symbol)
+        .then(prices => prices.reverse())
         .then(prices => {
-          const maxYear = prices[0].date.getFullYear()
-          const minYear = prices[prices.length - 1].date.getFullYear()
+          const minYear = prices[0].date.getFullYear()
+          const maxYear = prices[prices.length - 1].date.getFullYear()
+          console.log(`stock: min = ${minYear}, max = ${maxYear}`)
 
           const years = []
           for (let i = minYear; i <= maxYear; ++i) {
@@ -80,12 +83,18 @@ function initDividend(symbol) {
         const array = symbol.split('.')
         return array.length > 1 && array[1] === 'SI'
       }
+      const parse = () => symbol.split('.')[0]
+      console.log(check(), parse())
       if (check()) {
-        scrape(symbol)
+        scrape(parse())
           .then(dividends => dividends.reverse())
           .then(dividends => {
-            const maxYear = dividends[0].date.getFullYear()
-            const minYear = dividends[dividends.length - 1].date.getFullYear()
+            if (dividends.length === 0) {
+              return []
+            }
+            const minYear = dividends[0].date.getFullYear()
+            const maxYear = dividends[dividends.length - 1].date.getFullYear()
+            console.log(`div: min = ${minYear}, max = ${maxYear}`)
 
             const years = []
             for (let i = minYear; i <= maxYear; ++i) {
@@ -114,8 +123,9 @@ function initDividend(symbol) {
           .dividends(symbol)
           .then(dividends => dividends.reverse())
           .then(dividends => {
-            const maxYear = dividends[0].date.getFullYear()
-            const minYear = dividends[dividends.length - 1].date.getFullYear()
+            const minYear = dividends[0].date.getFullYear()
+            const maxYear = dividends[dividends.length - 1].date.getFullYear()
+            console.log(`div: min = ${minYear}, max = ${maxYear}`)
 
             const years = []
             for (let i = minYear; i <= maxYear; ++i) {
@@ -207,8 +217,25 @@ function initDividend(symbol) {
 //     .catch(err => console.log(err))
 // }
 
-module.exports = symbol => {
+const init = symbol => {
   initSymbolName(symbol)
   initStock(symbol)
   initDividend(symbol)
+}
+
+module.exports = init
+
+const symbols = () => SymbolName.find().then(x => x.map(y => y.symbol)).then(console.log).catch(console.log)
+const fetch = async symbol => {
+  try {
+    const stock = StockPrice.find({ symbol })
+    const div = DividendPrice.find({ symbol })
+    const done = await Promise.all([stock, div]).catch(console.log)
+    const s = done[0][0].days
+    const d = done[1][0].days
+    console.log('stock')
+    s.forEach(x => console.log(JSON.stringify(x)))
+    console.log('div')
+    d.forEach(x => console.log(JSON.stringify(x)))
+  } catch (err) { console.log(err) }
 }
