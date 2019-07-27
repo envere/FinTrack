@@ -50,6 +50,7 @@ function initStock(symbol) {
           alphavantage
             .daily
             .prices(symbol)
+            .then(prices => prices.reverse())
             .then(prices => {
               prices.forEach(price => {
                 const year = price.date.getFullYear()
@@ -81,6 +82,7 @@ function initDividend(symbol) {
       }
       if (check()) {
         scrape(symbol)
+          .then(dividends => dividends.reverse())
           .then(dividends => {
             const maxYear = dividends[0].date.getFullYear()
             const minYear = dividends[dividends.length - 1].date.getFullYear()
@@ -110,6 +112,7 @@ function initDividend(symbol) {
         alphavantage
           .monthlyAdjusted
           .dividends(symbol)
+          .then(dividends => dividends.reverse())
           .then(dividends => {
             const maxYear = dividends[0].date.getFullYear()
             const minYear = dividends[dividends.length - 1].date.getFullYear()
@@ -132,6 +135,7 @@ function initDividend(symbol) {
             alphavantage
               .dailyAdjusted
               .dividends(symbol)
+              .then(dividends => dividends.reverse())
               .then(dividends => {
                 dividends.forEach(dividend => {
                   const year = dividend.date.getFullYear()
@@ -153,55 +157,55 @@ function initDividend(symbol) {
     .catch(err => console.log(err))
 }
 
-function initDividend(symbol) {
-  console.log(`initDividend(${symbol})`)
-  DividendPrice
-    .deleteMany({ symbol })
-    .then(done => {
-      alphavantage
-        .monthlyAdjusted
-        .dividends(symbol)
-        .then(dividends => {
-          const maxYear = dividends[0].date.getFullYear()
-          const minYear = dividends[dividends.length - 1].date.getFullYear()
+// function initDividend(symbol) {
+//   console.log(`initDividend(${symbol})`)
+//   DividendPrice
+//     .deleteMany({ symbol })
+//     .then(done => {
+//       alphavantage
+//         .monthlyAdjusted
+//         .dividends(symbol)
+//         .then(dividends => {
+//           const maxYear = dividends[0].date.getFullYear()
+//           const minYear = dividends[dividends.length - 1].date.getFullYear()
 
-          const years = []
-          for (let i = minYear; i <= maxYear; ++i) {
-            years.push(i)
-          }
+//           const years = []
+//           for (let i = minYear; i <= maxYear; ++i) {
+//             years.push(i)
+//           }
 
-          const buckets = new Map()
-          years.forEach(year => buckets.set(year, new DividendPrice({ symbol, year })))
+//           const buckets = new Map()
+//           years.forEach(year => buckets.set(year, new DividendPrice({ symbol, year })))
 
-          dividends.forEach(dividend => {
-            const year = dividend.date.getFullYear()
-            const month = dividend.date.getMonth()
-            const value = dividend.dividend
-            const bucket = buckets.get(year)
-            bucket.months.push({ date: dividend.date, dividend: value })
-          })
-          alphavantage
-            .dailyAdjusted
-            .dividends(symbol)
-            .then(dividends => {
-              dividends.forEach(dividend => {
-                const year = dividend.date.getFullYear()
-                const month = dividend.date.getMonth()
-                const date = dividend.date.getDate()
-                const value = dividend.dividend
-                const bucket = buckets.get(year)
-                bucket.days.push({ date: dividend.date, dividend: value })
-              })
-              return buckets
-            })
-            .then(buckets => buckets.forEach(dividendprice => dividendprice.save()))
-            .then(done => console.log(`initialized ${symbol} dividends`))
-            .catch(err => console.log(err))
-        })
-        .catch(err => console.log(err))
-    })
-    .catch(err => console.log(err))
-}
+//           dividends.forEach(dividend => {
+//             const year = dividend.date.getFullYear()
+//             const month = dividend.date.getMonth()
+//             const value = dividend.dividend
+//             const bucket = buckets.get(year)
+//             bucket.months.push({ date: dividend.date, dividend: value })
+//           })
+//           alphavantage
+//             .dailyAdjusted
+//             .dividends(symbol)
+//             .then(dividends => {
+//               dividends.forEach(dividend => {
+//                 const year = dividend.date.getFullYear()
+//                 const month = dividend.date.getMonth()
+//                 const date = dividend.date.getDate()
+//                 const value = dividend.dividend
+//                 const bucket = buckets.get(year)
+//                 bucket.days.push({ date: dividend.date, dividend: value })
+//               })
+//               return buckets
+//             })
+//             .then(buckets => buckets.forEach(dividendprice => dividendprice.save()))
+//             .then(done => console.log(`initialized ${symbol} dividends`))
+//             .catch(err => console.log(err))
+//         })
+//         .catch(err => console.log(err))
+//     })
+//     .catch(err => console.log(err))
+// }
 
 module.exports = symbol => {
   initSymbolName(symbol)
