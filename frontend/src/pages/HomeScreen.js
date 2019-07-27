@@ -36,11 +36,12 @@ export default class HomeScreen extends Component {
       const makePercent = num => ((num / totalCapital) * 100).toFixed(1) + "%";
 
       const transactionsArr = data.transactions
-      .reverse()
+        .reverse()
         .map(transaction => [transaction.tradeValue])
-        .reduce((acc, curr) => acc.concat(acc[acc.length - 1] + curr[0]))
-      const dates = data.transactions.map(transaction => new Date(transaction.date.substring(0,10))).reverse()
-      ;
+        .reduce((acc, curr) => acc.concat(acc[acc.length - 1] + curr[0]));
+      const dates = data.transactions
+        .map(transaction => new Date(transaction.date.substring(0, 10)))
+        .reverse();
       const transactionsData = [];
       for (i = 0; i < dates.length; i++) {
         transactionsData[i] = {
@@ -55,7 +56,7 @@ export default class HomeScreen extends Component {
             y: stock.investedCapital
           };
         }),
-        transactionsData: transactionsData 
+        transactionsData: transactionsData
       });
     });
   }
@@ -137,7 +138,14 @@ export default class HomeScreen extends Component {
           onPress={() => {
             //this.setModalVisible(true);
             //alert(JSON.stringify(this.state.transactionsData));
-            alert(JSON.stringify(store.getState().transactions.map(x=>x.date).reverse()))
+            alert(
+              JSON.stringify(
+                store
+                  .getState()
+                  .transactions.map(x => x.date)
+                  .reverse()
+              )
+            );
           }}
         />
         <BottomTab />
@@ -152,7 +160,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF"
   },
   segment: {
-    alignContent: "center",
     flexDirection: "row"
   },
   modal: {
