@@ -120,27 +120,45 @@ export default class HomeScreen extends Component {
                 .map(stock => stock.message)
                 .includes(res.message)
             ) {
-              const newArr = [
-                ...this.state.priceHistory,
-                {
-                  symbol: stock.symbol,
-                  history: res.prices.days
-                }
-              ];
+              const history = res.prices.days
+                .sort((a, b) =>
+                  a.date > b.date ? 1 : b.date > a.date ? -1 : 0
+                )
+                .map(priceDay => {
+                  const units = unitsPerDay.find(
+                    transaction =>
+                      transaction.date <= priceDay.date &&
+                      transaction.symbol === stock.symbol
+                  ).units;
+                  return {
+                    price: priceDay.price * units,
+                    date: priceDay.date
+                  };
+                });
+
+              const newArr = this.state.priceHistory
+                .concat(history)
+                // self note: may need help with reducer
+                .reduce((acc, curr) => {
+                  if (acc.map(stock => stock.date).includes(curr.date)) {
+                    return acc.map(stock => {
+                      if (stock.date === curr.date) {
+                        return {
+                          price: stock.price + curr.price,
+                          date: acc.date
+                        };
+                      }
+                      return stock;
+                    });
+                  }
+                  return acc.concat(curr);
+                }, []);
               this.setState({
                 priceHistory: newArr
               });
             }
           });
       });
-
-      // to-do: final data crunching
-      const portfolioData = this.state.priceHistory.reduce((acc, curr) => {
-        const symbol = curr.symbol;
-        const mappedValues = curr.history.map(price => {
-
-        })
-      }, [])
 
       this.setState({
         pieData: data.stockList.map(stock => {
@@ -149,8 +167,7 @@ export default class HomeScreen extends Component {
             y: stock.investedCapital
           };
         }),
-        transactionsData: transactionsData,
-        portfolioData: uniqueList
+        transactionsData: transactionsData
       });
     });
   }
@@ -232,7 +249,7 @@ export default class HomeScreen extends Component {
           title="Add stock"
           onPress={() => {
             //this.setModalVisible(true);
-            //alert(JSON.stringify(this.state.portfolioData))
+            //alert(JSON.stringify(this.state.portfolioData));
             alert(JSON.stringify(this.state.priceHistory));
           }}
         />
