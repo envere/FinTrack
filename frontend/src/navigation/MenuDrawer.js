@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity
 } from "react-native";
+import { Toast } from "native-base";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -19,7 +20,10 @@ export default class MenuDrawer extends Component {
         style={{ height: 50 }}
         onPress={() => {
           if (text === "Logout") {
-            alert("You have logged out");
+            Toast.show({
+              text: "You have logged out",
+              type: "success"
+            });
           }
           this.props.navigation.navigate(nav);
         }}

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
+import { Toast } from "native-base";
 
 import store from "../data/PortfolioStore";
 
@@ -122,7 +123,10 @@ class LoginForm extends Component {
       .then(res => {
         const status = JSON.parse(res.status);
         if (status === 200) {
-          alert("Login successful!");
+          Toast.show({
+            text: "Login successful!",
+            type: "success"
+          });
           return res.json();
         }
         throw Error(status);
@@ -137,11 +141,20 @@ class LoginForm extends Component {
           text: "Login"
         });
         if (err.message === "403") {
-          alert("Incorrect password");
+          Toast.show({
+            text: "Incorrect password",
+            type: "warning"
+          });
         } else if (err.message === "404") {
-          alert("User not found. Please create an account.");
+          Toast.show({
+            text: "User not found. Please create an account.",
+            type: "warning"
+          });
         } else {
-          alert(err);
+          Toast.show({
+            text: err,
+            type: "warning"
+          });
         }
       });
   }
@@ -171,13 +184,15 @@ class LoginForm extends Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            // this.props.navigation.navigate("Home")  // writing this on the plane so i gotta bypass auth
             if (this.state.username || this.state.password) {
               this.setState({ text: "Logging in..." });
               this.login();
               return;
             }
-            return alert("Please enter your credentials");
+            return Toast.show({
+              text: "Please enter your credentials",
+              type: "warning"
+            });
           }}
         >
           <Text style={styles.buttonText}>{this.state.text}</Text>
