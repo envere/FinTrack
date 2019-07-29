@@ -55,6 +55,7 @@ StockPriceSchema.statics.range = function (symbol, start, end) {
   const endyear = formatISO(end)[0]
   return this
     .find({ symbol })
+    .sort({ year: 1 })
     .then(data => data.filter(bucket => startyear <= bucket.year && bucket.year <= endyear))
     .catch(err => console.log(err))
 }
