@@ -117,8 +117,6 @@ export default class HomeScreen extends Component {
           : [...acc, curr],
       []
     );
-
-    alert(JSON.stringify(unitsPerDay));
     uniqueList.forEach(stock => {
       const bodyReq = {
         start: stock.date.substring(0, 10),
@@ -138,11 +136,14 @@ export default class HomeScreen extends Component {
         .then(res => res.json())
         .then(res => {
           const history = res.prices.days.map(priceDay => {
-            const units = unitsPerDay.find(
-              transaction =>
-                transaction.date <= priceDay.date &&
-                transaction.symbol === stock.symbol
-            ).units;
+            const units = unitsPerDay
+              .slice()
+              .reverse()
+              .find(
+                transaction =>
+                  transaction.date <= priceDay.date &&
+                  transaction.symbol === stock.symbol
+              ).units;
             return {
               price: priceDay.price * units,
               date: priceDay.date
@@ -302,9 +303,9 @@ export default class HomeScreen extends Component {
         <Button
           title="Refresh"
           onPress={() => {
-            this.calculatePortfolioData(store.getState()); // refresh graph
-            //this.calculatePieData(store.getState())
-            //this.calculateTransactionData(store.getState())
+            this.calculatePortfolioData(store.getState()); 
+            this.calculatePieData(store.getState())
+            this.calculateTransactionData(store.getState())
           }}
         />
         <BottomTab />
