@@ -7,7 +7,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { withNavigation } from "react-navigation";
-import { updateExpression } from "@babel/types";
+import { Toast } from "native-base";
 
 const url = "https://orbital-fintrack.herokuapp.com/auth/register";
 
@@ -74,9 +74,15 @@ class SignupForm extends Component {
           onPress={() => {
             const pwCheck = this.state.password === this.state.password2;
             if (!validateEmail(this.state.email)) {
-              alert("Please enter a valid email");
+              Toast.show({
+                text: "Please enter a valid email",
+                type: "warning"
+              });
             } else if (!pwCheck) {
-              alert("Please ensure that your 2nd password is the same.");
+              Toast.show({
+                text: "Please ensure that your 2nd password is the same.",
+                type: "warning"
+              });
             } else {
               this.setState({ text: "Signing up..." });
               fetch(url, {
@@ -93,14 +99,20 @@ class SignupForm extends Component {
               })
                 .then(res => {
                   if (res.status === 201) {
-                    alert("Sign up successful!");
+                    Toast.show({
+                      text: "Sign up successful!",
+                      type: "success"
+                    });
                     return this.props.navigation.navigate("Login");
                   }
                   throw res.status;
                 })
                 .catch(err => {
                   this.setState({ text: "Sign up!" });
-                  alert("Error: Username/email is already in use.");
+                  Toast.show({
+                    text: "Error: Username/email is already in use.",
+                    type: "warning"
+                  });
                 });
             }
           }}

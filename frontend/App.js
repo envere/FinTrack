@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
+import { Root } from "native-base";
 
 import SplashScreen from "./src/pages/SplashScreen";
 import LoginScreen from "./src/pages/LoginScreen";
 import DrawerNavigator from "./src/navigation/DrawerNavigator";
 
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -58,3 +59,9 @@ const styles = StyleSheet.create({
     margin: 10
   }
 });
+
+export default () => (
+  <Root>
+    <App />
+  </Root>
+);

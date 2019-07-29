@@ -25,7 +25,8 @@ export default class HomeScreen extends Component {
       portfolioData: null,
       showPie: false,
       token: null,
-      priceHistory: []
+      priceHistory: [],
+      priceHistoryLoaded: false
     };
   }
 
@@ -55,12 +56,16 @@ export default class HomeScreen extends Component {
         .slice()
         .reverse()
         .map(transaction => new Date(transaction.date.substring(0, 10)));
-      const transactionsData = [];
+      let transactionsData = [];
       for (i = 0; i < dates.length; i++) {
         transactionsData[i] = {
           y: transactionsArr[i],
-          x: Date.parse(dates[i])
+          x: dates[i]
         };
+      }
+      if (transactionsData.length === 1) {
+        const newData = transactionsData.slice();
+        transactionsData = transactionsData.concat(newData)
       }
 
       // portfolioData calculations
@@ -138,14 +143,13 @@ export default class HomeScreen extends Component {
 
               const newArr = this.state.priceHistory
                 .concat(history)
-                // self note: may need help with reducer
                 .reduce((acc, curr) => {
                   if (acc.map(stock => stock.date).includes(curr.date)) {
                     return acc.map(stock => {
                       if (stock.date === curr.date) {
                         return {
                           price: stock.price + curr.price,
-                          date: acc.date
+                          date: stock.date
                         };
                       }
                       return stock;
@@ -153,8 +157,10 @@ export default class HomeScreen extends Component {
                   }
                   return acc.concat(curr);
                 }, []);
+              console.log(newArr);
               this.setState({
-                priceHistory: newArr
+                priceHistory: newArr,
+                priceHistoryLoaded: true
               });
             }
           });
@@ -167,7 +173,7 @@ export default class HomeScreen extends Component {
             y: stock.investedCapital
           };
         }),
-        transactionsData: transactionsData
+        transactionsData: transactionsData,
       });
     });
   }
@@ -198,21 +204,33 @@ export default class HomeScreen extends Component {
         </View>
       );
     }
-    return (
-      <View>
-        <VictoryChart scale={{ x: "time" }}>
-          <VictoryLine
-            animate={{ duration: 500 }}
-            interpolation="stepAfter"
-            style={{
-              data: { stroke: "#c43a31" },
-              parent: { border: "2px solid #ccc" }
-            }}
-            data={this.state.transactionsData}
-          />
-        </VictoryChart>
-      </View>
-    );
+    if (this.state.priceHistoryLoaded) {
+      return (
+        <View>
+          <VictoryChart scale={{ x: "time" }}>
+            {/*<VictoryLine
+              animate={{ duration: 500 }}
+              interpolation="stepAfter"
+              style={{
+                data: { stroke: "navy" },
+                parent: { border: "2px solid #ccc" }
+              }}
+              data={this.state.priceHistory}
+            />*/}
+            <VictoryLine
+              animate={{ duration: 500 }}
+              interpolation="stepAfter"
+              style={{
+                data: { stroke: "orange" },
+                parent: { border: "2px solid #ccc" }
+              }}
+              data={this.state.transactionsData}
+            />
+          </VictoryChart>
+        </View>
+      );
+    }
+    return <View><Text>Please wait while the graph is being generated...</Text></View>
   }
 
   toggleGraph(boolean) {
@@ -248,9 +266,9 @@ export default class HomeScreen extends Component {
         <Button
           title="Add stock"
           onPress={() => {
-            //this.setModalVisible(true);
+            this.setModalVisible(true);
             //alert(JSON.stringify(this.state.portfolioData));
-            alert(JSON.stringify(this.state.priceHistory));
+            //alert(JSON.stringify(this.state.priceHistory));
           }}
         />
         <BottomTab />
