@@ -30,7 +30,10 @@ export default class HomeScreen extends Component {
       showPie: false,
       token: null,
       priceHistory: [],
-      priceHistoryLoaded: false
+      priceHistoryLoaded: false,
+      totalCapital: 0,
+      portfolioValue: 0,
+      portfolioReturns: 0
     };
   }
 
@@ -71,8 +74,11 @@ export default class HomeScreen extends Component {
       y: transactionsData[transactionsData.length - 1].y,
       x: new Date()
     });
+
+    const totalValue = transactionsData[transactionsData.length - 1].y;
     this.setState({
-      transactionsData: transactionsData
+      transactionsData: transactionsData,
+      totalCapital: totalValue
     });
   }
 
@@ -95,9 +101,8 @@ export default class HomeScreen extends Component {
         if (!acc.map(stock => stock.symbol).includes(curr.symbol)) {
           return acc.concat(curr);
         }
-        const units = acc
-          .filter(stock => stock.symbol === curr.symbol)
-          .reduce((acc, curr) => acc + curr.units, 0);
+        let units = acc.filter(stock => stock.symbol === curr.symbol);
+        units = units[units.length - 1].units;
         const updatedTransaction = {
           symbol: curr.symbol,
           units: curr.units + units,
@@ -165,9 +170,13 @@ export default class HomeScreen extends Component {
               }
               return acc.concat(curr);
             }, []);
+
+          const portfolioValue = newArr[newArr.length - 1].price;
           this.setState({
             priceHistory: newArr,
-            priceHistoryLoaded: true
+            priceHistoryLoaded: true,
+            portfolioValue: portfolioValue,
+            portfolioReturns: portfolioValue - this.state.totalCapital
           });
         });
     });
@@ -292,6 +301,16 @@ export default class HomeScreen extends Component {
           />
         </View>
         <View>{this.graphSelector()}</View>
+        <Text>Portfolio Value: ${this.state.portfolioValue}</Text>
+        <Text>Total Invested Capital: ${this.state.totalCapital}</Text>
+        <Text>
+          Portfolio Returns: ${this.state.portfolioReturns} (
+          {(
+            (this.state.portfolioReturns / this.state.totalCapital) *
+            100
+          ).toFixed(2)}
+          %)
+        </Text>
         <Button
           title="Add stock"
           onPress={() => {
@@ -303,9 +322,13 @@ export default class HomeScreen extends Component {
         <Button
           title="Refresh"
           onPress={() => {
-            this.calculatePortfolioData(store.getState()); 
-            this.calculatePieData(store.getState())
-            this.calculateTransactionData(store.getState())
+            this.calculatePortfolioData(store.getState());
+            this.calculatePieData(store.getState());
+            this.calculateTransactionData(store.getState());
+            this.setState({
+              portfolioReturns:
+                this.state.portfolioValue - this.state.totalCapital
+            });
           }}
         />
         <BottomTab />
