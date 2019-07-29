@@ -7,7 +7,12 @@ import {
   Modal,
   Dimensions
 } from "react-native";
-import { VictoryPie, VictoryChart, VictoryLine } from "victory-native";
+import {
+  VictoryPie,
+  VictoryChart,
+  VictoryLine,
+  VictoryTheme
+} from "victory-native";
 import RNSecureStorage from "rn-secure-storage";
 
 import PageHeader from "../components/PageHeader";
@@ -104,6 +109,7 @@ export default class HomeScreen extends Component {
           : [...acc, curr],
       []
     );
+    alert(JSON.stringify(unitsPerDay));
 
     uniqueList.forEach(stock => {
       const bodyReq = {
@@ -217,7 +223,7 @@ export default class HomeScreen extends Component {
     if (this.state.priceHistoryLoaded) {
       return (
         <View>
-          <VictoryChart scale={{ x: "time" }}>
+          <VictoryChart scale={{ x: "time" }} theme={VictoryTheme.material}>
             {
               <VictoryLine
                 animate={{ duration: 500 }}
@@ -299,7 +305,12 @@ export default class HomeScreen extends Component {
             //this.setModalVisible(true);
             //alert(JSON.stringify(this.state.portfolioData));
             //alert(JSON.stringify(this.state.priceHistory));
-            this.calculatePortfolioData(store.getState()); // refresh button
+          }}
+        />
+        <Button
+          title="Refresh"
+          onPress={() => {
+            this.calculatePortfolioData(store.getState()); // refresh graph
           }}
         />
         <BottomTab />
