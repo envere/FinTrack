@@ -184,7 +184,8 @@ export default class HomeScreen extends Component {
             portfolioValue: portfolioValue,
             portfolioReturns: portfolioValue - this.state.totalCapital
           });
-        });
+        })
+        .catch(err => err);
     });
   }
 
@@ -237,7 +238,8 @@ export default class HomeScreen extends Component {
               history: transactionsArr
             });
           });
-        });
+        })
+        .catch(err => err);
     });
   }
 
@@ -373,16 +375,16 @@ export default class HomeScreen extends Component {
         <Button
           title="Add stock"
           onPress={() => {
-            //this.setModalVisible(true);
-            alert(JSON.stringify(store.getState().transactions));
+            this.setModalVisible(true);
           }}
         />
         <Button
           title="Refresh"
           onPress={() => {
-            this.calculatePortfolioData(store.getState());
-            this.calculatePieData(store.getState());
-            this.calculateTransactionData(store.getState());
+            const state = store.getState()
+            this.calculatePortfolioData(state)
+            this.calculatePieData(state);
+            this.calculateTransactionData(state)
             this.setState({
               portfolioReturns:
                 this.state.portfolioValue - this.state.totalCapital

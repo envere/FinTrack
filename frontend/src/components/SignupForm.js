@@ -83,6 +83,11 @@ class SignupForm extends Component {
                 text: "Please ensure that your 2nd password is the same.",
                 type: "warning"
               });
+            } else if (this.state.password.length < 8) {
+              Toast.show({
+                text: "Please ensure your password is 8 characters long.",
+                type: "warning"
+              })
             } else {
               this.setState({ text: "Signing up..." });
               fetch(url, {
