@@ -22,7 +22,6 @@ export default class HomeScreen extends Component {
       modalVisible: false,
       pieData: null,
       transactionsData: null,
-      portfolioData: null,
       showPie: false,
       token: null,
       priceHistory: [],
@@ -175,9 +174,17 @@ export default class HomeScreen extends Component {
 
     this.unsubscribe = store.subscribe(() => {
       const data = store.getState();
-      this.calculatePieData(data);
-      this.calculateTransactionData(data);
-      this.calculatePortfolioData(data);
+      if (
+        !(
+          this.state.priceHistory &&
+          this.state.pieData &&
+          this.state.transactionsData
+        )
+      ) {
+        this.calculatePieData(data);
+        this.calculateTransactionData(data);
+        this.calculatePortfolioData(data);
+      }
     });
   }
 
@@ -235,16 +242,14 @@ export default class HomeScreen extends Component {
                 parent: { border: "2px solid #ccc" }
               }}
               data={
-                /*this.state.transactionsData.length === 1
+                this.state.transactionsData.length === 1
                   ? this.state.transactionsData.concat([
                       {
                         x: new Date(),
                         y: this.state.transactionsData[0].y
                       }
                     ])
-                  :*/ this.state.transactionsData.concat(
-                  [{ x: new Date(), y: 10000 }]
-                )
+                  : this.state.transactionsData
               }
             />
           </VictoryChart>
@@ -294,9 +299,7 @@ export default class HomeScreen extends Component {
             //this.setModalVisible(true);
             //alert(JSON.stringify(this.state.portfolioData));
             //alert(JSON.stringify(this.state.priceHistory));
-            alert(JSON.stringify(this.state.transactionsData.concat(
-              [{ x: new Date(), y: 10000 }]
-            )));
+            this.calculatePortfolioData(store.getState()); // refresh button
           }}
         />
         <BottomTab />
