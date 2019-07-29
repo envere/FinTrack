@@ -67,6 +67,10 @@ export default class HomeScreen extends Component {
         x: dates[i]
       };
     }
+    transactionsData.push({
+      y: transactionsData[transactionsData.length - 1].y,
+      x: new Date()
+    });
     this.setState({
       transactionsData: transactionsData
     });
@@ -99,6 +103,10 @@ export default class HomeScreen extends Component {
           units: curr.units + units,
           date: curr.date
         };
+        if (acc[acc.length - 1].date === curr.date) {
+          acc.pop();
+          return acc.concat(updatedTransaction);
+        }
         return acc.concat(updatedTransaction);
       }, []);
 
@@ -109,8 +117,8 @@ export default class HomeScreen extends Component {
           : [...acc, curr],
       []
     );
-    alert(JSON.stringify(unitsPerDay));
 
+    alert(JSON.stringify(unitsPerDay));
     uniqueList.forEach(stock => {
       const bodyReq = {
         start: stock.date.substring(0, 10),
@@ -129,44 +137,37 @@ export default class HomeScreen extends Component {
       })
         .then(res => res.json())
         .then(res => {
-          if (
-            !this.state.priceHistory
-              .map(stock => stock.message)
-              .includes(res.message)
-          ) {
-            const history = res.prices.days.map(priceDay => {
-              const units = unitsPerDay.find(
-                transaction =>
-                  transaction.date <= priceDay.date &&
-                  transaction.symbol === stock.symbol
-              ).units;
-              return {
-                price: priceDay.price * units,
-                date: priceDay.date
-              };
-            });
-
-            const newArr = this.state.priceHistory
-              .concat(history)
-              .reduce((acc, curr) => {
-                if (acc.map(stock => stock.date).includes(curr.date)) {
-                  return acc.map(stock => {
-                    if (stock.date === curr.date) {
-                      return {
-                        price: stock.price + curr.price,
-                        date: stock.date
-                      };
-                    }
-                    return stock;
-                  });
-                }
-                return acc.concat(curr);
-              }, []);
-            this.setState({
-              priceHistory: newArr,
-              priceHistoryLoaded: true
-            });
-          }
+          const history = res.prices.days.map(priceDay => {
+            const units = unitsPerDay.find(
+              transaction =>
+                transaction.date <= priceDay.date &&
+                transaction.symbol === stock.symbol
+            ).units;
+            return {
+              price: priceDay.price * units,
+              date: priceDay.date
+            };
+          });
+          const newArr = this.state.priceHistory
+            .concat(history)
+            .reduce((acc, curr) => {
+              if (acc.map(stock => stock.date).includes(curr.date)) {
+                return acc.map(stock => {
+                  if (stock.date === curr.date) {
+                    return {
+                      price: stock.price + curr.price,
+                      date: stock.date
+                    };
+                  }
+                  return stock;
+                });
+              }
+              return acc.concat(curr);
+            }, []);
+          this.setState({
+            priceHistory: newArr,
+            priceHistoryLoaded: true
+          });
         });
     });
   }
@@ -247,16 +248,7 @@ export default class HomeScreen extends Component {
                 data: { stroke: "orange" },
                 parent: { border: "2px solid #ccc" }
               }}
-              data={
-                this.state.transactionsData.length === 1
-                  ? this.state.transactionsData.concat([
-                      {
-                        x: new Date(),
-                        y: this.state.transactionsData[0].y
-                      }
-                    ])
-                  : this.state.transactionsData
-              }
+              data={this.state.transactionsData}
             />
           </VictoryChart>
         </View>
@@ -302,7 +294,7 @@ export default class HomeScreen extends Component {
         <Button
           title="Add stock"
           onPress={() => {
-            //this.setModalVisible(true);
+            this.setModalVisible(true);
             //alert(JSON.stringify(this.state.portfolioData));
             //alert(JSON.stringify(this.state.priceHistory));
           }}
@@ -311,6 +303,8 @@ export default class HomeScreen extends Component {
           title="Refresh"
           onPress={() => {
             this.calculatePortfolioData(store.getState()); // refresh graph
+            //this.calculatePieData(store.getState())
+            //this.calculateTransactionData(store.getState())
           }}
         />
         <BottomTab />
