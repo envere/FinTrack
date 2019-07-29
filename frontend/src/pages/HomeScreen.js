@@ -33,7 +33,8 @@ export default class HomeScreen extends Component {
       priceHistoryLoaded: false,
       totalCapital: 0,
       portfolioValue: 0,
-      portfolioReturns: 0
+      portfolioReturns: 0,
+      dividendsData: []
     };
   }
 
@@ -57,11 +58,13 @@ export default class HomeScreen extends Component {
     const transactionsArr = data.transactions
       .slice()
       .reverse()
+      .filter(transaction => transaction.category === "ADD")
       .map(transaction => [transaction.tradeValue])
       .reduce((acc, curr) => acc.concat(acc[acc.length - 1] + curr[0]));
     const dates = data.transactions
       .slice()
       .reverse()
+      .filter(transaction => transaction.category === "ADD")
       .map(transaction => new Date(transaction.date.substring(0, 10)));
     let transactionsData = [];
     for (i = 0; i < dates.length; i++) {
@@ -90,6 +93,7 @@ export default class HomeScreen extends Component {
     const unitsPerDay = data.transactions
       .slice()
       .reverse()
+      .filter(transaction => transaction.category === "ADD")
       .map(transactions => {
         return {
           symbol: transactions.symbol,
@@ -114,6 +118,8 @@ export default class HomeScreen extends Component {
         }
         return acc.concat(updatedTransaction);
       }, []);
+
+    this.fetchDividends(unitsPerDay);
 
     const uniqueList = unitsPerDay.reduce(
       (acc, curr) =>
@@ -177,6 +183,59 @@ export default class HomeScreen extends Component {
             priceHistoryLoaded: true,
             portfolioValue: portfolioValue,
             portfolioReturns: portfolioValue - this.state.totalCapital
+          });
+        });
+    });
+  }
+
+  fetchDividends(portfolioList) {
+    const api = "https://orbital-fintrack.herokuapp.com/dividend/dividendrange";
+    const stockList = portfolioList.reduce((acc, curr) => {
+      if (!acc.map(stock => stock.symbol).includes(curr.symbol)) {
+        return acc.concat(curr);
+      }
+      return acc;
+    }, []);
+
+    stockList.forEach(stock => {
+      const body = {
+        symbol: stock.symbol,
+        start: stock.date.substring(0, 10),
+        end: new Date().toISOString().substring(0, 10)
+      };
+      fetch(api, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.state.token
+        },
+        body: JSON.stringify(body)
+      })
+        .then(res => res.json())
+        .then(res => {
+          const divArr = res.dividends.days;
+          const transactionList = portfolioList
+            .slice()
+            .reverse()
+            .filter(trans => trans.symbol === stock.symbol);
+          divArr.forEach(dividend => {
+            const units = transactionList.find(
+              trans => dividend.date >= trans.date
+            ).units;
+            const divTransaction = {
+              category: "DIVIDEND",
+              units: units,
+              symbol: stock.symbol,
+              tradeValue: units * dividend.dividend,
+              date: dividend.date,
+              price: dividend.dividend
+            };
+            let transactionsArr = store.getState().transactions;
+            transactionsArr.push(divTransaction);
+            store.dispatch({
+              type: "TRANSACTIONS",
+              history: transactionsArr
+            });
           });
         });
     });
@@ -314,9 +373,8 @@ export default class HomeScreen extends Component {
         <Button
           title="Add stock"
           onPress={() => {
-            this.setModalVisible(true);
-            //alert(JSON.stringify(this.state.portfolioData));
-            //alert(JSON.stringify(this.state.priceHistory));
+            //this.setModalVisible(true);
+            alert(JSON.stringify(store.getState().transactions));
           }}
         />
         <Button
