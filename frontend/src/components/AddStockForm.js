@@ -8,7 +8,7 @@ import {
   Picker
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { DatePicker, Header, Left, Right, Body, Title } from "native-base";
+import { Toast, DatePicker, Header, Left, Right, Body, Title } from "native-base";
 import RNSecureStorage, { ACCESSIBLE } from "rn-secure-storage";
 
 import store from "../data/PortfolioStore";
@@ -241,6 +241,10 @@ export default class AddStockForm extends Component {
       })
       .catch(err => err);
     this.props.setModalVisible(false); // to close the modal
+    Toast.show({
+      text: "Stock added!",
+      type: "success"
+    })
   }
 
   render() {
@@ -414,12 +418,6 @@ export default class AddStockForm extends Component {
           title="add"
           onPress={() => {
             this.addStock();
-          }}
-        />
-        <Button
-          title="test"
-          onPress={() => {
-            //do something
           }}
         />
       </View>
