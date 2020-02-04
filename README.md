@@ -1,7 +1,7 @@
 # FinTrack by Team NigerianPrince
 Proposed level of achievement: Apollo 11
 
-[Click to view project poster](readme_images/fintrackposter2.png)
+[Click to view project poster](readme_images/fintrackposter2.jpg)
 
 ## Overview
 In 8 weeks, we have developed a Stock Portfolio Tracker for Android users to conveniently track their financial assets and dividend yields, personalised to factor in miscellaneous fees independent of stock value. After several rounds of user testing, this app sports a robust and simple user interface that streamlines the experience to optimize convenience. Users will find that monitoring financial data and their portfolio will always be a few taps away on their mobile device regardless of where they are.
