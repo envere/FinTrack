@@ -1,13 +1,13 @@
 # FinTrack by Team NigerianPrince
 Proposed level of achievement: Apollo 11
-![Click to view project poster](readme_images/fintrackposter2.png)
+[Click to view project poster](readme_images/fintrackposter2.png)
 
 ## Overview
 In 8 weeks, we have developed a Stock Portfolio Tracker for Android users to conveniently track their financial assets and dividend yields, personalised to factor in miscellaneous fees independent of stock value. After several rounds of user testing, this app sports a robust and simple user interface that streamlines the experience to optimize convenience. Users will find that monitoring financial data and their portfolio will always be a few taps away on their mobile device regardless of where they are.
 
 
 ## Motivation
-![](https://docs.google.com/uc?export=download&id=1PPCauqHxk_8n05OD8d0Ka-pHV2cORr7o)
+![](readme_images/image4.png)
 
 ## Feedback Demographic
 To have a succinct idea of what potential users really want, we decided to ask traders and potential traders about their feedback and opinions on existing applications and their user experiences with these applications. Considering there are different tiers of trading enthusiast ranging from people who have just started out or planning to start out to veterans who have been trading for several years. Hence we decided to get the feedback of these demographic groups within this spectrum of users.
@@ -39,10 +39,10 @@ These pages serve their respective purposes as covered earlier.
 We intend to develop this application for android. Initially, we wanted to develop the application on all mobile devices. However, due to the timeline of Orbital and our level of experience in mobile app development, we decided to limit our platform development to Android. Despite this, we are considering expanding this application to IOS. This leads us to our choice of React Native, to easily scale this application towards IOS.
 
 ## Development
-![](https://docs.google.com/uc?export=download&id=1jB2iU7dK2VCuHupP2_Z6wjHl6mxQN0K3)
+![](readme_images/image6.png)
 
 ## Structure
-![](https://docs.google.com/uc?export=download&id=1mDdJWVB3SMExqODzJE3YJEDA8OJXGimL)
+![](readme_images/image10.png)
 
 ### Middleware
 We decided to use a Representational State Transfer Application Programming Interface (REST API) as a middleware between our Frontend and Backend due to its stateless protocol, which was performance-wise sufficient. We decided to use a REST API also due to its stateless nature which made it easier to test and debug.
@@ -81,7 +81,7 @@ The database we chose to use was MongoDB. We used this NoSQL, document based dat
 We used Mongoose, an Object Document Mapper (ODM), to help us model a flexible schema for our collections in MongoDB as there was a need to structure our data, albeit with a degree of flexibility in MongoDB. This helped us manage the data structure with minimal bugs. The overhead from using Mongoose was not significant enough to justify not using it, as we tested querying performance of the database after inserting large amounts of documents. We deemed that the query performance was strong enough that it would not impose on the user’s workflow on the application.
 
 ### Strategy
-![](https://docs.google.com/uc?export=download&id=1QYB4v-AlZ5MW_Cgoc8cSAIikLAKMt_S_)
+![](readme_images/image8.png)
 
 We store our data into mainly user, finance, authentication categories, comprising of up to several collections each. 
 
@@ -102,7 +102,7 @@ As mentioned earlier, most of our finance data are in large quantities and we st
 AlphaVantage has a very comprehensive collection of finance data, however, it did not provide the dividends for SG symbols, thus we had to diversify our source of data. We found a reliable source of dividend values of a web service at dividends.sg. We decided to scrape the website for dividends regarding SG symbols. We used Cheerio and Cheerio Table Parser to fetch the page from the dividends.sg and scrape their pages for the prices.
 
 ### Strategy
-![](https://docs.google.com/uc?export=download&id=11_UbRY7mn8A4cHiGCzLzUo2-UxMlbh5X)
+![](readme_images/image2.png)
 
 Considering that there was a vast number of symbols available, the amount of data to store would be immense. Furthermore, all this data are updated frequently. This prevented us from just using existing databases trivially. We had to dynamically update our database as required. Since stock data changes in real time, we decided to update our database daily to best provide the latest financial data available.
 
@@ -118,7 +118,7 @@ The UI and UX are vital to the utility and purpose of this application. After al
 Navigation was important to streamline, as the complexity of existing finance applications can be overwhelming. We settled on the dual use of a minimalistic drawer bar and a bottom tab for users to quickly orientate and move around with. The bottom tab is for the core features that users typically would want to frequently check, the drawer navigation opens up to provide all pages that have lower priority such as account settings and other extensible features.
 
 ### Page Functionality
-![](https://docs.google.com/uc?export=download&id=1iiH81v_P1swkh8yWIXgzAX4IVhOf_Go0)
+![](readme_images/image12.png)
 
 The pages for displaying data are spacious, and neatly aligned into lists. This helps you read and find what you need quickly without straining your eyes. With modern phones have large screen sizes, there was no need to compress data into compact lists. Furthermore with mobile users frequenting their applications at really short intervals throughout the day, it was important to take eye strain and fatigue into account. 
 
